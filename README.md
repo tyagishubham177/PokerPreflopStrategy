@@ -2,6 +2,10 @@
 
 Welcome to the **Poker Preflop Strategy Game**! This is a fun and interactive game where you can test and improve your poker preflop decision-making skills based on different hands and positions. 🎲
 
+👉 **Get ready to sharpen your skills and make the best moves at the table!** 💪
+
+[🎮 Play the Poker Decision Game](https://poker-preflop-strategy.vercel.app/) 🚀
+
 ## 📋 Features
 
 - **Dynamic Hand Dealing**: Randomly dealt poker hands.
