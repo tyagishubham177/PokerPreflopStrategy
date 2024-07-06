@@ -28,7 +28,6 @@ export const initialPokerStrategy = {
         "T9s",
         "98s",
       ],
-      "Raise as a Bluff": [],
       Limp: [],
     },
     "UTG + 1": {
@@ -62,8 +61,8 @@ export const initialPokerStrategy = {
         "QJs",
         "QTs",
         "Q9s",
-        "J9s",
         "JTs",
+        "J9s",
         "T9s",
         "98s",
         "78s",
