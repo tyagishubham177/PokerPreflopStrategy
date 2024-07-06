@@ -109,10 +109,16 @@ const usePokerGame = () => {
 
   // Function to get hand notation (e.g., "AKs", "TT")
   const getHandNotation = (hand) => {
+    const ranks = "23456789TJQKA";
     const [card1, card2] = hand.map((card) => card[0]); // Get first character (rank) of each card
+
     if (card1 === card2) return card1 + card2; // Pocket pair
+
     const suited = hand[0][1] === hand[1][1] ? "s" : "o";
-    return card1 > card2 ? card1 + card2 + suited : card2 + card1 + suited;
+    const rank1 = ranks.indexOf(card1);
+    const rank2 = ranks.indexOf(card2);
+
+    return rank1 > rank2 ? card1 + card2 + suited : card2 + card1 + suited;
   };
 
   // Function to handle correct decision

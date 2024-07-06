@@ -1,7 +1,7 @@
 export const CARD_WEIGHTS = {
-  A: 14,
-  K: 13,
-  Q: 12,
+  A: 54,
+  K: 43,
+  Q: 32,
   J: 11,
   T: 10,
   9: 9,
