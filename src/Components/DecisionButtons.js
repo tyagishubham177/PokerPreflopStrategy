@@ -1,18 +1,20 @@
-import React from 'react';
-import { Button } from '@mui/material';
+import React from "react";
+import { Button, Box } from "@mui/material";
 
-const DecisionButtons = ({ makeDecision }) => (
-  <div style={{ display: 'flex', justifyContent: 'space-around', marginBottom: 16 }}>
-    <Button variant="contained" color="primary" onClick={() => makeDecision('raise')}>
-      Raise
-    </Button>
-    <Button variant="contained" color="secondary" onClick={() => makeDecision('call')}>
-      Call
-    </Button>
-    <Button variant="contained" onClick={() => makeDecision('fold')}>
-      Fold
-    </Button>
-  </div>
+const DecisionButtons = ({ availableActions, makeDecision }) => (
+  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1, justifyContent: "center" }}>
+    {availableActions.map((action) => (
+      <Button
+        key={action}
+        variant="contained"
+        color={action === "Fold" ? "secondary" : "primary"}
+        onClick={() => makeDecision(action)}
+        sx={{ flexGrow: 1, minWidth: "100px" }}
+      >
+        {action}
+      </Button>
+    ))}
+  </Box>
 );
 
 export default DecisionButtons;
