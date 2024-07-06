@@ -1,0 +1,8 @@
+# Ignore all JS files in the hooks directory
+#src/Hooks/*.js
+
+# Ignore a specific file
+src/Constants/InitialStrategy.js
+
+# Ignore all files in a specific directory
+#some/directory/
