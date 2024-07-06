@@ -46,7 +46,11 @@ const PokerGame = () => {
     <Card sx={{ maxWidth: 400, margin: "auto", marginTop: 4, boxShadow: 3 }}>
       <CardHeader
         avatar={<Avatar src={pokerImage} />}
-        title="Learn Poker Preflop Strategy"
+        title={
+          <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+            Learn Preflop Strategy
+          </Typography>
+        }
         sx={{ backgroundColor: "primary.main", color: "white", textAlign: "center" }}
       />
       <CardContent>
@@ -62,7 +66,7 @@ const PokerGame = () => {
                 Position: {position}
                 <br />
                 Situation: {situation}
-                <InfoIcon onClick={() => setShowRules(true)} sx={{ ml: 1, cursor: "pointer" }} />
+                {/* <InfoIcon onClick={() => setShowRules(true)} sx={{ ml: 1, cursor: "pointer" }} /> */}
               </Typography>
             </Box>
             <Typography variant="h6" align="center" sx={{ mb: 2 }}>
@@ -85,21 +89,6 @@ const PokerGame = () => {
           <GameOver score={score} highScore={highScore} restartGame={restartGame} />
         )}
         <RulesDialog showRules={showRules} setShowRules={setShowRules} />
-        <SettingsDialog
-          showSettings={showSettings}
-          setShowSettings={setShowSettings}
-          editedStrategy={editedStrategy}
-          handleStrategyChange={handleStrategyChange}
-          saveStrategy={saveStrategy}
-        />
-        <Button
-          startIcon={<Settings />}
-          sx={{ mt: 2, width: "100%" }}
-          variant="outlined"
-          onClick={() => setShowSettings(true)}
-        >
-          Settings
-        </Button>
       </CardContent>
     </Card>
   );
