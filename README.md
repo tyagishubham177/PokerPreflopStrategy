@@ -1,6 +1,6 @@
-# 🃏 Poker Decision Game
+# 🃏 Poker Preflop Strategy Game
 
-Welcome to the **Poker Decision Game**! This is a fun and interactive game where you can test and improve your poker decision-making skills based on different hands and positions. 🎲
+Welcome to the **Poker Preflop Strategy Game**! This is a fun and interactive game where you can test and improve your poker preflop decision-making skills based on different hands and positions. 🎲
 
 ## 📋 Features
 
