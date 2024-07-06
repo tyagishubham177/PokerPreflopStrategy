@@ -1,5 +1,15 @@
 import React from "react";
-import { Card, CardContent, CardHeader, Typography, Button, LinearProgress, Box, Grid } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  Typography,
+  Button,
+  LinearProgress,
+  Box,
+  Grid,
+  Avatar,
+} from "@mui/material";
 import { Settings } from "@mui/icons-material";
 import CardDisplay from "./CardDisplay";
 import DecisionButtons from "./DecisionButtons";
@@ -8,6 +18,7 @@ import RulesDialog from "./RulesDialog";
 import SettingsDialog from "./SettingsDialog";
 import usePokerGame from "../Hooks/UsePokerGame";
 import { InfoIcon } from "../Constants/GameConstants";
+import pokerImage from "../Assets/pokerlogo512.png";
 
 const PokerGame = () => {
   const {
@@ -34,7 +45,8 @@ const PokerGame = () => {
   return (
     <Card sx={{ maxWidth: 400, margin: "auto", marginTop: 4, boxShadow: 3 }}>
       <CardHeader
-        title="Poker Decision Game"
+        avatar={<Avatar src={pokerImage} />}
+        title="Learn Poker Preflop Strategy"
         sx={{ backgroundColor: "primary.main", color: "white", textAlign: "center" }}
       />
       <CardContent>
