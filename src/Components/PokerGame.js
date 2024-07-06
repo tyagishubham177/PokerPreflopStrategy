@@ -1,20 +1,13 @@
-import React from 'react';
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  Typography,
-  Button,
-  LinearProgress,
-} from '@mui/material';
-import { Settings } from '@mui/icons-material';
-import CardDisplay from './CardDisplay';
-import DecisionButtons from './DecisionButtons';
-import GameOver from './GameOver';
-import RulesDialog from './RulesDialog';
-import SettingsDialog from './SettingsDialog';
-import usePokerGame from '../Hooks/UsePokerGame';
-import { InfoIcon } from '../Constants/GameConstants';
+import React from "react";
+import { Card, CardContent, CardHeader, Typography, Button, LinearProgress, Box, Grid } from "@mui/material";
+import { Settings } from "@mui/icons-material";
+import CardDisplay from "./CardDisplay";
+import DecisionButtons from "./DecisionButtons";
+import GameOver from "./GameOver";
+import RulesDialog from "./RulesDialog";
+import SettingsDialog from "./SettingsDialog";
+import usePokerGame from "../Hooks/UsePokerGame";
+import { InfoIcon } from "../Constants/GameConstants";
 
 const PokerGame = () => {
   const {
@@ -31,6 +24,7 @@ const PokerGame = () => {
     setShowSettings,
     editedStrategy,
     situation,
+    availableActions,
     makeDecision,
     restartGame,
     handleStrategyChange,
@@ -38,33 +32,41 @@ const PokerGame = () => {
   } = usePokerGame();
 
   return (
-    <Card style={{ maxWidth: 400, margin: 'auto', marginTop: 20 }}>
-      <CardHeader title="Poker Decision Game" />
+    <Card sx={{ maxWidth: 400, margin: "auto", marginTop: 4, boxShadow: 3 }}>
+      <CardHeader
+        title="Poker Decision Game"
+        sx={{ backgroundColor: "primary.main", color: "white", textAlign: "center" }}
+      />
       <CardContent>
         {!gameOver ? (
           <>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 16 }}>
-              <Typography>Score: {score}</Typography>
-              <Typography>High Score: {highScore}</Typography>
-            </div>
+            <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
+              <Typography variant="h6">Score: {score}</Typography>
+              <Typography variant="h6">High Score: {highScore}</Typography>
+            </Grid>
             <CardDisplay hand={hand} />
-            <Typography align="center" style={{ marginBottom: 16 }}>
-              Position: {position}
-              <br />
-              Situation: {situation}
-              <br />
-              <InfoIcon onClick={() => setShowRules(true)} />
-            </Typography>
-            <Typography align="center" style={{ marginBottom: 16 }}>
+            <Box sx={{ textAlign: "center", my: 2 }}>
+              <Typography variant="body1">
+                Position: {position}
+                <br />
+                Situation: {situation}
+                <InfoIcon onClick={() => setShowRules(true)} sx={{ ml: 1, cursor: "pointer" }} />
+              </Typography>
+            </Box>
+            <Typography variant="h6" align="center" sx={{ mb: 2 }}>
               What's your decision?
             </Typography>
-            <DecisionButtons makeDecision={makeDecision} />
-            <div style={{ marginBottom: 16 }}>
-              <Typography>Lives: {lives}</Typography>
-              <LinearProgress variant="determinate" value={(lives / 3) * 100} />
-            </div>
-            <Typography align="center">
-              Streak: {streak} {streak > 0 && <span> (+{streak * 10}% bonus)</span>}
+            <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} />
+            <Box sx={{ my: 2 }}>
+              <Typography variant="body2">Lives: {lives}</Typography>
+              <LinearProgress
+                variant="determinate"
+                value={(lives / 3) * 100}
+                sx={{ height: 10, borderRadius: 5 }}
+              />
+            </Box>
+            <Typography align="center" sx={{ fontWeight: "bold" }}>
+              Streak: {streak} {streak > 0 && <span>(+{streak * 10}% bonus)</span>}
             </Typography>
           </>
         ) : (
@@ -78,7 +80,12 @@ const PokerGame = () => {
           handleStrategyChange={handleStrategyChange}
           saveStrategy={saveStrategy}
         />
-        <Button startIcon={<Settings />} style={{ marginTop: 16 }} onClick={() => setShowSettings(true)}>
+        <Button
+          startIcon={<Settings />}
+          sx={{ mt: 2, width: "100%" }}
+          variant="outlined"
+          onClick={() => setShowSettings(true)}
+        >
           Settings
         </Button>
       </CardContent>
