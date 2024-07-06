@@ -1,5 +1,5 @@
 import React from "react";
-import PokerGame from "./Components/PokerDecisionComp";
+import PokerGame from "./Components/PokerGame";
 
 function App() {
 	return (
