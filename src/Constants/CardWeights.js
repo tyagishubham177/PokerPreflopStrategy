@@ -3,7 +3,7 @@ export const CARD_WEIGHTS = {
   K: 30,
   Q: 25,
   J: 15,
-  T: 15,
+  T: 17,
   9: 12,
   8: 10,
   7: 8,

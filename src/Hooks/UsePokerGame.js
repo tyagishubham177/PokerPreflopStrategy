@@ -100,6 +100,7 @@ const usePokerGame = () => {
 
     if (!situationKey || !positionKey) {
       console.error("Situation or Position key not found");
+      alert("Uh oh! See logs");
       return "Fold"; // Default to Fold if we can't determine the correct decision
     }
 
@@ -107,6 +108,7 @@ const usePokerGame = () => {
 
     if (!situationData) {
       console.error("Strategy data not found for the current situation and position");
+      alert("Uh oh! See logs");
       return "Fold";
     }
 
