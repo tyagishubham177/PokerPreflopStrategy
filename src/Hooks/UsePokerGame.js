@@ -133,7 +133,7 @@ const usePokerGame = () => {
   };
 
   const handleCorrectDecision = useCallback(() => {
-    const points = 10 * (1 + streak * 0.1);
+    const points = 10 * (1 + streak * 0.01);
     setScore((prevScore) => prevScore + points);
     setStreak((prevStreak) => prevStreak + 1);
     setHighScore((prevHighScore) => Math.max(prevHighScore, score + points));

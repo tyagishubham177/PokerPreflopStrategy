@@ -70,9 +70,9 @@ const PokerGame = () => {
                 <CardDisplay hand={hand} />
                 <Box sx={{ textAlign: "center", my: 2 }}>
                   <Typography variant="body1">
-                    Position: {position}
-                    <br />
                     Situation: {situation}
+                    <br />
+                    Position: {position}
                   </Typography>
                 </Box>
                 <Typography variant="h6" align="center" sx={{ mb: 2 }}>
