@@ -1,32 +1,42 @@
-import React, { useState } from 'react';
-import { Box, Typography, TextField, Button, Switch, FormControlLabel } from '@mui/material';
+import React, { useState } from "react";
+import { Box, Typography, TextField, Button, Switch, FormControlLabel } from "@mui/material";
 
 const SettingsTab = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
-  const [username, setUsername] = useState('');
-  const [difficulty, setDifficulty] = useState('medium');
+  const [username, setUsername] = useState("");
+  const [difficulty, setDifficulty] = useState("medium");
+
+  const handleInteraction = () => {
+    alert("This page is under development! Stay Tuned for updates!!");
+  };
 
   const handleSoundToggle = () => {
+    handleInteraction();
     setSoundEnabled(!soundEnabled);
   };
 
   const handleUsernameChange = (event) => {
+    handleInteraction();
     setUsername(event.target.value);
   };
 
   const handleDifficultyChange = (event) => {
+    handleInteraction();
     setDifficulty(event.target.value);
   };
 
   const handleSaveSettings = () => {
+    handleInteraction();
     // Here you would typically save these settings to your game state or local storage
-    console.log('Settings saved:', { soundEnabled, username, difficulty });
+    console.log("Settings saved:", { soundEnabled, username, difficulty });
   };
 
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom>Game Settings</Typography>
-      
+      <Typography variant="h6" gutterBottom>
+        Game Settings
+      </Typography>
+
       <FormControlLabel
         control={<Switch checked={soundEnabled} onChange={handleSoundToggle} />}
         label="Sound Effects"

@@ -1,11 +1,8 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, Typography, Avatar, Box, Grid, Tabs, Tab } from "@mui/material";
-import CardDisplay from "./CardDisplay";
-import DecisionButtons from "./DecisionButtons";
-import GameOver from "./GameOver";
+import { Card, CardContent, CardHeader, Typography, Avatar, Box, Tabs, Tab } from "@mui/material";
+import PokerGameTab from "./PokerGameTab";
 import RulesDialog from "./RulesDialog";
 import SettingsTab from "./SettingsTab";
-import IncorrectAnswers from "./IncorrectAnswers";
 import usePokerGame from "../Hooks/UsePokerGame";
 import pokerImage from "../Assets/pokerlogo512.png";
 import wallpaperImage from "../Assets/wallpaper.png";
@@ -43,9 +40,10 @@ const PokerGame = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
+        p: { xs: 2, md: 4 }, // Responsive padding
       }}
     >
-      <Card sx={{ maxWidth: 400, margin: "auto", boxShadow: 3 }}>
+      <Card sx={{ maxWidth: 400, width: "100%", boxShadow: 3, margin: { xs: "10px", sm: "auto" } }}>
         <CardHeader
           avatar={<Avatar src={pokerImage} />}
           title={
@@ -61,37 +59,20 @@ const PokerGame = () => {
         </Tabs>
         <CardContent>
           {activeTab === 0 ? (
-            !gameOver ? (
-              <>
-                <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
-                  <Typography variant="h6">Score: {score}</Typography>
-                  <Typography variant="h6">High Score: {highScore}</Typography>
-                </Grid>
-                <CardDisplay hand={hand} />
-                <Box sx={{ textAlign: "center", my: 2 }}>
-                  <Typography variant="body1">
-                    Situation: {situation}
-                    <br />
-                    Position: {position}
-                  </Typography>
-                </Box>
-                <Typography variant="h6" align="center" sx={{ mb: 2 }}>
-                  What's your decision?
-                </Typography>
-                <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} />
-                <Box sx={{ my: 2 }}>
-                  <Typography variant="body2">Lives: {lives}</Typography>
-                </Box>
-                <Typography align="center" sx={{ fontWeight: "bold" }}>
-                  Streak: {streak} {streak > 0 && <span>(+{streak * 10}% bonus)</span>}
-                </Typography>
-              </>
-            ) : (
-              <>
-                <GameOver score={score} highScore={highScore} restartGame={restartGame} />
-                <IncorrectAnswers wrongChoices={wrongChoices} />
-              </>
-            )
+            <PokerGameTab
+              gameOver={gameOver}
+              score={score}
+              highScore={highScore}
+              hand={hand}
+              situation={situation}
+              position={position}
+              availableActions={availableActions}
+              makeDecision={makeDecision}
+              lives={lives}
+              streak={streak}
+              restartGame={restartGame}
+              wrongChoices={wrongChoices}
+            />
           ) : (
             <SettingsTab />
           )}
