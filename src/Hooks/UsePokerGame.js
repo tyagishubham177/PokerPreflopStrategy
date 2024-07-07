@@ -1,5 +1,5 @@
-import { useState, useEffect } from "react";
-import { positions, suits, ranks } from "../Constants/GameConstants";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { suits } from "../Constants/GameConstants";
 import { initialPokerStrategy } from "../Constants/InitialStrategy";
 import { CARD_WEIGHTS } from "../Constants/CardWeights";
 import { SITUATION_LABELS, POSITION_LABELS, getLabel } from "../Constants/GameLabels";
@@ -14,18 +14,25 @@ const usePokerGame = () => {
   const [wrongChoices, setWrongChoices] = useState([]);
   const [gameOver, setGameOver] = useState(false);
   const [showRules, setShowRules] = useState(false);
-  const [showSettings, setShowSettings] = useState(false);
-  const [pokerStrategy, setPokerStrategy] = useState(initialPokerStrategy);
-  const [editedStrategy, setEditedStrategy] = useState(JSON.stringify(initialPokerStrategy, null, 2));
   const [situation, setSituation] = useState("");
   const [availableActions, setAvailableActions] = useState([]);
 
-  useEffect(() => {
-    dealNewHand();
+  const isInitialMount = useRef(true);
+  const dealCount = useRef(0);
+
+  const logGameState = useCallback((action, details = {}) => {
+    console.log(`[${action}]`, { ...details, dealCount: dealCount.current });
   }, []);
 
-  // Function to deal a new hand and set up the game state
-  const dealNewHand = () => {
+  useEffect(() => {
+    dealNewHand();
+    logGameState("Game Initialized", { lives, wrongChoices: wrongChoices.length, gameOver });
+  }, [logGameState]);
+
+  const dealNewHand = useCallback(() => {
+    dealCount.current += 1;
+    logGameState("Dealing New Hand", { dealCount: dealCount.current });
+
     const newHand = generateNewHand();
     setHand(newHand);
     const { newSituation, newPosition } = selectSituationAndPosition();
@@ -33,9 +40,16 @@ const usePokerGame = () => {
     setPosition(getLabel(POSITION_LABELS, newPosition));
     const newActions = getAvailableActions(newSituation, newPosition);
     setAvailableActions(newActions);
-  };
+  }, [logGameState]);
 
-  // Function to generate a new hand
+  useEffect(() => {
+    if (isInitialMount.current) {
+      logGameState("Initial Mount");
+      isInitialMount.current = false;
+      dealNewHand();
+    }
+  }, [dealNewHand, logGameState]);
+
   const generateNewHand = () => {
     const newHand = [];
     while (newHand.length < 2) {
@@ -61,7 +75,6 @@ const usePokerGame = () => {
     return items[items.length - 1];
   };
 
-  // Function to randomly select situation and position
   const selectSituationAndPosition = () => {
     const situations = Object.keys(initialPokerStrategy);
     const newSituation = situations[Math.floor(Math.random() * situations.length)];
@@ -70,49 +83,47 @@ const usePokerGame = () => {
     return { newSituation, newPosition };
   };
 
-  // Function to get available actions based on situation and position
   const getAvailableActions = (situation, position) => {
     const actions = Object.keys(initialPokerStrategy[situation][position]);
-    return [...actions, "Fold"]; // Always add 'Fold' as an option
+    return [...actions, "Fold"];
   };
 
-  // Function to determine the correct decision for a given hand
   const getCorrectDecision = (handNotation) => {
+    console.log("Situation:", situation);
+    console.log("Position:", position);
+
     const situationKey = Object.keys(SITUATION_LABELS).find((key) => SITUATION_LABELS[key] === situation);
     const positionKey = Object.keys(POSITION_LABELS).find((key) => POSITION_LABELS[key] === position);
-    const situationData = initialPokerStrategy[situationKey][positionKey];
+
+    console.log("Situation Key:", situationKey);
+    console.log("Position Key:", positionKey);
+
+    if (!situationKey || !positionKey) {
+      console.error("Situation or Position key not found");
+      return "Fold"; // Default to Fold if we can't determine the correct decision
+    }
+
+    const situationData = initialPokerStrategy[situationKey]?.[positionKey];
+
+    if (!situationData) {
+      console.error("Strategy data not found for the current situation and position");
+      return "Fold";
+    }
+
     for (const [action, hands] of Object.entries(situationData)) {
       if (hands.includes(handNotation)) {
         return action;
       }
     }
-    return "Fold"; // Default to 'Fold' if not found in any other category
+
+    return "Fold";
   };
 
-  // Function to handle player's decision
-  const makeDecision = (decision) => {
-    const handNotation = getHandNotation(hand);
-    const correctDecision = getCorrectDecision(handNotation);
-
-    if (decision === correctDecision) {
-      handleCorrectDecision();
-    } else {
-      handleIncorrectDecision(correctDecision);
-    }
-
-    if (lives > 1) {
-      dealNewHand();
-    } else {
-      setGameOver(true);
-    }
-  };
-
-  // Function to get hand notation (e.g., "AKs", "TT")
   const getHandNotation = (hand) => {
     const ranks = "23456789TJQKA";
-    const [card1, card2] = hand.map((card) => card[0]); // Get first character (rank) of each card
+    const [card1, card2] = hand.map((card) => card[0]);
 
-    if (card1 === card2) return card1 + card2; // Pocket pair
+    if (card1 === card2) return card1 + card2;
 
     const suited = hand[0][1] === hand[1][1] ? "s" : "o";
     const rank1 = ranks.indexOf(card1);
@@ -121,47 +132,80 @@ const usePokerGame = () => {
     return rank1 > rank2 ? card1 + card2 + suited : card2 + card1 + suited;
   };
 
-  // Function to handle correct decision
-  const handleCorrectDecision = () => {
+  const handleCorrectDecision = useCallback(() => {
     const points = 10 * (1 + streak * 0.1);
     setScore((prevScore) => prevScore + points);
     setStreak((prevStreak) => prevStreak + 1);
     setHighScore((prevHighScore) => Math.max(prevHighScore, score + points));
-  };
+    logGameState("Correct Decision", { points, newStreak: streak + 1 });
+  }, [streak, score, logGameState]);
 
-  // Function to handle incorrect decision
-  const handleIncorrectDecision = (correctDecision) => {
-    setLives((prevLives) => prevLives - 1);
-    setStreak(0);
-    setWrongChoices((prevWrongChoices) => [...prevWrongChoices, { hand, position, correctDecision }]);
-  };
+  const handleIncorrectDecision = useCallback(
+    (correctDecision, yourChoice, handNotation) => {
+      logGameState("Incorrect Decision", { correctDecision, yourChoice, handNotation, position, situation });
+      setStreak(0);
+      setWrongChoices((prevWrongChoices) => {
+        const newWrongChoices = [
+          ...prevWrongChoices,
+          { handNotation, position, situation, correctDecision, yourChoice },
+        ];
+        console.log("Updated wrong choices:", newWrongChoices);
+        return newWrongChoices;
+      });
+    },
+    [hand, position, situation, logGameState]
+  );
 
-  const restartGame = () => {
+  const makeDecision = useCallback(
+    (decision) => {
+      logGameState("Decision Made", { decision, lives, wrongChoices: wrongChoices.length });
+
+      const handNotation = getHandNotation(hand);
+      const correctDecision = getCorrectDecision(handNotation);
+      const isCorrect = decision === correctDecision;
+
+      if (isCorrect) {
+        handleCorrectDecision();
+      } else {
+        handleIncorrectDecision(correctDecision, decision, handNotation);
+      }
+
+      // Update lives and check game over status directly
+      setLives((currentLives) => {
+        const newLives = isCorrect ? currentLives : currentLives - 1;
+        if (newLives <= 0) {
+          setGameOver(true);
+          logGameState("Game Over");
+        }
+        return newLives;
+      });
+
+      // Ensure no new hand is dealt if the game is over
+      if (!gameOver) {
+        setTimeout(() => {
+          if (!gameOver) {
+            logGameState("Calling dealNewHand from makeDecision");
+            dealNewHand();
+          }
+        }, 0); // Timeout to allow state to update
+      }
+    },
+    [hand, gameOver, handleCorrectDecision, handleIncorrectDecision, logGameState, dealNewHand]
+  );
+
+  const restartGame = useCallback(() => {
+    logGameState("Restarting Game");
     setLives(3);
     setScore(0);
     setStreak(0);
     setWrongChoices([]);
     setGameOver(false);
+    dealCount.current = 0;
     dealNewHand();
-  };
-
-  const handleStrategyChange = (e) => {
-    setEditedStrategy(e.target.value);
-  };
-
-  const saveStrategy = () => {
-    try {
-      const newStrategy = JSON.parse(editedStrategy);
-      setPokerStrategy(newStrategy);
-      setShowSettings(false);
-    } catch (error) {
-      alert("Invalid JSON. Please check your input.");
-    }
-  };
+  }, [dealNewHand, logGameState]);
 
   return {
     hand,
-    availableActions,
     position,
     lives,
     score,
@@ -170,14 +214,11 @@ const usePokerGame = () => {
     gameOver,
     showRules,
     setShowRules,
-    showSettings,
-    setShowSettings,
-    editedStrategy,
     situation,
+    availableActions,
     makeDecision,
     restartGame,
-    handleStrategyChange,
-    saveStrategy,
+    wrongChoices,
   };
 };
 
