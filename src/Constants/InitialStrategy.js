@@ -1,5 +1,5 @@
 export const initialPokerStrategy = {
-  "RaiseFirstIn(RFI)": {
+  "RaiseFirstIn": {
     UTG: {
       Raise: [
         "AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", 
@@ -11,7 +11,7 @@ export const initialPokerStrategy = {
         "98s",
       ],
     },
-    "UTG + 1": {
+    "UTG+1": {
       Raise: [
         "AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66",
         "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s",
@@ -24,7 +24,7 @@ export const initialPokerStrategy = {
         "87s",
       ],
     },
-    "UTG + 2": {
+    "UTG+2": {
       Raise: [
         "AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", "55",
         "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
