@@ -33,11 +33,6 @@ const usePokerGame = () => {
     dealCount.current += 1;
     logGameState("Dealing New Hand", { dealCount: dealCount.current });
 
-    if (dealCount.current > 10) {
-      console.error("Excessive dealing detected. Stopping to prevent infinite loop.");
-      return;
-    }
-
     const newHand = generateNewHand();
     setHand(newHand);
     const { newSituation, newPosition } = selectSituationAndPosition();
@@ -146,20 +141,13 @@ const usePokerGame = () => {
   }, [streak, score, logGameState]);
 
   const handleIncorrectDecision = useCallback(
-    (correctDecision, yourChoice) => {
-      logGameState("Incorrect Decision", { correctDecision, yourChoice });
-
-      setLives((prevLives) => {
-        const newLives = prevLives - 1;
-        console.log(`Lives reduced from ${prevLives} to ${newLives}`);
-        return newLives;
-      });
-
+    (correctDecision, yourChoice, handNotation) => {
+      logGameState("Incorrect Decision", { correctDecision, yourChoice, handNotation, position, situation });
       setStreak(0);
       setWrongChoices((prevWrongChoices) => {
         const newWrongChoices = [
           ...prevWrongChoices,
-          { hand, position, situation, correctDecision, yourChoice },
+          { handNotation, position, situation, correctDecision, yourChoice },
         ];
         console.log("Updated wrong choices:", newWrongChoices);
         return newWrongChoices;
@@ -174,16 +162,17 @@ const usePokerGame = () => {
 
       const handNotation = getHandNotation(hand);
       const correctDecision = getCorrectDecision(handNotation);
+      const isCorrect = decision === correctDecision;
 
-      if (decision === correctDecision) {
+      if (isCorrect) {
         handleCorrectDecision();
       } else {
-        handleIncorrectDecision(correctDecision, decision);
+        handleIncorrectDecision(correctDecision, decision, handNotation);
       }
 
+      // Update lives and check game over status directly
       setLives((currentLives) => {
-        const newLives = currentLives - (decision !== correctDecision ? 1 : 0);
-        logGameState("Updated Lives", { previousLives: currentLives, newLives });
+        const newLives = isCorrect ? currentLives : currentLives - 1;
         if (newLives <= 0) {
           setGameOver(true);
           logGameState("Game Over");
@@ -191,21 +180,17 @@ const usePokerGame = () => {
         return newLives;
       });
 
+      // Ensure no new hand is dealt if the game is over
       if (!gameOver) {
-        logGameState("Calling dealNewHand from makeDecision");
-        dealNewHand();
+        setTimeout(() => {
+          if (!gameOver) {
+            logGameState("Calling dealNewHand from makeDecision");
+            dealNewHand();
+          }
+        }, 0); // Timeout to allow state to update
       }
     },
-    [
-      hand,
-      gameOver,
-      handleCorrectDecision,
-      handleIncorrectDecision,
-      logGameState,
-      lives,
-      wrongChoices.length,
-      dealNewHand,
-    ]
+    [hand, gameOver, handleCorrectDecision, handleIncorrectDecision, logGameState, dealNewHand]
   );
 
   const restartGame = useCallback(() => {
