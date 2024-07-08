@@ -31,7 +31,7 @@ export const initialPokerStrategy = {
         "T9s", "98s", "87s", "76s"
       ],
     },
-    "Lojack": {
+    "LJ": {
       Raise: [
         "AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", "55", "44",
         "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
@@ -42,7 +42,7 @@ export const initialPokerStrategy = {
         "T9s", "98s", "87s", "76s", "65s"
       ],
     },
-    "Hijack": {
+    "HJ": {
       Raise: [
         "AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", "55", "44", "33", "22",
         "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
@@ -53,7 +53,7 @@ export const initialPokerStrategy = {
         "T9s", "98s", "87s", "76s", "65s", "54s"
       ],
     },
-    "Cutoff": {
+    "CO": {
       Raise: [
         "AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", "55", "44", "33", "22",
         "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
@@ -70,7 +70,7 @@ export const initialPokerStrategy = {
         "43s"
       ],
     },
-    "Button": {
+    "BTN": {
       Raise: [
         "AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", "55", "44", "33", "22",
         "AKs", "AQs", "AJs", "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
@@ -87,7 +87,7 @@ export const initialPokerStrategy = {
         "65s", "64s", "54s", "53s", "43s", "32s"
       ],
     },
-    "Small Blind": {
+    "SB": {
       "Raise for Value": [
         "AKs", "AQs", "AJs", "ATs", "AQo", "AJo", "ATo",
         "KQs", "KJs", "KQo", "KJo", "QJs",
