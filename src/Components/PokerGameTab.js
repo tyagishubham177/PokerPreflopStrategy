@@ -32,7 +32,7 @@ const PokerGameTab = ({
             <Typography variant="body1">
               <strong>Situation:</strong> {situation}
               <br />
-              <strong>Position:</strong> {position}
+              <strong>Position:</strong> {position.includes(" - ") ? position.split(" - ")[0] : position}
             </Typography>
           </Box>
           <Typography variant="h6" align="center" sx={{ mb: 2 }}>
