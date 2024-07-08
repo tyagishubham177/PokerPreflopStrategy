@@ -4,6 +4,8 @@ Welcome to the **Poker Preflop Strategy Game**! This is a fun and interactive ga
 
 👉 **Get ready to sharpen your skills and make the best moves at the table!** 💪
 
+💡🔗 [Based on this strategy](https://poker-coaching.s3.amazonaws.com/tools/preflop-charts/full-preflop-charts.pdf) 📄🌐
+
 [🎮 Play the Poker Decision Game](https://poker-preflop-strategy.vercel.app/) 🚀
 
 ## 📋 Features
