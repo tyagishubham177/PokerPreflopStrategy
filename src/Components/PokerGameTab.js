@@ -30,9 +30,9 @@ const PokerGameTab = ({
           <CardDisplay hand={hand} />
           <Box sx={{ textAlign: "center", my: 2 }}>
             <Typography variant="body1">
-              Situation: {situation}
+              <strong>Situation:</strong> {situation}
               <br />
-              Position: {position}
+              <strong>Position:</strong> {position}
             </Typography>
           </Box>
           <Typography variant="h6" align="center" sx={{ mb: 2 }}>
