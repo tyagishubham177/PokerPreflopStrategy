@@ -1,14 +1,12 @@
 export const initialPokerStrategy = {
-  "RaiseFirstIn": {
-    UTG: {
+  "RFI": {
+    "UTG": {
       Raise: [
         "AA", "KK", "QQ", "JJ", "TT", "99", "88", "77", "66", 
         "AKs", "AQs", "AJs", "ATs", "A9s", "A5s", "AKo", "AQo", 
         "KQs", "KJs", "KTs",
         "QJs", "QTs",
-        "JTs",
-        "T9s",
-        "98s",
+        "JTs", "T9s", "98s"
       ],
     },
     "UTG+1": {
@@ -19,9 +17,7 @@ export const initialPokerStrategy = {
         "KQs", "KJs", "KTs", "K9s", "KQo",
         "QJs", "QTs", "Q9s",
         "JTs", "J9s",
-        "T9s",
-        "98s",
-        "87s",
+        "T9s", "98s", "87s"
       ],
     },
     "UTG+2": {
@@ -32,10 +28,7 @@ export const initialPokerStrategy = {
         "KQs", "KJs", "KTs", "K9s", "KQo",
         "QJs", "QTs", "Q9s",
         "JTs", "J9s",
-        "T9s",
-        "98s",
-        "87s",
-        "76s"
+        "T9s", "98s", "87s", "76s"
       ],
     },
     "Lojack": {
@@ -46,11 +39,7 @@ export const initialPokerStrategy = {
         "KQs", "KJs", "KTs", "K9s", "KQo", "KJo",
         "QJs", "QTs", "Q9s",
         "JTs", "J9s",
-        "T9s",
-        "98s",
-        "87s",
-        "76s",
-        "65s"
+        "T9s", "98s", "87s", "76s", "65s"
       ],
     },
     "Hijack": {
@@ -61,12 +50,7 @@ export const initialPokerStrategy = {
         "KQs", "KJs", "KTs", "K9s", "K8s", "KQo", "KJo",
         "QJs", "QTs", "Q9s", "QJo",
         "JTs", "J9s",
-        "T9s",
-        "98s",
-        "87s",
-        "76s",
-        "65s",
-        "54s"
+        "T9s", "98s", "87s", "76s", "65s", "54s"
       ],
     },
     "Cutoff": {
@@ -80,7 +64,7 @@ export const initialPokerStrategy = {
         "T9s", "T8s",
         "98s", "97s",
         "87s", "86s",
-        "76s", "76s", "75s",
+        "76s", "75s",
         "65s", "64s",
         "54s",
         "43s"
@@ -99,25 +83,23 @@ export const initialPokerStrategy = {
         "T9s", "T8s", "T7s", "T6s", "T9o", "T8o",
         "98s", "97s", "96s", "98o", "97o",
         "87s", "86s", "85s", "87o",
-        "76s", "76s", "75s", "74s", "76o",
-        "65s", "64s",
-        "54s", "53s",
-        "43s",
-        "32s"
+        "76s", "75s", "74s", "76o",
+        "65s", "64s", "54s", "53s", "43s", "32s"
       ],
     },
     "Small Blind": {
       "Raise for Value": [
         "AKs", "AQs", "AJs", "ATs", "AQo", "AJo", "ATo",
-        "KQs", "KJs", "KQo", "KJo",
+        "KQs", "KJs", "KQo", "KJo", "QJs",
         "QQ", "JJ", "TT", "99", "88"
       ],
       "Raise as bluff": [
         "K3o", "K2o", "Q5o", "Q4o", "Q3o", "Q2o",
-        "J4s", "J3s", "J2s", "T5s", "T4s", "95s", "94s", "85s", "84s", "74s", "63s", "53s", "43s",
+        "J4s", "J3s", "J2s", 
+        "T5s", "T4s", "95s", "94s", "85s", "84s", "74s", "63s", "53s", "43s",
         "J6o", "T6o", "96o", "86o"
       ],
-      "Limp or LimpRaise": [
+      "Limp": [
         "AA", "KK", "77", "66", "55", "44", "33", "22",
         "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
         "A9o", "A8o", "A7o", "A6o", "A5o", "A4o", "A3o", "A2o",
@@ -127,51 +109,53 @@ export const initialPokerStrategy = {
         "QJo", "QTo", "Q9o", "Q8o", "Q7o", "Q6o",
         "JTs", "J9s", "J8s", "J7s", "J6s", "J5s",
         "JTo", "J9o", "J8o", "J7o",
-        "T9s", "T8s", "T8s", "T6s", "98s", "97s", "96s", "87s", "86s", "76s", "75s", "65s", "64s", "54s", "32s",
+        "T9s", "T8s", "T8s", "T6s", 
+        "98s", "97s", "96s", 
+        "87s", "86s", "76s", "75s", "65s", "64s", "54s", "32s",
         "T9o", "T8o", "T7o", "98o", "97o", "87o", "76o", "65o"
       ]
     }
   },
   "RFI EP/MP": {
     "UTG+1 vs UTG": {
-      "3-bet for value": ["AA", "AKs", "AKo", "KK", "QQ"],
-      "3-bet as bluff": ["AQo", "ATs", "KJs"],
+      "3-Bet Value": ["AA", "AKs", "AKo", "KK", "QQ"],
+      "3-bet Bluff": ["AQo", "ATs", "KJs"],
       Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "99", "88"],
     },
     "UTG+2 vs UTG/UTG+1": {
-      "3-bet for value": ["AA", "AKs", "AKo", "KK", "QQ"],
-      "3-bet as a bluff": ["AQo", "ATs", "KJs"],
+      "3-Bet Value": ["AA", "AKs", "AKo", "KK", "QQ"],
+      "3-Bet Bluff": ["AQo", "ATs", "KJs"],
       Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "99", "88"],
     },
     "LJ vs UTG/UTG+1": {
-      "3-bet for value": ["AA", "AKs", "AKo", "KK", "QQ"],
-      "3-bet as a bluff": ["AQo", "ATs", "KJs", "A5s"],
+      "3-Bet Value": ["AA", "AKs", "AKo", "KK", "QQ"],
+      "3-Bet Bluff": ["AQo", "ATs", "KJs", "A5s"],
       Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "T9s", "99", "88", "77"],
     },
     "LJ vs UTG+2": {
-      "3-bet for value": ["AA", "AKs", "AKo", "KK", "QQ"],
-      "3-bet as bluff": ["AQo", "ATs", "KJs", "A5s"],
-      Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "T9s", "99", "88", "77"],
+      "3-Bet Value": ["AA", "AKs", "AKo", "KK", "QQ"],
+      "3-Bet Bluff": ["AQo", "ATs", "KJs", "A5s", "98s", "87s"],
+      Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "T9s", "99", "88", "77", "66"],
     },
     "HJ vs UTG": {
-      "3-bet for value": ["AA", "AKs", "AKo", "KK", "QQ"],
-      "3-bet as bluff": ["AQo", "ATs", "KJs", "A5s"],
+      "3-Bet Value": ["AA", "AKs", "AKo", "KK", "QQ"],
+      "3-Bet Bluff": ["AQo", "ATs", "KJs", "A5s"],
       Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "T9s", "99", "88", "77"],
     },
     "HJ vs UTG+1": {
-      "3-bet for value": ["AA", "AKs", "AKo", "KK", "QQ"],
-      "3-bet as bluff": ["AQo", "ATs", "KJs", "A5s"],
-      Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "T9s", "99", "88", "77", "66"],
+      "3-Bet Value": ["AA", "AKs", "AKo", "KK", "QQ"],
+      "3-Bet Bluff": ["AQo", "ATs", "KJs", "A5s"],
+      Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "T9s", "99", "98s", "88", "77", "66"],
     },
     "HJ vs UTG+2": {
-      "3-bet for value": ["AA", "AKs", "AKo", "KK", "QQ"],
-      "3-bet as bluff": ["AQo", "ATs", "KJs", "A5s", "A4s", "A3s", "87s", "76s"],
+      "3-Bet Value": ["AA", "AKs", "AKo", "KK", "QQ"],
+      "3-Bet Bluff": ["AQo", "ATs", "KJs", "A5s", "A4s", "A3s", "87s", "76s"],
       Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "T9s", "99", "98s", "88", "77", "66", "55"],
     },
     "HJ vs LJ": {
-      "3-bet for value": ["AA", "AKs", "AQs", "AJs", "AKo", "AQo", "KK", "QQ", "KQs"],
-      "3-bet as bluff": ["AQo", "ATs", "KJs", "A5s", "A4s", "A3s", "A2s", "AJo", "ATo", "KQo", "76s", "65s"],
-      Call: ["AQs", "AJs", "KQs", "QJs", "JJ", "JTs", "TT", "T9s", "99", "98s", "88", "77", "66", "55", "87s"],
+      "3-Bet Value": ["AA", "AKs", "AQs", "AJs", "AKo", "AQo", "KK", "QQ", "KQs"],
+      "3-Bet Bluff": ["A5s", "A4s", "A3s", "A2s", "AJo", "ATo", "KQo", "76s", "65s"],
+      Call: ["ATs", "KJs", "KTs", "QJs", "QTs", "JJ", "JTs", "TT", "T9s", "99", "98s", "88", "87s", "77", "66", "55"],
     }
   },
   "RFI CO":{
@@ -225,7 +209,8 @@ export const initialPokerStrategy = {
         "AA", "AKs", "AQs", "AJs", "AKo", "AQo", "KQs", "KK", "QQ"
       ],
       "3-bet Bluff":[
-        "AJo", "KQo", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s", "76s", "65s", "54s"
+        "AJo", "KQo", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s", 
+        "K9s", "Q9s", "J9s", "76s", "65s", "54s"
       ],
       "Call":[
         "ATs",
@@ -297,7 +282,7 @@ export const initialPokerStrategy = {
         "AJs", "ATs", "A9s", "AJo",
         "KQs", "KJs", "KTs", "KQo",
         "QJs", "QTs",
-        "JTs", "J9s","T9s", "98s", "87s", "76s",
+        "JTs", "J9s", "T9s", "98s", "87s", "76s",
         "JJ", "TT", "99", "88", "77", "66", "55", "44", "33", "22"
       ]
     },
@@ -364,7 +349,7 @@ export const initialPokerStrategy = {
         "AQs", "AJs", "ATs", "AKo", "AQo",
         "KQs", "KJs", "KTs",
         "QJs", "QTs", "JTs", "T9s", "98s",
-        "JJ", "TT", "99", "88", "77"
+        "JJ", "TT", "99", "88", "77", "66"
       ]
     },
     "SB vs LJ":{
@@ -376,7 +361,7 @@ export const initialPokerStrategy = {
         "87s", "76s"
       ],
       "Call": [
-        "AJs", "ATs", "AJo",
+        "AJs", "ATs", "AQo",
         "KQs", "KJs", "KTs",
         "QJs", "QTs", "JTs", "T9s", "98s",
         "JJ", "TT", "99", "88", "77", "66", "55"
@@ -388,7 +373,7 @@ export const initialPokerStrategy = {
       ],
       "3-Bet Bluff": [
         "A9s", "A5s", "A4s", "A3s", "AJo",
-        "87s", "76s", "65s", "54s",
+        "76s", "65s", "54s",
       ],
       "Call": [
         "AJs", "ATs", "AQo",
@@ -479,7 +464,7 @@ export const initialPokerStrategy = {
     },
     "BB vs LJ":{
       "3-Bet Value": [
-        "AKs", "AQs", "AJs", "AKo", "AQo", "KQs",
+        "AKs", "AQs", "AJs", "AKo", "KQs",
         "AA", "KK", "QQ", "JJ", "TT"
       ],
       "3-Bet Bluff": [
@@ -487,7 +472,7 @@ export const initialPokerStrategy = {
       ],
       "Call": [
         "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
-        "AJo", "ATo",
+        "AQo", "AJo", "ATo",
         "KJs", "KTs", "K9s", "K8s", "K7s", "K6s", "K5s", "K4s", "K3s", "K2s",
         "KQo", "KJo", "KTo",
         "QJs", "QTs", "Q9s", "Q8s", "Q7s", "Q6s", "Q5s", "Q4s",
@@ -503,7 +488,7 @@ export const initialPokerStrategy = {
     },
     "BB vs HJ":{
       "3-Bet Value": [
-        "AKs", "AQs", "AJs", "AKo", "KQs",
+        "AKs", "AQs", "AJs", "AKo", "AQo", "KQs",
         "AA", "KK", "QQ", "JJ", "TT"
       ],
       "3-Bet Bluff": [
@@ -511,7 +496,7 @@ export const initialPokerStrategy = {
       ],
       "Call": [
         "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
-        "AQo", "AJo", "ATo",
+        "AJo", "ATo",
         "KJs", "KTs", "K9s", "K8s", "K7s", "K6s", "K5s", "K4s", "K3s", "K2s",
         "KQo", "KJo", "KTo",
         "QJs", "QTs", "Q9s", "Q8s", "Q7s", "Q6s", "Q5s", "Q4s",
@@ -564,8 +549,7 @@ export const initialPokerStrategy = {
       "3-Bet Bluff": [
         "A3o", "A2o", 
         "K5o", "K4o", "K3o", "K2o",
-        "Q6o", "Q5o",
-        "85s", "84s", 
+        "Q6o", "Q5o", 
         "76s", "75s", "74s", "73s",
         "65s", "64s", "63s",
         "54s", "53s", "52s",
@@ -622,7 +606,6 @@ export const initialPokerStrategy = {
         "88", "77", "66", "55", "44", "33", "22",
       ]
     },
-    
   },
   "UTG vs 3Bet": {
     "UTG vs UTG+1": {
@@ -830,5 +813,236 @@ export const initialPokerStrategy = {
         "QQ", "JJ", "TT", "99", "88", "77", "66", "55"
       ]
     },
+  },
+  "LJ vs 3Bet": {
+    "LJ vs HJ": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ"
+      ],
+      "4-Bet Bluff": [
+        "A9s", "A8s", "A5s", "A4s", "A3s", "A2s", 
+        "AJo", "KQo",
+      ],
+      "Call":[
+        "AQs", "AJs", "ATs", "AQo",
+        "KQs", "KJs", "KTs", "QJs", "QTs", "JTs", "T9s", "98s",
+        "JJ", "TT", "99", "88", "77"
+      ]
+    },
+    "LJ vs CO": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ"
+      ],
+      "4-Bet Bluff": [
+        "A9s", "A8s", "A5s", "A4s", "A3s", "A2s", 
+        "AJo", "KQo", "87s"
+      ],
+      "Call":[
+        "AQs", "AJs", "ATs", "AQo",
+        "KQs", "KJs", "KTs", "QJs", "QTs", "JTs", "T9s", "98s",
+        "TT", "99", "88", "77", "66"
+      ]
+    },
+    "LJ vs BTN": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ"
+      ],
+      "4-Bet Bluff": [
+        "A9s", "A8s", "A7s", "A5s", "A4s", "A3s", "A2s", 
+        "AJo", "KQo", "76s"
+      ],
+      "Call":[
+        "AQs", "AJs", "ATs", "AQo",
+        "KQs", "KJs", "KTs", "QJs", "QTs", "JTs", "T9s", "98s", "87s",
+        "TT", "99", "88", "77", "66", "55"
+      ]
+    },
+    "LJ vs SB": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ"
+      ],
+      "4-Bet Bluff": [
+        "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s", 
+        "ATo", "KJo"
+      ],
+      "Call":[
+        "AQs", "AJs", "ATs", "AQo", "AJo",
+        "KQs", "KJs", "KTs", "KQo", "QJs", "QTs", "JTs", "T9s", "98s", "87s", "76s",
+        "TT", "99", "88", "77", "66", "55"
+      ]
+    },
+    "LJ vs BB": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ"
+      ],
+      "4-Bet Bluff": [
+        "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s", 
+        "AJo", "KQo"
+      ],
+      "Call":[
+        "AQs", "AJs", "ATs", "AQo",
+        "KQs", "KJs", "KTs", "QJs", "QTs", "JTs", "T9s", "98s", "87s", "76s",
+        "TT", "99", "88", "77", "66", "55", "44"
+      ]
+    },
+  },
+  "HJ/CO vs 3Bet":{
+    "HJ vs CO": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ"
+      ],
+      "4-Bet Bluff": [
+        "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
+        "ATo", "KJo", "76s"
+      ],
+      "Call": [
+        "AQs", "AJs", "ATs", "AQo", "AJo", 
+        "KQs", "KJs", "KTs", "K9s", "KQo",
+        "QJs", "QTs", "Q9s", "JTs", "J9s", 
+        "T9s", "98s", "87s",
+        "TT", "99", "88", "77", "66", "55"
+      ]
+    },
+    "HJ vs BTN": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ"
+      ],
+      "4-Bet Bluff": [
+        "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
+        "ATo", "KJo", "76s", "65s", "54s"
+      ],
+      "Call": [
+        "AQs", "AJs", "ATs", "AQo", "AJo", 
+        "KQs", "KJs", "KTs", "K9s", "KQo",
+        "QJs", "QTs", "Q9s", "JTs", "J9s", 
+        "T9s", "98s", "87s",
+        "TT", "99", "88", "77", "66", "55", "44"
+      ]
+    },
+    "HJ vs SB": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ"
+      ],
+      "4-Bet Bluff": [
+        "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
+        "ATo", "KJo"
+      ],
+      "Call": [
+        "AQs", "AJs", "ATs", "AQo", "AJo", 
+        "KQs", "KJs", "KTs", "K9s", "KQo",
+        "QJs", "QTs", "Q9s", "JTs", "J9s", 
+        "T9s", "98s", "87s", "76s",
+        "TT", "99", "88", "77", "66", "55", "44"
+      ]
+    },
+    "HJ vs BB": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ"
+      ],
+      "4-Bet Bluff": [
+        "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
+        "AJo", "KQo"
+      ],
+      "Call": [
+        "AQs", "AJs", "ATs", "AQo",
+        "KQs", "KJs", "KTs",
+        "QJs", "QTs", "JTs",
+        "T9s", "98s", "87s", "76s",
+        "TT", "99", "88", "77", "66", "55", "44"
+      ]
+    },
+    "HJ vs BTN/SB": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ", "TT"
+      ],
+      "4-Bet Bluff": [
+        "A8s", "A7s", "A6s", "A4s", "A3s", "A2s",
+        "ATo", "KJo", "97s", "86s", "75s", "54s"
+      ],
+      "Call": [
+        "AQs", "AJs", "ATs", "A9s", "A5s", "AQo", "AJo",
+        "KQs", "KJs", "KTs", "K9s", "KQo",
+        "QJs", "QTs", "Q9s", "JTs", "J9s",
+        "T9s", "T8s", "98s", "87s", "76s", "65s",
+        "99", "88", "77", "66", "55", "44"
+      ]
+    },
+    "CO vs BB": {
+      "4-Bet Value": [
+        "AA", "AKs", "AKo", "KK", "QQ", "JJ", "TT"
+      ],
+      "4-Bet Bluff": [
+        "A8s", "A4s", "A3s", "A2s",
+        "ATo", "KJo", "T8s", "97s", "65s", "54s"
+      ],
+      "Call": [
+        "AQs", "AJs", "ATs", "A9s", "A5s", "AQo", "AJo",
+        "KQs", "KJs", "KTs", "K9s", "KQo",
+        "QJs", "QTs", "Q9s", "JTs", "J9s",
+        "T9s", "98s", "87s", "76s",
+        "99", "88", "77", "66", "55", "44"
+      ]
+    },
+  },
+  "BTN/SB vs 3Bet":{
+    "BTN vs SB/BB":{
+      "4-Bet Value": [
+        "AKs", "AQs", "AJs", "AKo", "AQo",
+        "AA", "KK", "QQ", "JJ", "TT", "99"
+      ],
+      "4-Bet Bluff": [
+        "A8o", "A5o", "A4o", "A3o",
+        "K6s", "K5s", "K4s", "K9o",
+        "Q7s", "QTo", "J7s", "JTo",
+        "86s", "75s", "64s", "54s", "43s"
+      ],
+      "Call": [
+        "ATs", "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
+        "AJo", "ATo", "A9o", 
+        "KQs", "KJs", "KTs", "K9s", "K8s", "K7s",
+        "KQo", "KJo", "KTo",
+        "QJs", "QTs", "Q9s", "Q8s", "QJo",
+        "JTs", "J9s", "J8s",
+        "T9s", "T8s", "T7s", "98s", "87s", "76s", "65s",
+        "88", "77", "66", "55", "44", "33", "22"
+      ]
+    },
+    "SB RFI vs BB": {
+      "4-Bet Value": [
+        "AKs", "AQs", "AJs", "AQs", "QQ", "JJ"
+      ],
+      "4-Bet Bluff": [
+        "J4s", "K3o", "K2o", "Q5o", "Q4o"
+      ],
+      "Call": [
+        "ATs", "AJo", "ATo", 
+        "KQs", "KJs", "KQo", "KJo", "QJs",
+        "95s", "85s", "74s", "43s",
+        "TT", "99", "88"
+      ]
+    },
+    "SB Limp vs BB": {
+      "4-Bet Bluff": [
+        "AA", "KK", "AKo"
+      ],
+      "4-Bet Bluff": [
+        "A3o", "A2o", "K6o", "K5o", "Q7o",
+      ],
+      "Call": [
+        "A9s", "A8s", "A7s", "A6s", "A5s", "A4s", "A3s", "A2s",
+        "A9o", "A8o", "A7o", "A6o", "A5o", "A4o",
+        "KTs", "K9s", "K8s", "K7s", "K6s", "K5s", "K4s", "K3s", "K2s",
+        "KTo", "K9o", "K8o", "K7o",
+        "QTs", "Q9s", "Q8s", "Q7s", "Q6s", "Q5s", "Q4s", "Q3s", "Q2s",
+        "QJo", "QTo", "Q9o", "Q8o",
+        "JTs", "J9s", "J8s", "J7s", "J6s", "J5s",
+        "JTo", "J9o", "J8o",
+        "T9s", "T8s", "T7s", "T6s", "T9o", "T8o",
+        "98s", "97s", "96s", "98o", "97o",
+        "87s", "86s", "87o",
+        "76s", "75s", "76o",
+        "65s", "64s", "54s", "32s"
+      ]
+    }
   }
 };

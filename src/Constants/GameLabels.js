@@ -1,5 +1,5 @@
 export const SITUATION_LABELS = {
-  RaiseFirstIn: "Raise First In",
+  RFI: "Raise First In",
   "RFI EP/MP": "Facing raise from Early/Middle Position",
   "RFI CO": "Facing raise from Cutoff",
   "RFI BTN": "Facing raise from Button",
@@ -8,6 +8,9 @@ export const SITUATION_LABELS = {
   "UTG vs 3Bet": "Facing 3-Bet at Under the Gun",
   "UTG+1 vs 3Bet": "Facing 3-Bet at UTG+1",
   "UTG+2 vs 3Bet": "Facing 3-Bet at UTG+2",
+  "LJ vs 3Bet": "Facing 3-Bet at Lojack",
+  "HJ/CO vs 3Bet": "Facing 3-Bet at Hijact/Cutoff",
+  "BTN/SB vs 3Bet": "Facing 3-Bet at Button/Small Blind",
 };
 
 export const POSITION_LABELS = {
@@ -73,6 +76,23 @@ export const POSITION_LABELS = {
   "UTG+2 vs HJ": "UTG+2 vs Hijack",
   "UTG+2 vs CO/BTN": "UTG+2 vs Cutoff/Button",
   "UTG+2 vs SB/BB": "UTG+2 vs Blinds",
+
+  "LJ vs HJ": "Lojack vs Hijack",
+  "LJ vs CO": "Lojack vs Cutoff",
+  "LJ vs BTN": "Lojack vs Button",
+  "LJ vs SB": "Lojack vs Small Blind",
+  "LJ vs BB": "Lojack vs Big Blind",
+
+  "HJ vs CO": "Hijack vs Cutoff",
+  "HJ vs BTN": "Hijack vs Button",
+  "HJ vs SB": "Hijack vs Small Blind",
+  "HJ vs BB": "Hijack vs Big Blind",
+  "HJ vs BTN/SB": "Hijack vs Button/Small Blind",
+  "CO vs BB": "Cutoff vs Big Blind",
+
+  "BTN vs SB/BB": "Button vs Blinds",
+  "SB RFI vs BB": "Small Blind's Raise vs Big Blind",
+  "SB Limp vs BB": "Small Blind's Limp vs Big BLind",
 };
 
 export const getLabel = (dict, key) => dict[key] || key;
