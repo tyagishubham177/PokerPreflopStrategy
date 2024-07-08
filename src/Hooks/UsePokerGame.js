@@ -9,7 +9,11 @@ const usePokerGame = () => {
   const [position, setPosition] = useState("");
   const [lives, setLives] = useState(3);
   const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(0);
+  const [highScore, setHighScore] = useState(() => {
+    // Load high score from localStorage
+    const savedHighScore = localStorage.getItem("highScore");
+    return savedHighScore ? parseInt(savedHighScore, 10) : 0;
+  });
   const [streak, setStreak] = useState(0);
   const [wrongChoices, setWrongChoices] = useState([]);
   const [gameOver, setGameOver] = useState(false);
@@ -97,9 +101,11 @@ const usePokerGame = () => {
 
     console.log("Situation Key:", situationKey);
     console.log("Position Key:", positionKey);
+    console.log("HN:", handNotation);
 
     if (!situationKey || !positionKey) {
       console.error("Situation or Position key not found");
+      alert("Uh oh! See logs");
       return "Fold"; // Default to Fold if we can't determine the correct decision
     }
 
@@ -107,6 +113,7 @@ const usePokerGame = () => {
 
     if (!situationData) {
       console.error("Strategy data not found for the current situation and position");
+      alert("Uh oh! See logs");
       return "Fold";
     }
 
@@ -136,7 +143,13 @@ const usePokerGame = () => {
     const points = 10 * (1 + streak * 0.1);
     setScore((prevScore) => prevScore + points);
     setStreak((prevStreak) => prevStreak + 1);
-    setHighScore((prevHighScore) => Math.max(prevHighScore, score + points));
+    const newScore = score + points;
+    setHighScore((prevHighScore) => {
+      const newHighScore = Math.max(prevHighScore, newScore);
+      // Save the new high score to localStorage
+      localStorage.setItem("highScore", newHighScore);
+      return newHighScore;
+    });
     logGameState("Correct Decision", { points, newStreak: streak + 1 });
   }, [streak, score, logGameState]);
 
