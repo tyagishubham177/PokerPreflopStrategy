@@ -37,7 +37,7 @@ const PokerGame = () => {
   const handleLongPressStart = () => {
     const timer = setTimeout(() => {
       setCollapsed(true);
-    }, 2000); // 1 second
+    }, 1000); // 1 second
     setPressTimer(timer);
   };
 
@@ -121,11 +121,11 @@ const PokerGame = () => {
           sx={{
             backgroundColor: "primary.light",
             "& .MuiTab-root": { color: "white", fontWeight: "bold" },
-            "& .Mui-selected": { color: "#32CD32", backgroundColor: "primary.dark" }, // Sharp lime-green color for selected tab
+            "& .Mui-selected": { backgroundColor: "primary.dark" }, // Ensure background color remains consistent
           }}
         >
-          <Tab label="Game" />
-          <Tab label="Settings" />
+          <Tab label="Game" className={activeTab === 0 ? "selected-tab" : ""} />
+          <Tab label="Settings" className={activeTab === 1 ? "selected-tab" : ""} />
         </Tabs>
         <CardContent
           sx={{
