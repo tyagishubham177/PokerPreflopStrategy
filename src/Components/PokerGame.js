@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Card, CardContent, CardHeader, Typography, Avatar, Box, Tabs, Tab } from "@mui/material";
+import { Card, CardContent, CardHeader, Typography, Avatar, Box, Tabs, Tab, IconButton } from "@mui/material";
+import InfoIcon from '@mui/icons-material/Info';
 import PokerGameTab from "./PokerGameTab";
 import RulesDialog from "./RulesDialog";
 import SettingsTab from "./SettingsTab";
@@ -40,24 +41,54 @@ const PokerGame = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        p: { xs: 2, md: 4 }, // Responsive padding
+        p: { xs: 2, md: 4 },
       }}
     >
-      <Card sx={{ maxWidth: 400, width: "100%", boxShadow: 3, margin: { xs: "10px", sm: "auto" } }}>
+      <Card sx={{ 
+        maxWidth: 600, 
+        width: "100%", 
+        boxShadow: 3, 
+        margin: { xs: "10px", sm: "auto" },
+        borderRadius: 2,
+        overflow: "hidden",
+      }}>
         <CardHeader
-          avatar={<Avatar src={pokerImage} />}
+          avatar={<Avatar src={pokerImage} sx={{ width: 56, height: 56 }} />}
+          action={
+            <IconButton 
+              aria-label="info" 
+              onClick={() => setShowRules(true)}
+              sx={{ color: 'white' }}
+            >
+              <InfoIcon />
+            </IconButton>
+          }
           title={
             <Typography variant="h5" sx={{ fontWeight: "bold" }}>
               Learn Preflop Strategy
             </Typography>
           }
-          sx={{ backgroundColor: "primary.main", color: "white", textAlign: "center" }}
+          sx={{ 
+            backgroundColor: "primary.main", 
+            color: "white", 
+            textAlign: "center",
+            py: 2,
+          }}
         />
-        <Tabs value={activeTab} onChange={handleTabChange} centered>
+        <Tabs 
+          value={activeTab} 
+          onChange={handleTabChange} 
+          centered
+          sx={{ 
+            backgroundColor: "primary.light",
+            '& .MuiTab-root': { color: 'white' },
+            '& .Mui-selected': { color: 'secondary.main' },
+          }}
+        >
           <Tab label="Game" />
           <Tab label="Settings" />
         </Tabs>
-        <CardContent>
+        <CardContent sx={{ p: { xs: 2, md: 3 } }}>
           {activeTab === 0 ? (
             <PokerGameTab
               gameOver={gameOver}

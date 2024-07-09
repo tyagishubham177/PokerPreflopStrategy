@@ -5,22 +5,27 @@ const DecisionButtons = ({ availableActions, makeDecision }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Adjust styles based on the number of actions and screen size
   const buttonStyle = {
     flexGrow: 1,
-    minWidth: isMobile ? "100%" : "100px", // Ensuring full width on mobile only
-    fontSize: isMobile ? "0.75rem" : "1rem",
+    minWidth: isMobile ? "100%" : "120px",
+    fontSize: isMobile ? "0.875rem" : "1rem",
+    padding: isMobile ? theme.spacing(1) : theme.spacing(1.5),
+    transition: "all 0.3s ease-in-out",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: theme.shadows[4],
+    },
   };
 
   return (
     <Box
       sx={{
         display: "flex",
-        flexDirection: isMobile ? "column" : "row", // Conditionally setting the flex direction
+        flexDirection: isMobile ? "column" : "row",
         flexWrap: "wrap",
-        gap: 1,
+        gap: theme.spacing(1.5),
         justifyContent: "center",
-        margin: isMobile ? 2 : 1,
+        margin: theme.spacing(2, 0),
       }}
     >
       {availableActions.map((action) => (
