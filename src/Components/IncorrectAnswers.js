@@ -15,16 +15,50 @@ const IncorrectAnswers = ({ wrongChoices }) => {
                 primary={`Hand Notation: ${choice.handNotation}`}
                 secondary={
                   <>
-                    <Typography component="span" variant="body2" color="text.primary">
-                      Position: {choice.position}
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      color="text.primary"
+                      sx={{
+                        fontFamily: "Tahoma",
+                      }}
+                    >
+                      {(() => {
+                        const parts = choice.position.split(" - ");
+                        return (
+                          <>
+                            Situation: {parts[0]}
+                            <br />
+                            Hero: {parts[1]}
+                            <br />
+                            Villain: {parts[2]}
+                          </>
+                        );
+                      })()}
                     </Typography>
-                    {` — Situation: ${choice.situation}`}
                     <br />
-                    <Typography component="span" variant="body2" color="error">
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      color="error"
+                      sx={{
+                        fontFamily: "Gadget",
+                        fontStyle: "italic",
+                      }}
+                    >
                       Your choice: {choice.yourChoice}
                     </Typography>
+
                     <br />
-                    <Typography component="span" variant="body2" color="success.main">
+                    <Typography
+                      component="span"
+                      variant="body2"
+                      color="success.main"
+                      sx={{
+                        fontFamily: "Comic Sans MS, cursive, sans-serif",
+                        fontWeight: "bold",
+                      }}
+                    >
                       Correct choice: {choice.correctDecision}
                     </Typography>
                   </>

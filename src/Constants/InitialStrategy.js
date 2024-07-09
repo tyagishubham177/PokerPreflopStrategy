@@ -1019,6 +1019,9 @@ export const initialPokerStrategy = {
         "KQs", "KJs", "KQo", "KJo", "QJs",
         "95s", "85s", "74s", "43s",
         "TT", "99", "88"
+      ],
+      "Invalid":[
+        "AA", "KK", "AKo"
       ]
     },
     "SB Limp vs BB": {

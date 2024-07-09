@@ -23,16 +23,25 @@ const PokerGameTab = ({
     <>
       {!gameOver ? (
         <>
-          <Grid container justifyContent="space-between" sx={{ mb: 2 }}>
+          <Grid container justifyContent="space-between" sx={{ mb: 2, textAlign: "left" }}>
             <Typography variant="h6">Score: {score}</Typography>
             <Typography variant="h6">High Score: {highScore}</Typography>
           </Grid>
           <CardDisplay hand={hand} />
           <Box sx={{ textAlign: "center", my: 2 }}>
             <Typography variant="body1">
-              <strong>Situation:</strong> {situation}
-              <br />
-              <strong>Position:</strong> {position.includes(" - ") ? position.split(" - ")[0] : position}
+              {(() => {
+                const parts = position.split(" - ");
+                return (
+                  <>
+                    <strong>Situation:</strong> {parts[0]}
+                    <br />
+                    <strong>Villain:</strong> {parts[2]}
+                    <br />
+                    <strong>Hero:</strong> {parts[1]}
+                  </>
+                );
+              })()}
             </Typography>
           </Box>
           <Typography variant="h6" align="center" sx={{ mb: 2 }}>
