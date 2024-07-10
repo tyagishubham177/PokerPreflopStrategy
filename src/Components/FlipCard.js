@@ -6,7 +6,11 @@ import FlipCardBack from "./FlipCardBack";
 
 const FlipCard = ({ index, choice, flippedCards, toggleFlip }) => {
   return (
-    <motion.div whileHover={{ scale: 1.05 }} transition={{ type: "spring", stiffness: 300 }}>
+    <motion.div
+      initial={{ scale: 0.85 }}
+      whileHover={{ scale: 0.9 }}
+      transition={{ type: "spring", stiffness: 300 }}
+    >
       <Paper
         elevation={3}
         sx={{

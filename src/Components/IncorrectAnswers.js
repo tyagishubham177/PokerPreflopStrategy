@@ -1,11 +1,10 @@
 import React, { useState } from "react";
-import { Typography, Grid, Paper, useTheme, useMediaQuery } from "@mui/material";
-import FlipCard from "./FlipCard";
+import { Typography, Paper, useTheme } from "@mui/material";
 import StyledLink from "./StyledLink";
+import CarouselComponent from "./CarouselComponent";
 
 const IncorrectAnswers = ({ wrongChoices }) => {
   const theme = useTheme();
-  const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
   const [flippedCards, setFlippedCards] = useState({});
 
   const toggleFlip = (index) => {
@@ -40,29 +39,7 @@ const IncorrectAnswers = ({ wrongChoices }) => {
         Incorrect Answers
       </Typography>
       <StyledLink />
-      <Grid
-        container
-        spacing={3}
-        sx={{ overflowY: isDesktop ? "visible" : "scroll", maxHeight: isDesktop ? "none" : "300px" }}
-      >
-        {wrongChoices.slice(0, 3).map((choice, index) => (
-          <Grid
-            item
-            xs={12}
-            md={4}
-            key={index}
-            sx={{
-              display: "block",
-              marginBottom: isDesktop ? 0 : "10px",
-              "&:last-child": {
-                marginBottom: 0,
-              },
-            }}
-          >
-            <FlipCard index={index} choice={choice} flippedCards={flippedCards} toggleFlip={toggleFlip} />
-          </Grid>
-        ))}
-      </Grid>
+      <CarouselComponent wrongChoices={wrongChoices} flippedCards={flippedCards} toggleFlip={toggleFlip} />
     </Paper>
   );
 };

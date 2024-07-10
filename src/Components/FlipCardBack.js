@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { RotateCw } from "lucide-react";
 
 const FlipCardBack = ({ flipped, choice }) => {
   return (
@@ -38,20 +37,6 @@ const FlipCardBack = ({ flipped, choice }) => {
       >
         Correct choice: {choice.correctDecision}
       </Typography>
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: "5px",
-          left: "5px",
-          zIndex: 10,
-          color: "text.secondary",
-          backgroundColor: "rgba(255,255,255,0.8)",
-          borderRadius: "50%",
-          padding: "3px",
-        }}
-      >
-        <RotateCw size={16} />
-      </Box>
     </Box>
   );
 };

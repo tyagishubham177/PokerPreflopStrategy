@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Typography } from "@mui/material";
-import { RotateCw } from "lucide-react";
 
 const FlipCardFront = ({ flipped, choice }) => {
   return (
@@ -45,21 +44,6 @@ const FlipCardFront = ({ flipped, choice }) => {
         <Typography variant="body1" sx={{ color: "success.main", textAlign: "left", fontSize: "0.75rem" }}>
           <strong>Hero:</strong> {choice.position.split(" - ")[1]}
         </Typography>
-      </Box>
-      <Box
-        sx={{
-          position: "absolute",
-          bottom: "5px",
-          right: "5px",
-          zIndex: 10,
-          color: "text.secondary",
-          backgroundColor: "rgba(255,255,255,0.8)",
-          borderRadius: "50%",
-          padding: "3px",
-          transform: "translate(-50%, -50%)",
-        }}
-      >
-        <RotateCw size={16} />
       </Box>
     </Box>
   );
