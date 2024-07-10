@@ -1,5 +1,8 @@
-import React, { useState } from "react";
-import { Card, CardContent, CardHeader, Typography, Avatar, Box, Tabs, Tab } from "@mui/material";
+import React, { useState, useEffect, useRef } from "react";
+import { Card, CardContent, Typography, Avatar, Box, IconButton, SwipeableDrawer, Fab } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
+import SettingsIcon from "@mui/icons-material/Settings";
+import CloseIcon from "@mui/icons-material/Close";
 import PokerGameTab from "./PokerGameTab";
 import RulesDialog from "./RulesDialog";
 import SettingsTab from "./SettingsTab";
@@ -8,7 +11,12 @@ import pokerImage from "../Assets/pokerlogo512.png";
 import wallpaperImage from "../Assets/wallpaper.png";
 
 const PokerGame = () => {
-  const [activeTab, setActiveTab] = useState(0);
+  const [showSettings, setShowSettings] = useState(false);
+  const [collapsed, setCollapsed] = useState(false);
+  const [longPress, setLongPress] = useState(false);
+
+  const longPressTimeout = useRef(null);
+
   const {
     hand,
     position,
@@ -26,8 +34,35 @@ const PokerGame = () => {
     wrongChoices,
   } = usePokerGame();
 
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
+  const toggleSettings = () => {
+    setShowSettings(!showSettings);
+  };
+
+  useEffect(() => {
+    let timer;
+    if (collapsed) {
+      timer = setTimeout(() => {
+        setCollapsed(false);
+      }, 5000);
+    }
+    return () => clearTimeout(timer);
+  }, [collapsed]);
+
+  const handleLongPressStart = () => {
+    longPressTimeout.current = setTimeout(() => {
+      setCollapsed(true);
+      setLongPress(false);
+    }, 2000); // 2 seconds
+  };
+
+  const handleLongPressEnd = () => {
+    clearTimeout(longPressTimeout.current);
+  };
+
+  const handleClick = () => {
+    if (!longPress) {
+      setShowRules(true);
+    }
   };
 
   return (
@@ -40,25 +75,64 @@ const PokerGame = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        p: { xs: 2, md: 4 }, // Responsive padding
+        overflow: "hidden",
+        p: 0,
+        m: 0,
       }}
     >
-      <Card sx={{ maxWidth: 400, width: "100%", boxShadow: 3, margin: { xs: "10px", sm: "auto" } }}>
-        <CardHeader
-          avatar={<Avatar src={pokerImage} />}
-          title={
-            <Typography variant="h5" sx={{ fontWeight: "bold" }}>
+      {!collapsed && (
+        <Card
+          sx={{
+            maxWidth: 650,
+            width: "95%",
+            boxShadow: 3,
+            margin: "auto",
+            borderRadius: 2,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            height: {
+              xs: "80vh",
+              sm: "85vh",
+            },
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              p: 1,
+              backgroundColor: "primary.main",
+            }}
+          >
+            <Avatar src={pokerImage} sx={{ width: 40, height: 40 }} />
+            <Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
               Learn Preflop Strategy
             </Typography>
-          }
-          sx={{ backgroundColor: "primary.main", color: "white", textAlign: "center" }}
-        />
-        <Tabs value={activeTab} onChange={handleTabChange} centered>
-          <Tab label="Game" />
-          <Tab label="Settings" />
-        </Tabs>
-        <CardContent>
-          {activeTab === 0 ? (
+            <IconButton
+              aria-label="info"
+              onClick={handleClick}
+              onMouseDown={handleLongPressStart}
+              onMouseUp={handleLongPressEnd}
+              onTouchStart={handleLongPressStart}
+              onTouchEnd={handleLongPressEnd}
+              sx={{ color: "white" }}
+            >
+              <InfoIcon />
+            </IconButton>
+          </Box>
+
+          <CardContent
+            sx={{
+              p: { xs: 2, md: 3 },
+              flex: 1,
+              overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "space-between",
+            }}
+          >
             <PokerGameTab
               gameOver={gameOver}
               score={score}
@@ -73,12 +147,37 @@ const PokerGame = () => {
               restartGame={restartGame}
               wrongChoices={wrongChoices}
             />
-          ) : (
-            <SettingsTab />
-          )}
+          </CardContent>
           <RulesDialog showRules={showRules} setShowRules={setShowRules} />
-        </CardContent>
-      </Card>
+        </Card>
+      )}
+
+      <Fab
+        color="primary"
+        aria-label="settings"
+        onClick={toggleSettings}
+        sx={{
+          position: "fixed",
+          bottom: 16,
+          right: 16,
+          backgroundColor: "custom.main",
+          "&:hover": { backgroundColor: "custom.dark" },
+        }}
+      >
+        <SettingsIcon />
+      </Fab>
+
+      <SwipeableDrawer anchor="right" open={showSettings} onClose={toggleSettings} onOpen={toggleSettings}>
+        <Box sx={{ width: 250, p: 2 }}>
+          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
+            <Typography variant="h6">Settings</Typography>
+            <IconButton onClick={toggleSettings}>
+              <CloseIcon />
+            </IconButton>
+          </Box>
+          <SettingsTab />
+        </Box>
+      </SwipeableDrawer>
     </Box>
   );
 };

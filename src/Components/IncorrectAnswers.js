@@ -1,41 +1,46 @@
-import React from "react";
-import { Box, Typography, List, ListItem, ListItemText, Divider } from "@mui/material";
+import React, { useState } from "react";
+import { Typography, Paper, useTheme } from "@mui/material";
+import StyledLink from "./StyledLink";
+import CarouselComponent from "./CarouselComponent";
 
 const IncorrectAnswers = ({ wrongChoices }) => {
+  const theme = useTheme();
+  const [flippedCards, setFlippedCards] = useState({});
+
+  const toggleFlip = (index) => {
+    setFlippedCards((prev) => ({ ...prev, [index]: !prev[index] }));
+  };
+
   return (
-    <Box sx={{ mt: 2 }}>
-      <Typography variant="h6" gutterBottom>
-        Incorrect Answers:
+    <Paper
+      elevation={1}
+      sx={{
+        mt: 3,
+        p: 3,
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: "16px",
+        overflow: "hidden",
+        transition: "all 0.3s ease-in-out",
+      }}
+    >
+      <Typography
+        variant="h6"
+        gutterBottom
+        sx={{
+          fontWeight: "bold",
+          color: theme.palette.primary.main,
+          textAlign: "center",
+          mb: 3,
+          fontSize: "1.5rem",
+          textTransform: "uppercase",
+          letterSpacing: "1px",
+        }}
+      >
+        Incorrect Answers
       </Typography>
-      <List>
-        {wrongChoices.map((choice, index) => (
-          <React.Fragment key={index}>
-            <ListItem>
-              <ListItemText
-                primary={`Hand Notation: ${choice.handNotation}`}
-                secondary={
-                  <>
-                    <Typography component="span" variant="body2" color="text.primary">
-                      Position: {choice.position}
-                    </Typography>
-                    {` — Situation: ${choice.situation}`}
-                    <br />
-                    <Typography component="span" variant="body2" color="error">
-                      Your choice: {choice.yourChoice}
-                    </Typography>
-                    <br />
-                    <Typography component="span" variant="body2" color="success.main">
-                      Correct choice: {choice.correctDecision}
-                    </Typography>
-                  </>
-                }
-              />
-            </ListItem>
-            {index < wrongChoices.length - 1 && <Divider />}
-          </React.Fragment>
-        ))}
-      </List>
-    </Box>
+      <StyledLink />
+      <CarouselComponent wrongChoices={wrongChoices} flippedCards={flippedCards} toggleFlip={toggleFlip} />
+    </Paper>
   );
 };
 

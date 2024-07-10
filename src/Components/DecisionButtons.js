@@ -5,31 +5,39 @@ const DecisionButtons = ({ availableActions, makeDecision }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
-  // Adjust styles based on the number of actions and screen size
   const buttonStyle = {
-    flexGrow: 1,
-    minWidth: isMobile ? "100%" : "100px", // Ensuring full width on mobile only
-    fontSize: isMobile ? "0.75rem" : "1rem",
+    width: isMobile ? "calc(50% - 8px)" : "auto",
+    minWidth: isMobile ? "auto" : "100px",
+    fontSize: isMobile ? "0.875rem" : "1rem",
+    padding: theme.spacing(1),
+    transition: "all 0.3s ease-in-out",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: theme.shadows[4],
+    },
   };
 
   return (
     <Box
       sx={{
         display: "flex",
-        flexDirection: isMobile ? "column" : "row", // Conditionally setting the flex direction
-        flexWrap: "wrap",
-        gap: 1,
+        flexDirection: isMobile ? "row" : "row",
+        flexWrap: isMobile ? "wrap" : "nowrap",
+        gap: theme.spacing(1),
         justifyContent: "center",
-        margin: isMobile ? 2 : 1,
+        margin: theme.spacing(1, 0),
       }}
     >
-      {availableActions.map((action) => (
+      {availableActions.map((action, index) => (
         <Button
           key={action}
           variant="contained"
           color={action === "Fold" ? "secondary" : "primary"}
           onClick={() => makeDecision(action)}
-          sx={buttonStyle}
+          sx={{
+            ...buttonStyle,
+            width: isMobile && availableActions.length % 2 !== 0 && index === availableActions.length - 1 ? "100%" : buttonStyle.width,
+          }}
         >
           {action}
         </Button>

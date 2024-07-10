@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Button, Switch, FormControlLabel } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Switch,
+  FormControlLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 const SettingsTab = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -7,7 +16,7 @@ const SettingsTab = () => {
   const [difficulty, setDifficulty] = useState("medium");
 
   const handleInteraction = () => {
-    alert("This page is under development! Stay Tuned for updates!!");
+    alert("The Settings are under development! Stay Tuned for updates!!");
   };
 
   const handleSoundToggle = () => {
@@ -27,19 +36,19 @@ const SettingsTab = () => {
 
   const handleSaveSettings = () => {
     handleInteraction();
-    // Here you would typically save these settings to your game state or local storage
     console.log("Settings saved:", { soundEnabled, username, difficulty });
   };
 
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom>
+      <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold", color: "primary.main" }}>
         Game Settings
       </Typography>
 
       <FormControlLabel
-        control={<Switch checked={soundEnabled} onChange={handleSoundToggle} />}
+        control={<Switch checked={soundEnabled} onChange={handleSoundToggle} color="primary" />}
         label="Sound Effects"
+        sx={{ my: 2 }}
       />
 
       <TextField
@@ -48,25 +57,24 @@ const SettingsTab = () => {
         value={username}
         onChange={handleUsernameChange}
         margin="normal"
+        variant="outlined"
+        sx={{ mb: 2 }}
       />
 
-      <TextField
+      <Select
         fullWidth
-        select
         label="Difficulty"
         value={difficulty}
         onChange={handleDifficultyChange}
-        margin="normal"
-        SelectProps={{
-          native: true,
-        }}
+        margin="dense"
+        sx={{ mb: 2 }}
       >
-        <option value="easy">Easy</option>
-        <option value="medium">Medium</option>
-        <option value="hard">Hard</option>
-      </TextField>
+        <MenuItem value="easy">Easy</MenuItem>
+        <MenuItem value="medium">Medium</MenuItem>
+        <MenuItem value="hard">Hard</MenuItem>
+      </Select>
 
-      <Button variant="contained" color="primary" onClick={handleSaveSettings} sx={{ mt: 2 }}>
+      <Button variant="contained" color="primary" onClick={handleSaveSettings} sx={{ mt: 2, width: "100%" }}>
         Save Settings
       </Button>
     </Box>
