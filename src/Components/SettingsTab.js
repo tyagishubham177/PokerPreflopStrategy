@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Box, Typography, TextField, Button, Switch, FormControlLabel, Select, MenuItem } from "@mui/material";
+import {
+  Box,
+  Typography,
+  TextField,
+  Button,
+  Switch,
+  FormControlLabel,
+  Select,
+  MenuItem,
+} from "@mui/material";
 
 const SettingsTab = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
@@ -7,7 +16,7 @@ const SettingsTab = () => {
   const [difficulty, setDifficulty] = useState("medium");
 
   const handleInteraction = () => {
-    alert("This page is under development! Stay Tuned for updates!!");
+    alert("The Settings are under development! Stay Tuned for updates!!");
   };
 
   const handleSoundToggle = () => {
@@ -65,12 +74,7 @@ const SettingsTab = () => {
         <MenuItem value="hard">Hard</MenuItem>
       </Select>
 
-      <Button 
-        variant="contained" 
-        color="primary" 
-        onClick={handleSaveSettings} 
-        sx={{ mt: 2, width: '100%' }}
-      >
+      <Button variant="contained" color="primary" onClick={handleSaveSettings} sx={{ mt: 2, width: "100%" }}>
         Save Settings
       </Button>
     </Box>

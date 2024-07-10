@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Typography, List, ListItem, Paper, useTheme, useMediaQuery } from "@mui/material";
+import { Box, Typography, List, ListItem, Paper, useTheme, useMediaQuery, Link } from "@mui/material";
 
 const IncorrectAnswers = ({ wrongChoices }) => {
   const theme = useTheme();
@@ -10,6 +10,25 @@ const IncorrectAnswers = ({ wrongChoices }) => {
       <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold", color: theme.palette.primary.main }}>
         Incorrect Answers:
       </Typography>
+      <Link
+        href="https://poker-coaching.s3.amazonaws.com/tools/preflop-charts/full-preflop-charts.pdf"
+        target="_blank"
+        rel="noopener"
+        underline="hover"
+        sx={{
+          display: "inline-block",
+          color: theme.palette.secondary.main,
+          fontSize: "1rem",
+          fontWeight: "bold",
+          mb: 2,
+          "&:hover": {
+            color: theme.palette.secondary.dark,
+            textDecoration: "underline",
+          },
+        }}
+      >
+        Click here to see charts
+      </Link>
       <List>
         {wrongChoices.map((choice, index) => (
           <ListItem key={index} sx={{ flexDirection: "column", alignItems: "stretch", mb: 2 }}>
@@ -17,7 +36,10 @@ const IncorrectAnswers = ({ wrongChoices }) => {
               Hand: {choice.handNotation}
             </Typography>
             <Box sx={{ display: isDesktop ? "flex" : "block", gap: 2 }}>
-              <Paper elevation={1} sx={{ flex: 1, p: 1, mb: isDesktop ? 0 : 1, backgroundColor: theme.palette.action.hover }}>
+              <Paper
+                elevation={1}
+                sx={{ flex: 1, p: 1, mb: isDesktop ? 0 : 1, backgroundColor: theme.palette.action.hover }}
+              >
                 <Typography variant="body2">
                   <strong>Situation:</strong> {choice.position.split(" - ")[0]}
                   <br />

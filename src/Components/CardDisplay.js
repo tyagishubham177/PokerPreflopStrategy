@@ -11,21 +11,21 @@ const CustomCard = ({ card }) => {
   return (
     <Box
       sx={{
-        width: isMobile ? "60px" : "100px",
-        height: isMobile ? "84px" : "140px",
+        width: isMobile ? "60px" : "90px",
+        height: isMobile ? "84px" : "126px",
         backgroundColor: "white",
-        borderRadius: "10px",
+        borderRadius: "8px",
         border: `2px solid ${theme.palette.grey[300]}`,
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: "5px",
+        padding: "4px",
         boxShadow: theme.shadows[3],
         color: isRed ? theme.palette.error.main : theme.palette.text.primary,
         position: "relative",
       }}
     >
-      <Typography variant={isMobile ? "body2" : "h6"} sx={{ position: "absolute", top: 5, left: 5 }}>
+      <Typography variant={isMobile ? "body2" : "body1"} sx={{ position: "absolute", top: 2, left: 2 }}>
         {rank}
       </Typography>
       <Typography
@@ -35,8 +35,8 @@ const CustomCard = ({ card }) => {
         {suit}
       </Typography>
       <Typography
-        variant={isMobile ? "body2" : "h6"}
-        sx={{ position: "absolute", bottom: 5, right: 5, transform: "rotate(180deg)" }}
+        variant={isMobile ? "body2" : "body1"}
+        sx={{ position: "absolute", bottom: 2, right: 2, transform: "rotate(180deg)" }}
       >
         {rank}
       </Typography>
@@ -53,17 +53,17 @@ const CardDisplay = ({ hand }) => {
       sx={{
         display: "flex",
         justifyContent: "center",
-        gap: isMobile ? 1 : 2,
-        my: 2,
+        gap: 1,
+        my: 1,
         perspective: "1000px",
       }}
     >
       {hand.map((card, index) => (
         <motion.div
           key={card}
-          initial={{ opacity: 0, rotateY: 180, y: -50 }}
+          initial={{ opacity: 0, rotateY: 180, y: -30 }}
           animate={{ opacity: 1, rotateY: 0, y: 0 }}
-          transition={{ duration: 0.5, delay: index * 0.2 }}
+          transition={{ duration: 0.4, delay: index * 0.15 }}
         >
           <CustomCard card={card} />
         </motion.div>

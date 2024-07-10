@@ -20,35 +20,68 @@ const PokerGameTab = ({
   wrongChoices,
 }) => {
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        height: "100%",
+        justifyContent: "space-between", // Distribute space evenly
+      }}
+    >
       {!gameOver ? (
         <>
-          <Grid container justifyContent="space-between" sx={{ mb: 2, textAlign: "left" }}>
-            <Typography variant="h6">Score: {score}</Typography>
-            <Typography variant="h6">High Score: {highScore}</Typography>
-          </Grid>
-          <HandDealer hand={hand} />
-          <Paper elevation={3} sx={{ p: 2, my: 2, backgroundColor: "rgba(255, 255, 255, 0.9)" }}>
-            <Typography variant="body1" sx={{ textAlign: "center", fontWeight: "bold" }}>
-              {(() => {
-                const parts = position.split(" - ");
-                return (
-                  <>
-                    <span style={{ color: "#1976d2" }}>Situation:</span> {parts[0]}
-                    <br />
-                    <span style={{ color: "#d32f2f" }}>Villain:</span> {parts[2]}
-                    <br />
-                    <span style={{ color: "#388e3c" }}>Hero:</span> {parts[1]}
-                  </>
-                );
-              })()}
+          <Box>
+            {/* Top section */}
+            <Grid container justifyContent="space-between" sx={{ mb: 2, textAlign: "left" }}>
+              <Typography variant="body1">Score: {score}</Typography>
+              <Typography variant="body1">High Score: {highScore}</Typography>
+            </Grid>
+
+            {/* Increase spacing for HandDealer */}
+            <Box sx={{ my: 3 }}>
+              <HandDealer hand={hand} />
+            </Box>
+
+            {/* Increase padding and margin for situation info */}
+            <Paper elevation={3} sx={{ p: 2, my: 3, backgroundColor: "rgba(255, 255, 255, 0.9)" }}>
+              <Typography variant="body1" sx={{ textAlign: "center", fontWeight: "bold" }}>
+                {(() => {
+                  const parts = position.split(" - ");
+                  return (
+                    <>
+                      <span style={{ color: "#1976d2" }}>Situation:</span> {parts[0]}
+                      <br />
+                      <span style={{ color: "#d32f2f" }}>Villain:</span> {parts[2]}
+                      <br />
+                      <span style={{ color: "#388e3c" }}>Hero:</span> {parts[1]}
+                    </>
+                  );
+                })()}
+              </Typography>
+            </Paper>
+
+            {/* Add more space before the decision prompt */}
+            <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold" }}>
+              What's your decision?
             </Typography>
-          </Paper>
-          <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold" }}>
-            What's your decision?
-          </Typography>
-          <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} />
-          <Box sx={{ my: 2, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          </Box>
+
+          {/* Center section - Decision Buttons */}
+          <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
+            <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} />
+          </Box>
+
+          {/* Bottom section */}
+          <Box
+            sx={{
+              mt: 3,
+              pt: 2,
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "center",
+              borderTop: "1px solid rgba(0, 0, 0, 0.12)", // Add a subtle separator
+            }}
+          >
             <Typography variant="body1" sx={{ fontWeight: "bold" }}>
               Lives: {lives}
             </Typography>
@@ -64,7 +97,7 @@ const PokerGameTab = ({
           <IncorrectAnswers wrongChoices={wrongChoices} />
         </>
       )}
-    </>
+    </Box>
   );
 };
 
