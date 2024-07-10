@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Typography, Grid, Paper, useTheme, useMediaQuery, Link } from "@mui/material";
+import { Typography, Grid, Paper, useTheme, useMediaQuery } from "@mui/material";
 import FlipCard from "./FlipCard";
 import StyledLink from "./StyledLink";
 
@@ -59,12 +59,7 @@ const IncorrectAnswers = ({ wrongChoices }) => {
               },
             }}
           >
-            <FlipCard
-              index={index}
-              choice={choice}
-              flippedCards={flippedCards}
-              toggleFlip={toggleFlip}
-            />
+            <FlipCard index={index} choice={choice} flippedCards={flippedCards} toggleFlip={toggleFlip} />
           </Grid>
         ))}
       </Grid>
