@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, IconButton } from "@mui/material";
+import RotateRightIcon from '@mui/icons-material/RotateRight';
 
 const FlipCardBack = ({ flipped, choice }) => {
   return (
@@ -37,6 +38,17 @@ const FlipCardBack = ({ flipped, choice }) => {
       >
         Correct choice: {choice.correctDecision}
       </Typography>
+      <IconButton
+        sx={{
+          position: "absolute",
+          bottom: 8,
+          right: 8,
+          backgroundColor: "transparent",
+          color: "black",
+        }}
+      >
+        <RotateRightIcon />
+      </IconButton>
     </Box>
   );
 };
