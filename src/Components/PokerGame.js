@@ -83,7 +83,7 @@ const PokerGame = () => {
       {!collapsed && (
         <Card
           sx={{
-            maxWidth: 600,
+            maxWidth: 650,
             width: "95%",
             boxShadow: 3,
             margin: "auto",

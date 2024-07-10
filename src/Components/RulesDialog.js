@@ -13,7 +13,7 @@ const RulesDialog = ({ showRules, setShowRules }) => {
         exit: "transition-transform duration-300",
       }}
     >
-      <DialogTitle sx={{ bgcolor: "primary.main", color: "white" }}>Game Rules</DialogTitle>
+      <DialogTitle sx={{ bgcolor: "primary.main", color: "white" }}>Game Rules & Info</DialogTitle>
       <DialogContent>
         <Typography variant="body1" paragraph sx={{ mt: 2 }}>
           1. You'll be presented with a poker hand with a specific situation.
@@ -30,14 +30,21 @@ const RulesDialog = ({ showRules, setShowRules }) => {
         <Typography variant="body1" paragraph>
           5. The game ends when you run out of lives or reach the maximum score.
         </Typography>
+        <Typography variant="body1" paragraph>
+          6. After the game ends you'll be shown the incorrect decisions made by you. So you can review and improve. 
+          Flip those cards to see more details.
+        </Typography>
         <Typography variant="body1">
-          The preflop strategy is based on these charts. In future we wish to support customizable ranges.{" "}
+          7. In future we wish to support customizable ranges.
+          <br />
+          But as of now the preflop strategy is based on these charts.{" "}
+          <br />
           <Link
             href="https://poker-coaching.s3.amazonaws.com/tools/preflop-charts/full-preflop-charts.pdf"
             target="_blank"
             rel="noopener noreferrer"
           >
-            Check these charts out!!
+            Check out the charts!!
           </Link>
           .
         </Typography>
