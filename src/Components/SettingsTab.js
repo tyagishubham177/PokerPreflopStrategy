@@ -10,8 +10,8 @@ import {
   MenuItem,
 } from "@mui/material";
 import StrategyCustomizationModal from './StrategyCustomizationModal.js';
-import { initialPokerStrategy } from '../../Constants/InitialStrategy.js';
-import { POSITION_LABELS } from '../../Constants/GameLabels.js';
+import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
+import { POSITION_LABELS } from '../Constants/GameLabels.js';
 
 const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
 
