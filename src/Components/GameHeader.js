@@ -1,0 +1,36 @@
+import React from 'react';
+import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import InfoIcon from "@mui/icons-material/Info";
+import pokerImage from "../Assets/pokerlogo512.png";
+
+const GameHeader = ({ onInfoClick, onLongPressStart, onLongPressEnd }) => {
+  return (
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        p: 1,
+        backgroundColor: "primary.main",
+      }}
+    >
+      <Avatar src={pokerImage} sx={{ width: 40, height: 40 }} />
+      <Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
+        Learn Preflop Strategy
+      </Typography>
+      <IconButton
+        aria-label="info"
+        onClick={onInfoClick}
+        onMouseDown={onLongPressStart}
+        onMouseUp={onLongPressEnd}
+        onTouchStart={onLongPressStart}
+        onTouchEnd={onLongPressEnd}
+        sx={{ color: "white" }}
+      >
+        <InfoIcon />
+      </IconButton>
+    </Box>
+  );
+};
+
+export default GameHeader;

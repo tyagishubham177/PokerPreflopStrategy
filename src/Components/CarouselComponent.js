@@ -18,7 +18,7 @@ const CarouselComponent = ({ wrongChoices, flippedCards, toggleFlip }) => {
     slidesToScroll: 1,
     nextArrow: <SampleNextArrow />,
     prevArrow: <SamplePrevArrow />,
-    arrows: true // This ensures our custom arrows are used
+    arrows: true 
   };
 
   return (

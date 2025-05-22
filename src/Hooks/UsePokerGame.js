@@ -1,233 +1,208 @@
 import { useState, useEffect, useCallback, useRef } from "react";
-import { suits } from "../Constants/GameConstants";
-import { initialPokerStrategy } from "../Constants/InitialStrategy";
-import { CARD_WEIGHTS } from "../Constants/CardWeights";
-import { SITUATION_LABELS, POSITION_LABELS, getLabel } from "../Constants/GameLabels";
+import useGameState from "./useGameState";
+import useGameLogic from "./useGameLogic";
 
 const usePokerGame = () => {
-  const [hand, setHand] = useState([]);
-  const [position, setPosition] = useState("");
-  const [lives, setLives] = useState(3);
-  const [score, setScore] = useState(0);
-  const [highScore, setHighScore] = useState(() => {
-    // Load high score from localStorage
-    const savedHighScore = localStorage.getItem("highScore");
-    return savedHighScore ? parseInt(savedHighScore, 10) : 0;
-  });
-  const [streak, setStreak] = useState(0);
-  const [wrongChoices, setWrongChoices] = useState([]);
-  const [gameOver, setGameOver] = useState(false);
-  const [showRules, setShowRules] = useState(false);
-  const [situation, setSituation] = useState("");
-  const [availableActions, setAvailableActions] = useState([]);
+  const {
+    hand,
+    situationKey,
+    positionKey,
+    situationDisplay,
+    positionDisplay,
+    lives,
+    score,
+    highScore,
+    streak,
+    wrongChoices,
+    gameOver,
+    availableActions,
+    setHand,
+    setSituationKey,
+    setPositionKey,
+    setSituationDisplay,
+    setPositionDisplay,
+    // setLives, // Using decrementLives or resetLives
+    setScore,
+    // setHighScore, // Using updateHighScore
+    updateHighScore,
+    setStreak,
+    setWrongChoices,
+    setGameOver,
+    setAvailableActions,
+    decrementLives,
+    resetLives,
+    resetGameScoreAndStats,
+  } = useGameState();
 
+  const {
+    generateNewHand,
+    selectSituationAndPosition,
+    getAvailableActions: getLogicAvailableActions, // Renamed to avoid conflict
+    getCorrectDecision: getLogicCorrectDecision, // Renamed to avoid conflict
+    getHandNotation: getLogicHandNotation, // Renamed to avoid conflict
+  } = useGameLogic();
+
+  const [showRules, setShowRules] = useState(false); // UI state, can remain here or move to UI component
   const isInitialMount = useRef(true);
-  const dealCount = useRef(0);
+  const dealCount = useRef(0); // For logging/debugging
 
   const logGameState = useCallback((action, details = {}) => {
-    console.log(`[${action}]`, { ...details, dealCount: dealCount.current });
+    console.log(`[PokerGame - ${action}]`, { ...details, dealCount: dealCount.current });
   }, []);
-
-  useEffect(() => {
-    dealNewHand();
-    logGameState("Game Initialized", { lives, wrongChoices: wrongChoices.length, gameOver });
-  }, [logGameState]);
 
   const dealNewHand = useCallback(() => {
     dealCount.current += 1;
-    logGameState("Dealing New Hand", { dealCount: dealCount.current });
+    logGameState("Dealing New Hand");
 
     const newHand = generateNewHand();
-    setHand(newHand);
-    const { newSituation, newPosition } = selectSituationAndPosition();
-    setSituation(getLabel(SITUATION_LABELS, newSituation));
-    setPosition(getLabel(POSITION_LABELS, newPosition));
-    const newActions = getAvailableActions(newSituation, newPosition);
+    setHand(newHand); // newHand could be a fallback hand from generateNewHand
+
+    const { newSituationKey, newPositionKey, newSituationDisplay, newPositionDisplay } = selectSituationAndPosition();
+
+    // Check if situation/position data indicates an error from useGameLogic
+    if (newSituationKey.startsWith("ERROR_") || newPositionKey.startsWith("ERROR_")) {
+      logGameState("Critical Error: Failed to select situation/position", { newSituationKey, newPositionKey });
+      setSituationDisplay(newSituationDisplay || "Error"); // Show error in UI
+      setPositionDisplay(newPositionDisplay || "Error");
+      setAvailableActions(["Fold"]); // Only allow Fold
+      setGameOver(true); // Stop the game
+      // Optionally, set a more specific error message for the UI here
+      return; // Do not proceed further with setting keys that are error codes
+    }
+
+    setSituationKey(newSituationKey);
+    setPositionKey(newPositionKey);
+    setSituationDisplay(newSituationDisplay);
+    setPositionDisplay(newPositionDisplay);
+
+    const newActions = getLogicAvailableActions(newSituationKey, newPositionKey);
     setAvailableActions(newActions);
-  }, [logGameState]);
+  }, [
+    generateNewHand, 
+    selectSituationAndPosition, 
+    getLogicAvailableActions, 
+    setHand, 
+    setSituationKey, 
+    setPositionKey, 
+    setSituationDisplay, 
+    setPositionDisplay, 
+    setAvailableActions, 
+    logGameState,
+    setGameOver // Added setGameOver as a dependency
+  ]);
 
   useEffect(() => {
     if (isInitialMount.current) {
-      logGameState("Initial Mount");
+      logGameState("Initial Mount - First Deal");
       isInitialMount.current = false;
       dealNewHand();
     }
   }, [dealNewHand, logGameState]);
 
-  const generateNewHand = () => {
-    const newHand = [];
-    while (newHand.length < 2) {
-      const rank = weightedRandomSelect(Object.keys(CARD_WEIGHTS), Object.values(CARD_WEIGHTS));
-      const suit = suits[Math.floor(Math.random() * suits.length)];
-      const card = `${rank}${suit}`;
-      if (!newHand.includes(card)) {
-        newHand.push(card);
-      }
-    }
-    return newHand;
-  };
-
-  const weightedRandomSelect = (items, weights) => {
-    const totalWeight = weights.reduce((sum, weight) => sum + weight, 0);
-    let random = Math.random() * totalWeight;
-    for (let i = 0; i < items.length; i++) {
-      random -= weights[i];
-      if (random <= 0) {
-        return items[i];
-      }
-    }
-    return items[items.length - 1];
-  };
-
-  const selectSituationAndPosition = () => {
-    const situations = Object.keys(initialPokerStrategy);
-    const newSituation = situations[Math.floor(Math.random() * situations.length)];
-    const positions = Object.keys(initialPokerStrategy[newSituation]);
-    const newPosition = positions[Math.floor(Math.random() * positions.length)];
-    return { newSituation, newPosition };
-  };
-
-  const getAvailableActions = (situation, position) => {
-    const actions = Object.keys(initialPokerStrategy[situation][position]);
-    return [...actions, "Fold"];
-  };
-
-  const getCorrectDecision = (handNotation) => {
-    console.log("Situation:", situation);
-    console.log("Position:", position);
-
-    const situationKey = Object.keys(SITUATION_LABELS).find((key) => SITUATION_LABELS[key] === situation);
-    const positionKey = Object.keys(POSITION_LABELS).find((key) => POSITION_LABELS[key] === position);
-
-    console.log("Situation Key:", situationKey);
-    console.log("Position Key:", positionKey);
-    console.log("HN:", handNotation);
-
-    if (!situationKey || !positionKey) {
-      console.error("Situation or Position key not found");
-      alert("Uh oh! See logs");
-      return "Fold"; // Default to Fold if we can't determine the correct decision
-    }
-
-    const situationData = initialPokerStrategy[situationKey]?.[positionKey];
-
-    if (!situationData) {
-      console.error("Strategy data not found for the current situation and position");
-      alert("Uh oh! See logs");
-      return "Fold";
-    }
-
-    for (const [action, hands] of Object.entries(situationData)) {
-      if (hands.includes(handNotation)) {
-        return action;
-      }
-    }
-
-    return "Fold";
-  };
-
-  const getHandNotation = (hand) => {
-    const ranks = "23456789TJQKA";
-    const [card1, card2] = hand.map((card) => card[0]);
-
-    if (card1 === card2) return card1 + card2;
-
-    const suited = hand[0][1] === hand[1][1] ? "s" : "o";
-    const rank1 = ranks.indexOf(card1);
-    const rank2 = ranks.indexOf(card2);
-
-    return rank1 > rank2 ? card1 + card2 + suited : card2 + card1 + suited;
-  };
 
   const handleCorrectDecision = useCallback(() => {
-    const points = 10 * (1 + streak * 0.1);
-    setScore((prevScore) => prevScore + points);
-    setStreak((prevStreak) => prevStreak + 1);
+    const points = 10 * (1 + streak * 0.1); // Base points + streak bonus
     const newScore = score + points;
-    setHighScore((prevHighScore) => {
-      const newHighScore = Math.max(prevHighScore, newScore);
-      // Save the new high score to localStorage
-      localStorage.setItem("highScore", newHighScore);
-      return newHighScore;
-    });
-    logGameState("Correct Decision", { points, newStreak: streak + 1 });
-  }, [streak, score, logGameState]);
+    setScore(newScore);
+    setStreak((prevStreak) => prevStreak + 1);
+    updateHighScore(newScore);
+    logGameState("Correct Decision", { points, newStreak: streak + 1, currentScore: newScore });
+  }, [streak, score, setScore, setStreak, updateHighScore, logGameState]);
 
-  const handleIncorrectDecision = useCallback(
-    (correctDecision, yourChoice, handNotation) => {
-      logGameState("Incorrect Decision", { correctDecision, yourChoice, handNotation, position, situation });
-      setStreak(0);
-      setWrongChoices((prevWrongChoices) => {
-        const newWrongChoices = [
-          ...prevWrongChoices,
-          { handNotation, position, situation, correctDecision, yourChoice },
-        ];
-        console.log("Updated wrong choices:", newWrongChoices);
-        return newWrongChoices;
-      });
-    },
-    [hand, position, situation, logGameState]
-  );
+  const handleIncorrectDecision = useCallback((correctDecision, yourChoice, handNotation) => {
+    logGameState("Incorrect Decision", { correctDecision, yourChoice, handNotation, position: positionDisplay, situation: situationDisplay });
+    setStreak(0);
+    decrementLives();
+    setWrongChoices((prevWrongChoices) => [
+      ...prevWrongChoices,
+      { handNotation, position: positionDisplay, situation: situationDisplay, correctDecision, yourChoice },
+    ]);
+  }, [decrementLives, setStreak, setWrongChoices, positionDisplay, situationDisplay, logGameState]);
+  
+  const makeDecision = useCallback((decision) => {
+    if (gameOver) {
+      logGameState("Decision Attempted - Game Over");
+      return; // Don't process decisions if game is over
+    }
+    logGameState("Decision Made", { decision, currentLives: lives, numWrongChoices: wrongChoices.length });
 
-  const makeDecision = useCallback(
-    (decision) => {
-      logGameState("Decision Made", { decision, lives, wrongChoices: wrongChoices.length });
+    const handNotation = getLogicHandNotation(hand);
 
-      const handNotation = getHandNotation(hand);
-      const correctDecision = getCorrectDecision(handNotation);
-      const isCorrect = decision === correctDecision;
-
-      if (isCorrect) {
-        handleCorrectDecision();
+    if (handNotation === "") {
+      logGameState("Error: Invalid hand notation for decision making.", { hand });
+      // Treat as incorrect decision or prevent further action
+      handleIncorrectDecision("Unknown", decision, "Invalid Hand"); 
+      // Potentially deal new hand or end game if this happens often
+      if (lives -1 <= 0) {
+        setGameOver(true);
+        logGameState("Game Over due to invalid hand leading to incorrect decision");
       } else {
-        handleIncorrectDecision(correctDecision, decision, handNotation);
+         setTimeout(() => dealNewHand(), 0);
       }
+      return;
+    }
 
-      // Update lives and check game over status directly
-      setLives((currentLives) => {
-        const newLives = isCorrect ? currentLives : currentLives - 1;
-        if (newLives <= 0) {
-          setGameOver(true);
-          logGameState("Game Over");
-        }
-        return newLives;
-      });
+    const correctDecision = getLogicCorrectDecision(handNotation, situationKey, positionKey);
+    const isCorrect = decision === correctDecision;
 
-      // Ensure no new hand is dealt if the game is over
-      if (!gameOver) {
-        setTimeout(() => {
-          if (!gameOver) {
-            logGameState("Calling dealNewHand from makeDecision");
-            dealNewHand();
-          }
-        }, 0); // Timeout to allow state to update
-      }
-    },
-    [hand, gameOver, handleCorrectDecision, handleIncorrectDecision, logGameState, dealNewHand]
-  );
+    if (isCorrect) {
+      handleCorrectDecision();
+    } else {
+      handleIncorrectDecision(correctDecision, decision, handNotation);
+    }
+
+    // Check for game over condition after processing decision and updating lives
+    // Note: lives state updates asynchronously, so we check against the current value
+    // If lives becomes 0 or less due to this incorrect decision, set gameOver.
+    if (!isCorrect && lives -1 <= 0) {
+        setGameOver(true);
+        logGameState("Game Over");
+    } else if (!isCorrect && lives -1 > 0) {
+        // If incorrect but game is not over, deal new hand
+        // Delay slightly to allow state updates to be perceived if necessary, though often not needed for logic
+        setTimeout(() => dealNewHand(), 0); 
+    } else if (isCorrect) {
+        // If correct, deal new hand
+        setTimeout(() => dealNewHand(), 0);
+    }
+  }, 
+  [
+    hand, situationKey, positionKey, gameOver, lives, wrongChoices.length, // Include all dependencies
+    getLogicHandNotation, getLogicCorrectDecision, 
+    handleCorrectDecision, handleIncorrectDecision, 
+    dealNewHand, setGameOver, logGameState,
+    // Added situationKey, positionKey as they are used in getLogicCorrectDecision
+    situationKey, positionKey 
+  ]);
 
   const restartGame = useCallback(() => {
     logGameState("Restarting Game");
-    setLives(3);
-    setScore(0);
-    setStreak(0);
-    setWrongChoices([]);
+    resetLives();
+    resetGameScoreAndStats();
     setGameOver(false);
-    dealCount.current = 0;
-    dealNewHand();
-  }, [dealNewHand, logGameState]);
+    dealCount.current = 0; // Reset deal count for new game session
+    dealNewHand(); // Deal the first hand of the new game
+  }, [resetLives, resetGameScoreAndStats, setGameOver, dealNewHand, logGameState]);
+
+  // This effect handles the game over condition more directly after `lives` updates.
+  useEffect(() => {
+    if (lives <= 0 && !gameOver) {
+      setGameOver(true);
+      logGameState("Game Over - Lives Depleted");
+    }
+  }, [lives, gameOver, setGameOver, logGameState]);
 
   return {
     hand,
-    position,
+    position: positionDisplay, // Use display-friendly position
     lives,
     score,
     highScore,
     streak,
     gameOver,
-    showRules,
-    setShowRules,
-    situation,
+    showRules, // Still managed here
+    setShowRules, // Still managed here
+    situation: situationDisplay, // Use display-friendly situation
     availableActions,
     makeDecision,
     restartGame,

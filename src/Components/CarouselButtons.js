@@ -16,7 +16,7 @@ export const SampleNextArrow = (props) => {
   return (
     <div
       className={className}
-      style={{ ...style, ...arrowStyles, marginRight: "20px" }} // Adjust the margin as needed
+      style={{ ...style, ...arrowStyles, marginRight: "20px" }} 
       onClick={onClick}
     >
       <ChevronRightIcon style={{ fontSize: "2rem" }} />
