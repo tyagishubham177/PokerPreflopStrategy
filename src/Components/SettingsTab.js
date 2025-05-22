@@ -25,24 +25,14 @@ const SettingsTab = () => {
     try {
       const savedStrategy = localStorage.getItem(CUSTOM_STRATEGY_LS_KEY);
       if (savedStrategy) {
-        const strategyFromModalFormat = JSON.parse(savedStrategy); 
-        
-        const reconstructedStrategy = { RFI: {} };
-        Object.keys(strategyFromModalFormat).forEach(posKey => {
-          if (posKey === "SB") {
-            reconstructedStrategy.RFI[posKey] = { 
-                "Raise for Value": strategyFromModalFormat[posKey],
-                "Raise as bluff": [] 
-            };
-          } else {
-            reconstructedStrategy.RFI[posKey] = { "Raise": strategyFromModalFormat[posKey] };
-          }
-        });
-        return reconstructedStrategy;
+        // Directly parse and use the saved strategy if it exists
+        return JSON.parse(savedStrategy); 
       }
     } catch (error) {
       console.error("Failed to load custom strategy from localStorage:", error);
+      // If there's an error (e.g., corrupted data), fall back to initialPokerStrategy
     }
+    // If no saved strategy or if there was an error, return the default initial strategy
     return initialPokerStrategy; 
   });
 
@@ -79,19 +69,11 @@ const SettingsTab = () => {
 
   const handleSaveStrategy = (modifiedStrategies) => {
     try {
+      // The modifiedStrategies from the modal is already in the correct, full format.
+      // Directly stringify and save to localStorage.
       localStorage.setItem(CUSTOM_STRATEGY_LS_KEY, JSON.stringify(modifiedStrategies));
-      const reconstructedStrategy = { RFI: {} };
-      Object.keys(modifiedStrategies).forEach(posKey => {
-        if (posKey === "SB") {
-          reconstructedStrategy.RFI[posKey] = {
-            "Raise for Value": modifiedStrategies[posKey],
-            "Raise as bluff": [] 
-          };
-        } else {
-          reconstructedStrategy.RFI[posKey] = { "Raise": modifiedStrategies[posKey] };
-        }
-      });
-      setCurrentStrategy(reconstructedStrategy);
+      // Directly set it to the currentStrategy state.
+      setCurrentStrategy(modifiedStrategies);
       console.log("Custom strategy saved to localStorage and state updated.");
     } catch (error) {
       console.error("Failed to save custom strategy to localStorage:", error);
@@ -173,7 +155,6 @@ const SettingsTab = () => {
         open={showStrategyModal}
         onClose={handleCloseStrategyModal}
         initialStrategy={currentStrategy} 
-        gameLabels={POSITION_LABELS}
         onSave={handleSaveStrategy}
       />
     </Box>
