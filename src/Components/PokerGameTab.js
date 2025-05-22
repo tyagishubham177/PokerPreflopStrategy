@@ -25,7 +25,7 @@ const PokerGameTab = ({
         display: "flex",
         flexDirection: "column",
         height: "100%",
-        justifyContent: "space-between", // Distribute space evenly
+        justifyContent: "space-between", 
       }}
     >
       {!gameOver ? (
@@ -79,7 +79,7 @@ const PokerGameTab = ({
               display: "flex",
               justifyContent: "space-between",
               alignItems: "center",
-              borderTop: "1px solid rgba(0, 0, 0, 0.12)", // Add a subtle separator
+              borderTop: "1px solid rgba(0, 0, 0, 0.12)", 
             }}
           >
             <Typography variant="body1" sx={{ fontWeight: "bold" }}>

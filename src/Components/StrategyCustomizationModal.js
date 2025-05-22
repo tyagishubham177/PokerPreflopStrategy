@@ -7,7 +7,8 @@ import Button from '@mui/material/Button';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import Box from '@mui/material/Box';
-import StrategyEditor from './StrategyEditor.js'; // Assuming StrategyEditor.js is in the same directory
+import StrategyEditor from './StrategyEditor.js';
+import ErrorBoundary from './ErrorBoundary'; 
 
 const POSITIONS = [
   { key: "UTG", labelKey: "UTG", strategyPath: "RFI.UTG", uiLabel: "UTG" },
@@ -66,7 +67,7 @@ const StrategyCustomizationModal = ({
   useEffect(() => {
     if (open && initialStrategy) {
       setModifiedStrategies(initializeAllStrategies(initialStrategy));
-      setCurrentTab(0); // Reset to the first tab when modal opens or strategy changes
+      setCurrentTab(0); 
     }
   }, [open, initialStrategy]);
 
@@ -139,11 +140,13 @@ const StrategyCustomizationModal = ({
             style={{ paddingTop: '20px' }} 
           >
             {currentTab === index && (
-              <StrategyEditor
-                key={position.key} // Ensure StrategyEditor re-mounts or updates correctly
-                initialHands={handsForEditor}
-                onSelectionChange={handleStrategySelectionChange}
-              />
+              <ErrorBoundary fallbackMessage={`Error loading strategy editor for ${position.uiLabel}. Please try selecting another tab or reopening the dialog.`}>
+                <StrategyEditor
+                  key={position.key} 
+                  initialHands={handsForEditor}
+                  onSelectionChange={handleStrategySelectionChange}
+                />
+              </ErrorBoundary>
             )}
           </div>
         ))}

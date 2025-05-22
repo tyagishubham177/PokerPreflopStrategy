@@ -1,13 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Card, CardContent, Typography, Avatar, Box, IconButton, SwipeableDrawer, Fab } from "@mui/material";
-import InfoIcon from "@mui/icons-material/Info";
+import { Box, Fab } from "@mui/material"; 
 import SettingsIcon from "@mui/icons-material/Settings";
-import CloseIcon from "@mui/icons-material/Close";
-import PokerGameTab from "./PokerGameTab";
-import RulesDialog from "./RulesDialog";
-import SettingsTab from "./SettingsTab";
+import SettingsPanel from "./SettingsPanel"; 
+import GameDisplay from "./GameDisplay"; 
+import ErrorBoundary from "./ErrorBoundary"; 
 import usePokerGame from "../Hooks/UsePokerGame";
-import pokerImage from "../Assets/pokerlogo512.png";
 import wallpaperImage from "../Assets/wallpaper.png";
 
 const PokerGame = () => {
@@ -52,7 +49,7 @@ const PokerGame = () => {
     longPressTimeout.current = setTimeout(() => {
       setCollapsed(true);
       setLongPress(false);
-    }, 2000); // 2 seconds
+    }, 2000); 
   };
 
   const handleLongPressEnd = () => {
@@ -80,77 +77,28 @@ const PokerGame = () => {
         m: 0,
       }}
     >
-      {!collapsed && (
-        <Card
-          sx={{
-            maxWidth: 650,
-            width: "95%",
-            boxShadow: 3,
-            margin: "auto",
-            borderRadius: 2,
-            overflow: "hidden",
-            display: "flex",
-            flexDirection: "column",
-            height: {
-              xs: "80vh",
-              sm: "85vh",
-            },
-          }}
-        >
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              p: 1,
-              backgroundColor: "primary.main",
-            }}
-          >
-            <Avatar src={pokerImage} sx={{ width: 40, height: 40 }} />
-            <Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
-              Learn Preflop Strategy
-            </Typography>
-            <IconButton
-              aria-label="info"
-              onClick={handleClick}
-              onMouseDown={handleLongPressStart}
-              onMouseUp={handleLongPressEnd}
-              onTouchStart={handleLongPressStart}
-              onTouchEnd={handleLongPressEnd}
-              sx={{ color: "white" }}
-            >
-              <InfoIcon />
-            </IconButton>
-          </Box>
-
-          <CardContent
-            sx={{
-              p: { xs: 2, md: 3 },
-              flex: 1,
-              overflowY: "auto",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-            }}
-          >
-            <PokerGameTab
-              gameOver={gameOver}
-              score={score}
-              highScore={highScore}
-              hand={hand}
-              situation={situation}
-              position={position}
-              availableActions={availableActions}
-              makeDecision={makeDecision}
-              lives={lives}
-              streak={streak}
-              restartGame={restartGame}
-              wrongChoices={wrongChoices}
-            />
-          </CardContent>
-          <RulesDialog showRules={showRules} setShowRules={setShowRules} />
-        </Card>
-      )}
+      <ErrorBoundary fallbackMessage="There was an error displaying the game. Please refresh.">
+        <GameDisplay
+          collapsed={collapsed}
+          onInfoClick={handleClick}
+          onLongPressStart={handleLongPressStart}
+        onLongPressEnd={handleLongPressEnd}
+        gameOver={gameOver}
+        score={score}
+        highScore={highScore}
+        hand={hand}
+        situation={situation}
+        position={position}
+        availableActions={availableActions}
+        makeDecision={makeDecision}
+        lives={lives}
+        streak={streak}
+        restartGame={restartGame}
+        wrongChoices={wrongChoices}
+          showRules={showRules}
+          setShowRules={setShowRules}
+        />
+      </ErrorBoundary>
 
       <Fab
         color="primary"
@@ -167,17 +115,11 @@ const PokerGame = () => {
         <SettingsIcon />
       </Fab>
 
-      <SwipeableDrawer anchor="right" open={showSettings} onClose={toggleSettings} onOpen={toggleSettings}>
-        <Box sx={{ width: 250, p: 2 }}>
-          <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 2 }}>
-            <Typography variant="h6">Settings</Typography>
-            <IconButton onClick={toggleSettings}>
-              <CloseIcon />
-            </IconButton>
-          </Box>
-          <SettingsTab />
-        </Box>
-      </SwipeableDrawer>
+      <SettingsPanel
+        open={showSettings}
+        onClose={toggleSettings}
+        onOpen={toggleSettings}
+      />
     </Box>
   );
 };
