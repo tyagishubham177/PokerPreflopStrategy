@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HandCell = ({ hand, isSelected, onClick }) => {
+const HandCell = ({ hand, isSelected, onClick, isHighlighted = false }) => {
   const cellStyle = {
     display: 'flex',
     alignItems: 'center',
@@ -16,6 +16,12 @@ const HandCell = ({ hand, isSelected, onClick }) => {
     WebkitUserSelect: 'none',
     msUserSelect: 'none',
   };
+
+  // Apply highlighting styles
+  if (isHighlighted) {
+    cellStyle.outline = '2px solid #FFD700'; // Gold outline
+    cellStyle.outlineOffset = '-1px'; // Keep outline inside cell boundaries
+  }
 
   return (
     <div

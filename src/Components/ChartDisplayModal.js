@@ -17,8 +17,8 @@ const style = {
   alignItems: 'center', // Center content including the chart
 };
 
-// Props will change: open, onClose, title, situationKey, positionKey, decisionKey
-const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, decisionKey }) => {
+// Props will change: open, onClose, title, situationKey, positionKey, decisionKey, handNotation
+const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, decisionKey, handNotation = null }) => {
   return (
     <Modal
       open={open}
@@ -37,6 +37,7 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
             situationKey={situationKey}
             positionKey={positionKey}
             decisionKey={decisionKey}
+            handToHighlight={handNotation} // Add this line
           />
         ) : (
           <Typography sx={{ mt: 2, textAlign: 'center' }}>

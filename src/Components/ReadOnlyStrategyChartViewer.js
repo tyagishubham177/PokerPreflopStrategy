@@ -4,7 +4,7 @@ import StrategyEditor from './StrategyEditor';
 import { initialPokerStrategy } from '../Constants/InitialStrategy';
 import { SITUATION_LABELS, POSITION_LABELS } from '../Constants/GameLabels';
 
-const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey }) => {
+const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey, handToHighlight = null }) => {
   // Defensive lookup for hands
   const hands = initialPokerStrategy[situationKey]?.[positionKey]?.[decisionKey] || [];
 
@@ -30,6 +30,7 @@ const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey })
       <StrategyEditor
         initialHands={hands}
         isReadOnly={true}
+        highlightedHand={handToHighlight} // Add this line
         // onSelectionChange can be omitted as it's read-only
       />
     </Box>

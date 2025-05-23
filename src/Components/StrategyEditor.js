@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { getHandRepresentation, handMatrixRanks as ranks } from '../Utils/handUtils'; 
 import HandCell from './HandCell'; 
 
-const StrategyEditor = ({ initialHands = [], onSelectionChange, isReadOnly = false }) => {
+const StrategyEditor = ({ initialHands = [], onSelectionChange, isReadOnly = false, highlightedHand = null }) => {
   const [selectedHands, setSelectedHands] = useState(new Set(initialHands));
 
   useEffect(() => {
@@ -45,6 +45,7 @@ const StrategyEditor = ({ initialHands = [], onSelectionChange, isReadOnly = fal
               hand={hand}
               isSelected={selectedHands.has(hand)}
               onClick={isReadOnly ? () => {} : handleHandClick} // Conditional onClick
+              isHighlighted={highlightedHand ? hand === highlightedHand : false} // Add this line
             />
           );
         })

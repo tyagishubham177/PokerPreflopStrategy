@@ -9,7 +9,12 @@ const IncorrectAnswers = ({ wrongChoices }) => {
   const [flippedCards, setFlippedCards] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
   // Updated state structure for currentChartData
-  const [currentChartData, setCurrentChartData] = useState({ situationKey: '', positionKey: '', decisionKey: '' });
+  const [currentChartData, setCurrentChartData] = useState({
+    situationKey: '',
+    positionKey: '',
+    decisionKey: '',
+    handNotation: '' // Add handNotation
+  });
 
   const toggleFlip = (index) => {
     setFlippedCards((prev) => ({ ...prev, [index]: !prev[index] }));
@@ -20,6 +25,7 @@ const IncorrectAnswers = ({ wrongChoices }) => {
       situationKey: choice.situationKey,
       positionKey: choice.positionKey,
       decisionKey: choice.correctDecision, // choice.correctDecision is the action like "Raise"
+      handNotation: choice.handNotation // Add this line
     });
     setModalOpen(true);
   };
@@ -69,6 +75,7 @@ const IncorrectAnswers = ({ wrongChoices }) => {
         situationKey={currentChartData.situationKey} // Pass situationKey
         positionKey={currentChartData.positionKey} // Pass positionKey
         decisionKey={currentChartData.decisionKey} // Pass decisionKey
+        handNotation={currentChartData.handNotation} // Add this prop
       />
     </Paper>
   );
