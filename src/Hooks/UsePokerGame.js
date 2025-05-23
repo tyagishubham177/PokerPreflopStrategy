@@ -141,6 +141,11 @@ const usePokerGame = () => {
     updateHighScore(newScore);
     setLastAnswerCorrectness('CORRECT'); // Set for correct decision
     logGameState("Correct Decision", { points, newStreak: streak + 1, currentScore: newScore });
+
+    // Add this timeout
+    setTimeout(() => {
+      setLastAnswerCorrectness(null);
+    }, 1400);
   }, [streak, score, setScore, setStreak, updateHighScore, logGameState]); // setLastAnswerCorrectness is stable
 
   const handleIncorrectDecision = useCallback((correctDecision, yourChoice, handNotation) => {
@@ -150,9 +155,14 @@ const usePokerGame = () => {
     decrementLives();
     setWrongChoices((prevWrongChoices) => [
       ...prevWrongChoices,
-      { handNotation, position: positionDisplay, situation: situationDisplay, correctDecision, yourChoice },
+      { handNotation, position: positionDisplay, situation: situationDisplay, correctDecision, yourChoice, situationKey: situationKey, positionKey: positionKey },
     ]);
-  }, [decrementLives, setStreak, setWrongChoices, positionDisplay, situationDisplay, logGameState]);
+
+    // Add this timeout
+    setTimeout(() => {
+      setLastAnswerCorrectness(null);
+    }, 1400);
+  }, [decrementLives, setStreak, setWrongChoices, positionDisplay, situationDisplay, logGameState, situationKey, positionKey]);
   
   const makeDecision = useCallback((decision) => {
     if (gameOver) {
@@ -235,6 +245,13 @@ const usePokerGame = () => {
       logGameState("Game Over - Lives Depleted");
     }
   }, [lives, gameOver, setGameOver, logGameState]);
+
+  // useEffect to reset lastAnswerCorrectness when gameOver becomes true
+  useEffect(() => {
+    if (gameOver) {
+      setLastAnswerCorrectness(null);
+    }
+  }, [gameOver]);
 
   // useEffect to update timerDuration when difficulty changes
   useEffect(() => {
