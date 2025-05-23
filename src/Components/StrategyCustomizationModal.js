@@ -14,41 +14,6 @@ import FormControl from '@mui/material/FormControl';
 import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
 import { SITUATION_LABELS, POSITION_LABELS } from '../Constants/GameLabels.js';
 
-const getNestedValue = (obj, path) => {
-  if (!path) return undefined;
-  const keys = path.split('.');
-  let result = obj;
-  for (const key of keys) {
-    if (result && typeof result === 'object' && key in result) {
-      result = result[key];
-    } else {
-      return undefined;
-    }
-  }
-  return result;
-};
-
-const initializeAllStrategies = (initialStrategy) => {
-  const strategies = {};
-  if (!initialStrategy || !initialStrategy.RFI) {
-    console.warn("Initial strategy or RFI not found");
-    POSITIONS.forEach(pos => strategies[pos.key] = []);
-    return strategies;
-  }
-
-  POSITIONS.forEach(position => {
-    if (position.key === "SB") {
-      const raiseForValue = getNestedValue(initialStrategy, `${position.strategyPath}.Raise for Value`) || [];
-      const raiseAsBluff = getNestedValue(initialStrategy, `${position.strategyPath}.Raise as bluff`) || [];
-      strategies[position.key] = Array.from(new Set([...raiseForValue, ...raiseAsBluff]));
-    } else {
-      const raiseActions = getNestedValue(initialStrategy, `${position.strategyPath}.Raise`) || [];
-      strategies[position.key] = Array.from(new Set([...raiseActions]));
-    }
-  });
-  return strategies;
-};
-
 const StrategyCustomizationModal = ({
   open,
   onClose,
