@@ -18,7 +18,7 @@ const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
 const SettingsTab = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [username, setUsername] = useState("");
-  const [difficulty, setDifficulty] = useState("medium");
+  const [difficulty, setDifficulty] = useState(localStorage.getItem('gameDifficulty') || "medium");
   const [showStrategyModal, setShowStrategyModal] = useState(false);
 
   const [currentStrategy, setCurrentStrategy] = useState(() => {
@@ -56,6 +56,7 @@ const SettingsTab = () => {
 
   const handleSaveSettings = () => {
     handleInteraction();
+    localStorage.setItem('gameDifficulty', difficulty);
     console.log("Settings saved:", { soundEnabled, username, difficulty });
   };
 

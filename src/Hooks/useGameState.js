@@ -24,6 +24,11 @@ const useGameState = () => {
   const [wrongChoices, setWrongChoices] = useState([]); // Array of incorrect decisions made by the player
   const [gameOver, setGameOver] = useState(false);
   const [availableActions, setAvailableActions] = useState([]); // Possible actions for the current hand
+  const [difficulty, setDifficulty] = useState("medium"); 
+  const [hints, setHints] = useState(0);
+  const [timer, setTimer] = useState(0);
+  const [highlightedAction, setHighlightedAction] = useState(null);
+  const [answerFeedback, setAnswerFeedback] = useState(null);
 
   const updateHighScore = useCallback((newScore) => {
     setHighScore((prevHighScore) => {
@@ -48,9 +53,12 @@ const useGameState = () => {
     setLives((prevLives) => prevLives - 1);
   }, []);
 
-  const resetLives = useCallback(() => {
-    setLives(3);
+  const resetLives = useCallback((numLives) => {
+    setLives(numLives);
   }, []);
+
+  const decrementHints = useCallback(() => setHints((prevHints) => Math.max(0, prevHints - 1)), []);
+  const resetTimer = useCallback((duration) => setTimer(duration), []);
 
   return {
     // State values
@@ -66,6 +74,11 @@ const useGameState = () => {
     wrongChoices,
     gameOver,
     availableActions,
+    difficulty,
+    hints,
+    timer,
+    highlightedAction,
+    answerFeedback,
 
     // State setters
     setHand,
@@ -81,11 +94,18 @@ const useGameState = () => {
     setWrongChoices,
     setGameOver,
     setAvailableActions,
+    setDifficulty,
+    setHints,
+    setTimer,
+    setHighlightedAction,
+    setAnswerFeedback,
     
     // Specific game action state updaters
     decrementLives,
     resetLives,
     resetGameScoreAndStats,
+    decrementHints,
+    resetTimer,
   };
 };
 

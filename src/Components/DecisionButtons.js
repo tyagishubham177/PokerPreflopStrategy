@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Box, useTheme, useMediaQuery } from "@mui/material";
 
-const DecisionButtons = ({ availableActions, makeDecision }) => {
+const DecisionButtons = ({ availableActions, makeDecision, highlightedAction }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -36,6 +36,13 @@ const DecisionButtons = ({ availableActions, makeDecision }) => {
           onClick={() => makeDecision(action)}
           sx={{
             ...buttonStyle,
+            ...(action === highlightedAction && {
+              boxShadow: '0 0 15px 5px yellow', // Yellow glow for highlight
+              // Adding a border as well for more visibility
+              // borderColor: 'yellow', 
+              // borderWidth: '2px', 
+              // borderStyle: 'solid',
+            }),
             width: isMobile && availableActions.length % 2 !== 0 && index === availableActions.length - 1 ? "100%" : buttonStyle.width,
           }}
         >

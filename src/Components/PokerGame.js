@@ -29,7 +29,13 @@ const PokerGame = () => {
     makeDecision,
     restartGame,
     wrongChoices,
-  } = usePokerGame();
+    difficulty, // New value
+    hints,      // New value
+    timer,      // New value
+    useHint,    // New function
+    highlightedAction, // New value
+    answerFeedback, // New value
+  } = usePokerGame({ showSettings }); // Pass showSettings
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
@@ -95,8 +101,15 @@ const PokerGame = () => {
         streak={streak}
         restartGame={restartGame}
         wrongChoices={wrongChoices}
-          showRules={showRules}
-          setShowRules={setShowRules}
+        showRules={showRules}
+        setShowRules={setShowRules}
+        difficulty={difficulty} // New prop
+        hints={hints} // New prop
+        timer={timer} // New prop
+        useHint={useHint} // New prop
+        highlightedAction={highlightedAction} // New prop
+        answerFeedback={answerFeedback} // New prop
+        showSettings={showSettings} // New prop
         />
       </ErrorBoundary>
 

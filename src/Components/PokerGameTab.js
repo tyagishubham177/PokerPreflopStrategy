@@ -18,6 +18,10 @@ const PokerGameTab = ({
   streak,
   restartGame,
   wrongChoices,
+  // New props
+  highlightedAction,
+  answerFeedback,
+  difficulty, // difficulty is available if needed
 }) => {
   return (
     <Box
@@ -64,11 +68,30 @@ const PokerGameTab = ({
             <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold" }}>
               What's your decision?
             </Typography>
+
+            {/* Answer Feedback Display */}
+            {answerFeedback && (
+              <Typography 
+                variant="h5" 
+                align="center" 
+                sx={{ 
+                  my: 2, 
+                  fontWeight: "bold",
+                  color: answerFeedback === "correct" ? "success.main" : "error.main" 
+                }}
+              >
+                {answerFeedback === "correct" ? "Correct!" : "Incorrect!"}
+              </Typography>
+            )}
           </Box>
 
           {/* Center section - Decision Buttons */}
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} />
+            <DecisionButtons 
+              availableActions={availableActions} 
+              makeDecision={makeDecision} 
+              highlightedAction={highlightedAction} // Pass prop
+            />
           </Box>
 
           {/* Bottom section */}
