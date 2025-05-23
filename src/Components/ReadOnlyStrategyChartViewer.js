@@ -8,6 +8,8 @@ const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey, h
   // Defensive lookup for hands
   const hands = initialPokerStrategy[situationKey]?.[positionKey]?.[decisionKey] || [];
 
+  const debugInfo = `DEBUG: Keys: Sit: ${situationKey}, Pos: ${positionKey}, Dec: ${decisionKey} | Hands found: ${hands.length}`;
+  
   // Constructing a title
   const situationLabel = SITUATION_LABELS[situationKey] || situationKey;
   const positionData = POSITION_LABELS[positionKey];
@@ -24,6 +26,7 @@ const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey, h
 
   return (
     <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Typography variant="caption" color="red" sx={{ mb: 1 }}>{debugInfo}</Typography>
       <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
         {title}
       </Typography>
