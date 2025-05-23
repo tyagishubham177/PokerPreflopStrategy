@@ -8,18 +8,19 @@ const IncorrectAnswers = ({ wrongChoices }) => {
   const theme = useTheme();
   const [flippedCards, setFlippedCards] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
-  const [currentChartData, setCurrentChartData] = useState({ situation: '', position: '', chartLink: 'https://poker-coaching.s3.amazonaws.com/tools/preflop-charts/full-preflop-charts.pdf' });
+  // Updated state structure for currentChartData
+  const [currentChartData, setCurrentChartData] = useState({ situationKey: '', positionKey: '', decisionKey: '' });
 
   const toggleFlip = (index) => {
     setFlippedCards((prev) => ({ ...prev, [index]: !prev[index] }));
   };
 
   const handleInfoClick = (choice) => {
-    setCurrentChartData(prevData => ({
-      ...prevData, // Keep the existing chartLink
-      situation: choice.situation,
-      position: choice.position,
-    }));
+    setCurrentChartData({
+      situationKey: choice.situationKey,
+      positionKey: choice.positionKey,
+      decisionKey: choice.correctDecision, // choice.correctDecision is the action like "Raise"
+    });
     setModalOpen(true);
   };
 
@@ -64,10 +65,10 @@ const IncorrectAnswers = ({ wrongChoices }) => {
       <ChartDisplayModal
         open={modalOpen}
         onClose={handleCloseModal}
-        title="Poker Chart Information"
-        situation={currentChartData.situation}
-        position={currentChartData.position}
-        chartLink={currentChartData.chartLink}
+        title="Strategy Chart" // Updated title
+        situationKey={currentChartData.situationKey} // Pass situationKey
+        positionKey={currentChartData.positionKey} // Pass positionKey
+        decisionKey={currentChartData.decisionKey} // Pass decisionKey
       />
     </Paper>
   );

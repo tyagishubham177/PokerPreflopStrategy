@@ -40,8 +40,9 @@ const CarouselComponent = ({ wrongChoices, flippedCards, toggleFlip, onInfoClick
                   position: 'absolute',
                   top: 8,
                   right: 8,
-                  zIndex: 1, 
-                  color: 'primary.main' 
+                  zIndex: 1,
+                  color: 'black', // Changed to black
+                  // backgroundColor: 'transparent', // IconButton is transparent by default
                 }}
               >
                 <InfoIcon />
