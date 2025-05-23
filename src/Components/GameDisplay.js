@@ -28,26 +28,33 @@ const GameDisplay = (props) => {
     wrongChoices,
     showRules,
     setShowRules,
-    currentCorrectAction, // Destructure currentCorrectAction (no longer used for hint logic here)
-    hints, // Destructure hints (no longer used for hint logic here)
-    decrementHints, // Destructure decrementHints (no longer used for hint logic here)
-    lastAnswerCorrectness, // Destructure lastAnswerCorrectness
-    timeLeft, // Destructure timeLeft (no longer displayed here)
-    hintedAction, // Receive hintedAction as a prop
+    currentCorrectAction, 
+    // hints, decrementHints are removed from here as they are passed directly to PokerGameTab
+    lastAnswerCorrectness, 
+    // timeLeft is removed from here as it is passed directly to PokerGameTab
+    hintedAction, 
+    // New props from PokerGame.js to be passed down
+    timeLeft, 
+    hints, 
+    handleHintClick, 
+    isHintButtonDisabled,
   } = props;
 
   const [feedbackTrigger, setFeedbackTrigger] = useState(null); // Renamed state variable
 
   // Effect to trigger feedback based on lastAnswerCorrectness
   useEffect(() => {
-    let timer;
-    if (lastAnswerCorrectness === 'CORRECT' || lastAnswerCorrectness === 'INCORRECT') {
-      setFeedbackTrigger(lastAnswerCorrectness); // Use renamed setter
-      timer = setTimeout(() => {
-        setFeedbackTrigger(null); // Use renamed setter
-      }, 1500); // Updated timeout to 1500ms
+    let timerId; // Renamed to timerId for clarity in cleanup
+    if (lastAnswerCorrectness) { // Simplified condition: if not null (i.e., 'CORRECT' or 'INCORRECT')
+      setFeedbackTrigger(lastAnswerCorrectness);
+      timerId = setTimeout(() => {
+        setFeedbackTrigger(null);
+      }, 1500);
     }
-    return () => clearTimeout(timer); // Cleanup timeout
+    // The cleanup function will clear the timerId from the effect's closure
+    // from the run where lastAnswerCorrectness was not null.
+    // If lastAnswerCorrectness is null, timerId will be undefined, and clearTimeout(undefined) is safe.
+    return () => clearTimeout(timerId);
   }, [lastAnswerCorrectness]);
 
   // Removed handleHintClick as it's now in PokerGame.js
@@ -139,11 +146,16 @@ const GameDisplay = (props) => {
           position={position}
           availableActions={availableActions}
           makeDecision={makeDecision}
-          lives={lives} // lives is still passed for other potential uses in PokerGameTab
+          lives={lives} 
           streak={streak}
           restartGame={restartGame}
           wrongChoices={wrongChoices}
-          hintedAction={hintedAction} // Pass hintedAction to PokerGameTab
+          hintedAction={hintedAction} 
+          // Pass new props for the bottom bar functionality
+          timeLeft={timeLeft}
+          hints={hints}
+          handleHintClick={handleHintClick}
+          isHintButtonDisabled={isHintButtonDisabled}
         />
       </CardContent>
       <RulesDialog showRules={showRules} setShowRules={setShowRules} />

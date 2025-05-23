@@ -53,8 +53,13 @@ const usePokerGame = () => {
   const [lastAnswerCorrectness, setLastAnswerCorrectness] = useState(null); // For correct/incorrect answer feedback
   const [timeLeft, setTimeLeft] = useState(0); // Added state for timer
   const [isTimerActive, setIsTimerActive] = useState(false); // Added state for timer activity
+  const gameOverRef = useRef(gameOver); // Add ref for gameOver
   const isInitialMount = useRef(true);
   const dealCount = useRef(0); // For logging/debugging
+
+  useEffect(() => { // useEffect to keep gameOverRef updated
+    gameOverRef.current = gameOver;
+  }, [gameOver]);
 
   const logGameState = useCallback((action, details = {}) => {
     console.log(`[PokerGame - ${action}]`, { ...details, dealCount: dealCount.current });
@@ -185,19 +190,21 @@ const usePokerGame = () => {
     // Check for game over condition after processing decision and updating lives
     // Note: lives state updates asynchronously, so we check against the current value
     // If lives becomes 0 or less due to this incorrect decision, set gameOver.
+    // Note: setGameOver updates the state, but gameOverRef.current might be more immediate for the timeout logic below.
     if (!isCorrect && lives - 1 <= 0) {
-        setGameOver(true);
+        setGameOver(true); // This will trigger the useEffect to update gameOverRef
         logGameState("Game Over");
         setCurrentCorrectAction(null); // Reset on game over
-    } else if (!isCorrect && lives - 1 > 0) {
-        // If incorrect but game is not over, deal new hand
-        setCurrentCorrectAction(null); // Reset before new hand
-        setTimeout(() => dealNewHand(), 0); 
-    } else if (isCorrect) {
-        // If correct, deal new hand
-        setCurrentCorrectAction(null); // Reset before new hand
-        setTimeout(() => dealNewHand(), 0);
+    } else {
+        setCurrentCorrectAction(null); // Reset before new hand if not game over
     }
+
+    // Common logic for post-decision: wait 1.5s then deal new hand if not game over
+    setTimeout(() => {
+      if (!gameOverRef.current) { // Check the ref here
+        dealNewHand();
+      }
+    }, 1500);
   }, 
   [
     hand, situationKey, positionKey, gameOver, lives, wrongChoices.length, // Include all dependencies
@@ -207,6 +214,7 @@ const usePokerGame = () => {
     // Added situationKey, positionKey as they are used in getLogicCorrectDecision
     situationKey, positionKey
     // setCurrentCorrectAction is not needed in deps
+    // gameOver is a dependency because its direct value is used for the immediate logic within makeDecision (though ref is for timeout)
   ]);
 
   const restartGame = useCallback(() => {

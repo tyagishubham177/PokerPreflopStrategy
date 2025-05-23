@@ -5,7 +5,7 @@ import SettingsPanel from "./SettingsPanel";
 import GameDisplay from "./GameDisplay"; 
 import ErrorBoundary from "./ErrorBoundary"; 
 import usePokerGame from "../Hooks/UsePokerGame";
-import BottomGameBar from "./BottomGameBar"; // Import BottomGameBar
+// Removed BottomGameBar import
 import wallpaperImage from "../Assets/wallpaper.png";
 
 const PokerGame = () => {
@@ -128,16 +128,14 @@ const PokerGame = () => {
           lastAnswerCorrectness={lastAnswerCorrectness} // Pass lastAnswerCorrectness
           timeLeft={timeLeft} // Pass timeLeft
           hintedAction={hintedAction} // Pass hintedAction to GameDisplay
+          // Pass additional props for PokerGameTab via GameDisplay
+          handleHintClick={handleHintClick}
+          isHintButtonDisabled={isHintButtonDisabled}
+          streak={streak} // streak was already passed, ensuring it remains
         />
       </ErrorBoundary>
 
-      <BottomGameBar
-        lives={lives}
-        timeLeft={timeLeft}
-        hints={hints}
-        onHintClick={handleHintClick}
-        isHintDisabled={isHintButtonDisabled}
-      />
+      {/* BottomGameBar rendering removed */}
 
       <Fab
         color="primary"
