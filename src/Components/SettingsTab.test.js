@@ -29,7 +29,10 @@ jest.mock('./StrategyCustomizationModal', () => {
           if (modifiedStrategy.RFI && modifiedStrategy.RFI.UTG && modifiedStrategy.RFI.UTG.Raise) {
             modifiedStrategy.RFI.UTG.Raise.push('NEW_HAND_FROM_MODAL');
           } else { // Fallback if structure is not as expected, to ensure save has some effect
-            modifiedStrategy.NEW_KEY_FROM_MODAL = ['AAs'];
+            // Ensure RFI and UTG exist for the fallback to avoid errors
+            if (!modifiedStrategy.RFI) modifiedStrategy.RFI = {};
+            if (!modifiedStrategy.RFI.UTG) modifiedStrategy.RFI.UTG = {};
+            modifiedStrategy.RFI.UTG.Raise = ['NEW_HAND_FROM_MODAL_FALLBACK'];
           }
           onSave(modifiedStrategy);
         }}>
@@ -74,11 +77,19 @@ describe('SettingsTab', () => {
     }
   });
 
+  test('renders the "Customize Preflop Strategy" button with correct text', () => {
+    render(<SettingsTab />);
+    const strategyButton = screen.getByRole('button', { name: /Customize Preflop Strategy/i });
+    expect(strategyButton).toBeInTheDocument();
+    // More specific check for the exact text content if needed, though name regex usually suffices
+    expect(strategyButton).toHaveTextContent('Customize Preflop Strategy');
+  });
+
   describe('Strategy Loading from localStorage', () => {
     test('loads initialPokerStrategy if localStorage is empty', () => {
       localStorageMock.getItem.mockReturnValueOnce(null);
       render(<SettingsTab />);
-      fireEvent.click(screen.getByRole('button', { name: /Customize Initial Strategy/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Customize Preflop Strategy/i }));
 
       expect(StrategyCustomizationModal).toHaveBeenCalledTimes(1);
       const modalProps = StrategyCustomizationModal.mock.calls[0][0];
@@ -91,7 +102,7 @@ describe('SettingsTab', () => {
       localStorageMock.getItem.mockReturnValueOnce(JSON.stringify(savedStrategy));
       
       render(<SettingsTab />);
-      fireEvent.click(screen.getByRole('button', { name: /Customize Initial Strategy/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Customize Preflop Strategy/i }));
 
       expect(StrategyCustomizationModal).toHaveBeenCalledTimes(1);
       const modalProps = StrategyCustomizationModal.mock.calls[0][0];
@@ -103,14 +114,14 @@ describe('SettingsTab', () => {
       jest.spyOn(console, 'error').mockImplementation(() => {}); // Suppress console.error for this test
 
       render(<SettingsTab />);
-      fireEvent.click(screen.getByRole('button', { name: /Customize Initial Strategy/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Customize Preflop Strategy/i }));
       
       expect(StrategyCustomizationModal).toHaveBeenCalledTimes(1);
       const modalProps = StrategyCustomizationModal.mock.calls[0][0];
       expect(modalProps.initialStrategy).toEqual(initialPokerStrategy);
       expect(console.error).toHaveBeenCalledWith(
         expect.stringContaining("Failed to load custom strategy from localStorage:"),
-        expect.any(SyntaxError) // Or Error, depending on what JSON.parse throws
+        expect.any(SyntaxError) 
       );
     });
   });
@@ -119,20 +130,20 @@ describe('SettingsTab', () => {
     test('saves the full strategy to localStorage and updates state when modal saves', () => {
       render(<SettingsTab />);
       
-      // Open the modal
-      fireEvent.click(screen.getByRole('button', { name: /Customize Initial Strategy/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Customize Preflop Strategy/i }));
       expect(screen.getByTestId('mock-strategy-customization-modal')).toBeInTheDocument();
 
-      // Simulate the modal saving a strategy
-      // The mockModalOnSave function is captured when StrategyCustomizationModal is rendered
-      // It will be called with a strategy modified by the mock itself
       act(() => {
-        // The mock save button in the modal calls onSave with a modified strategy
         fireEvent.click(screen.getByTestId('modal-simulate-save'));
       });
       
       const expectedSavedStrategy = JSON.parse(JSON.stringify(initialPokerStrategy));
+      // Ensure RFI and UTG path exists for the modification in the mock
+      if (!expectedSavedStrategy.RFI) expectedSavedStrategy.RFI = {};
+      if (!expectedSavedStrategy.RFI.UTG) expectedSavedStrategy.RFI.UTG = {};
+      if (!expectedSavedStrategy.RFI.UTG.Raise) expectedSavedStrategy.RFI.UTG.Raise = [];
       expectedSavedStrategy.RFI.UTG.Raise.push('NEW_HAND_FROM_MODAL');
+
 
       expect(localStorageMock.setItem).toHaveBeenCalledTimes(1);
       expect(localStorageMock.setItem).toHaveBeenCalledWith(
@@ -140,12 +151,10 @@ describe('SettingsTab', () => {
         JSON.stringify(expectedSavedStrategy)
       );
 
-      // Modal should close after save
       expect(screen.queryByTestId('mock-strategy-customization-modal')).not.toBeInTheDocument();
 
-      // Re-open the modal to check if currentStrategy in SettingsTab was updated
-      fireEvent.click(screen.getByRole('button', { name: /Customize Initial Strategy/i }));
-      const modalProps = StrategyCustomizationModal.mock.calls[1][0]; // Second call to the modal
+      fireEvent.click(screen.getByRole('button', { name: /Customize Preflop Strategy/i }));
+      const modalProps = StrategyCustomizationModal.mock.calls[1][0]; 
       expect(modalProps.initialStrategy).toEqual(expectedSavedStrategy);
     });
   });
@@ -157,43 +166,37 @@ describe('SettingsTab', () => {
       localStorageMock.setItem(CUSTOM_STRATEGY_LS_KEY, JSON.stringify(customStrategy));
 
       render(<SettingsTab />);
-      fireEvent.click(screen.getByRole('button', { name: /Customize Initial Strategy/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Customize Preflop Strategy/i }));
 
       expect(StrategyCustomizationModal).toHaveBeenCalledTimes(1);
       const modalProps = StrategyCustomizationModal.mock.calls[0][0];
       
-      // Check initialStrategy prop
       expect(modalProps.initialStrategy).toEqual(customStrategy);
-      
-      // Check that gameLabels prop is not passed (should be undefined)
       expect(modalProps.gameLabels).toBeUndefined();
     });
   });
 
   describe('Resetting Strategy', () => {
     test('"Reset to Default Strategy" button clears localStorage and resets strategy state', () => {
-      const customStrategy = { RFI: { UTG: { Raise: ['AKo'] } } }; // Simplified for this test
+      const customStrategy = { RFI: { UTG: { Raise: ['AKo'] } } }; 
       localStorageMock.setItem(CUSTOM_STRATEGY_LS_KEY, JSON.stringify(customStrategy));
       
       render(<SettingsTab />);
       
-      // Open modal to confirm custom strategy is loaded initially
-      fireEvent.click(screen.getByRole('button', { name: /Customize Initial Strategy/i }));
+      fireEvent.click(screen.getByRole('button', { name: /Customize Preflop Strategy/i }));
       let modalProps = StrategyCustomizationModal.mock.calls[0][0];
       expect(modalProps.initialStrategy).toEqual(customStrategy);
       act(() => {
-        fireEvent.click(screen.getByTestId('modal-simulate-close')); // Close the modal
+        fireEvent.click(screen.getByTestId('modal-simulate-close')); 
       });
 
-      // Click the reset button
       fireEvent.click(screen.getByRole('button', { name: /Reset to Default Strategy/i }));
       
       expect(localStorageMock.removeItem).toHaveBeenCalledTimes(1);
       expect(localStorageMock.removeItem).toHaveBeenCalledWith(CUSTOM_STRATEGY_LS_KEY);
 
-      // Re-open the modal to check if strategy is reset to default
-      fireEvent.click(screen.getByRole('button', { name: /Customize Initial Strategy/i }));
-      modalProps = StrategyCustomizationModal.mock.calls[1][0]; // Second call to the modal
+      fireEvent.click(screen.getByRole('button', { name: /Customize Preflop Strategy/i }));
+      modalProps = StrategyCustomizationModal.mock.calls[1][0]; 
       expect(modalProps.initialStrategy).toEqual(initialPokerStrategy);
     });
   });

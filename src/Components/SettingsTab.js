@@ -135,7 +135,7 @@ const SettingsTab = () => {
         onClick={handleOpenStrategyModal} 
         sx={{ mb: 1, width: "100%" }}
       >
-        Customize Initial Strategy
+        Customize Preflop Strategy
       </Button>
 
       <Button 
