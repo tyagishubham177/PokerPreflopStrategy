@@ -22,9 +22,3 @@ export const InfoIcon = () => (
     style={{ cursor: "pointer" }}
   />
 );
-
-export const DIFFICULTY_SETTINGS = {
-  "easy": { lives: 5, hints: 3, timerDuration: 90 },
-  "medium": { lives: 3, hints: 1, timerDuration: 60 },
-  "hard": { lives: 3, hints: 0, timerDuration: 40 }
-};

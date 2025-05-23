@@ -24,14 +24,6 @@ const GameDisplay = (props) => {
     wrongChoices,
     showRules,
     setShowRules,
-    // New props from PokerGame.js
-    difficulty,
-    hints,
-    timer,
-    useHint,
-    highlightedAction,
-    answerFeedback,
-    showSettings, // Added showSettings as per plan
   } = props;
 
   if (collapsed) {
@@ -59,11 +51,6 @@ const GameDisplay = (props) => {
         onInfoClick={onInfoClick}
         onLongPressStart={onLongPressStart}
         onLongPressEnd={onLongPressEnd}
-        lives={lives} // Existing, confirmed
-        hints={hints} // New
-        timer={timer} // New
-        useHint={useHint} // New
-        difficulty={difficulty} // New
       />
       <CardContent
         sx={{
@@ -88,9 +75,6 @@ const GameDisplay = (props) => {
           streak={streak}
           restartGame={restartGame}
           wrongChoices={wrongChoices}
-          highlightedAction={highlightedAction} // New
-          answerFeedback={answerFeedback} // New
-          difficulty={difficulty} // New (or confirming if it should be here)
         />
       </CardContent>
       <RulesDialog showRules={showRules} setShowRules={setShowRules} />

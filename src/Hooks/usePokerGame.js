@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import useGameState from "./useGameState";
 import useGameLogic from "./useGameLogic";
-import { DIFFICULTY_SETTINGS } from "../../Constants/GameConstants"; // 1. Import
+import { DIFFICULTY_SETTINGS } from "../../Constants/GameConstants";
 
-const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
+const usePokerGame = ({ showSettings, showRules }) => {
   const {
     hand,
     situationKey,
@@ -17,11 +17,11 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
     wrongChoices,
     gameOver,
     availableActions,
-    difficulty, // 1. Destructure new states
+    difficulty, 
     hints,
     timer,
     highlightedAction,
-    answerFeedback,
+    answerFeedback, // Included
     setHand,
     setSituationKey,
     setPositionKey,
@@ -37,13 +37,13 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
     resetGameScoreAndStats,
     decrementLives,
     resetLives,
-    setDifficulty, // 1. Destructure new setters
+    setDifficulty, 
     setHints,
     setTimer,
     decrementHints,
     resetTimer,
     setHighlightedAction,
-    setAnswerFeedback,
+    setAnswerFeedback, // Included
   } = useGameState();
 
   const {
@@ -55,15 +55,13 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
   } = useGameLogic();
 
   const dealCount = useRef(0);
-  const timerIdRef = useRef(null); // 5. Timer Logic
+  const timerIdRef = useRef(null); 
 
-  // 10. logGameState function
   const logGameState = useCallback(() => {
     dealCount.current += 1;
-    console.log(`Game State Update #${dealCount.current}: Hand: ${hand}, Situation: ${situationKey}, Position: ${positionKey}`);
+    // console.log(`Game State Update #${dealCount.current}: Hand: ${hand}, Situation: ${situationKey}, Position: ${positionKey}`);
   }, [dealCount, hand, situationKey, positionKey]);
 
-  // 4. dealNewHand Function
   const dealNewHand = useCallback(() => {
     logGameState();
     const newHand = generateNewHand();
@@ -81,17 +79,16 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
     setSituationDisplay(selectedSituationDisplay);
     setPositionDisplay(selectedPositionDisplay);
     setAvailableActions(currentAvailableActions);
-    setGameOver(false); // Ensure game is not over when new hand is dealt
+    setGameOver(false); 
 
-    // Difficulty-specific timer reset
     const currentDifficultySettings = DIFFICULTY_SETTINGS[difficulty] || DIFFICULTY_SETTINGS.medium;
     resetTimer(currentDifficultySettings.timerDuration);
-    setHighlightedAction(null); // Clear any previous highlights
-
+    setHighlightedAction(null); 
+    // setAnswerFeedback(null); // Do not clear feedback on new hand, let it timeout
   }, [
-    difficulty, // Added
-    resetTimer, // Added
-    setHighlightedAction, // Added
+    difficulty, 
+    resetTimer, 
+    setHighlightedAction, 
     generateNewHand, 
     selectSituationAndPosition, 
     getLogicAvailableActions, 
@@ -101,11 +98,10 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
     setSituationDisplay, 
     setPositionDisplay, 
     setAvailableActions, 
-    logGameState, // logGameState is stable
-    setGameOver // Added
+    logGameState, 
+    setGameOver 
   ]);
 
-  // 3. restartGame Function
   const restartGame = useCallback(() => {
     logGameState();
     const settings = DIFFICULTY_SETTINGS[difficulty] || DIFFICULTY_SETTINGS.medium;
@@ -116,12 +112,12 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
     resetGameScoreAndStats();
     setGameOver(false);
     setHighlightedAction(null);
-    setAnswerFeedback(null);
-    dealCount.current = 0; // Reset deal count
+    setAnswerFeedback(null); // Clear feedback on restart
+    dealCount.current = 0; 
     dealNewHand();
   }, [
     difficulty, 
-    logGameState, // Stable
+    logGameState, 
     resetLives, 
     setHints, 
     resetTimer, 
@@ -129,67 +125,72 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
     setGameOver, 
     setHighlightedAction, 
     setAnswerFeedback, 
-    dealNewHand // dealNewHand is stable
+    dealNewHand 
   ]);
 
-  // 2. State Initialization and Game Setup Effects
-  // Effect 1: Load Difficulty from localStorage on mount
   useEffect(() => {
     const savedDifficulty = localStorage.getItem('gameDifficulty') || "medium";
     setDifficulty(savedDifficulty);
-  }, [setDifficulty]); // Dependency: setDifficulty (stable)
+  }, [setDifficulty]); 
 
-  // Effect 2: Restart game when difficulty changes
   useEffect(() => {
-    // Only restart if difficulty is actually set (not during initial undefined state perhaps)
     if (difficulty) {
-        console.log("Difficulty changed to:", difficulty, "Restarting game.");
+        // console.log("Difficulty changed to:", difficulty, "Restarting game.");
         restartGame();
     }
-  }, [difficulty, restartGame]); // Dependencies: difficulty, restartGame (restartGame is stable)
+  }, [difficulty, restartGame]); 
+
+  useEffect(() => {
+    if (lives <= 0 && !gameOver) { 
+      setGameOver(true);
+    }
+  }, [lives, gameOver, setGameOver]);
 
 
-  // 5. Timer Logic useEffect
   useEffect(() => {
     if (timer > 0 && !gameOver && !showSettings && !showRules) {
       timerIdRef.current = setInterval(() => {
         setTimer(t => t - 1);
       }, 1000);
-    } else if (timer === 0 && !gameOver && hand.length === 2 && !showSettings && !showRules) { // Ensure hand is present
+    } else if (timer === 0 && !gameOver && hand.length === 2 && !showSettings && !showRules) { 
       const handNotation = getLogicHandNotation(hand);
-      // Pass additional info for context, ensuring these are available and correctly passed
       handleIncorrectDecision("Timer Expired", "Timeout", handNotation, positionDisplay, situationDisplay);
+      
+      if (lives > 1) { 
+        dealNewHand();
+      }
+    } else {
+      clearInterval(timerIdRef.current); 
     }
-    return () => clearInterval(timerIdRef.current);
-  }, [timer, gameOver, showSettings, showRules, setTimer, handleIncorrectDecision, hand, getLogicHandNotation, positionDisplay, situationDisplay]);
+    
+    return () => {
+      clearInterval(timerIdRef.current);
+    };
+  }, [timer, gameOver, showSettings, showRules, setTimer, handleIncorrectDecision, hand, getLogicHandNotation, positionDisplay, situationDisplay, difficulty, lives, dealNewHand, setGameOver]);
 
 
-  // 7. handleCorrectDecision Modifications
   const handleCorrectDecision = useCallback(() => {
-    const newScore = score + 10; // Example scoring
+    const newScore = score + 10; 
     const newStreak = streak + 1;
     setScore(newScore);
     setStreak(newStreak);
     updateHighScore(newScore);
     logGameState();
-    setAnswerFeedback("correct");
-    setTimeout(() => setAnswerFeedback(null), 1500);
-    // Optionally, deal a new hand automatically or wait for user input
-    // dealNewHand(); 
+    setAnswerFeedback("correct"); // Sets feedback
+    setTimeout(() => setAnswerFeedback(null), 2500); // Increased duration
+    // dealNewHand(); // Usually call dealNewHand after correct decision
   }, [score, streak, setScore, setStreak, updateHighScore, logGameState, setAnswerFeedback]);
 
-  // 7. handleIncorrectDecision Modifications
   const handleIncorrectDecision = useCallback((actionTaken, correctDecision, handNotation, currentPositionDisplay, currentSituationDisplay) => {
     logGameState();
     setStreak(0);
     decrementLives();
     setWrongChoices(prev => [...prev, { actionTaken, correctDecision, hand: handNotation, position: currentPositionDisplay, situation: currentSituationDisplay }]);
-    setAnswerFeedback("incorrect");
-    setTimeout(() => setAnswerFeedback(null), 1500);
-  }, [logGameState, setStreak, decrementLives, setWrongChoices, setAnswerFeedback]); // Removed positionDisplay, situationDisplay from deps as they are passed as args now
+    setAnswerFeedback("incorrect"); // Sets feedback
+    setTimeout(() => setAnswerFeedback(null), 2500); // Increased duration
+  }, [logGameState, setStreak, decrementLives, setWrongChoices, setAnswerFeedback]); 
 
 
-  // 6. makeDecision Function Modifications
   const makeDecision = useCallback((action) => {
     if (gameOver) return;
     logGameState();
@@ -199,39 +200,39 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
 
     if (action === correctDecision) {
       handleCorrectDecision();
+      // IMPORTANT: Deal new hand only on correct decision for this game's flow
+      dealNewHand(); 
     } else {
       handleIncorrectDecision(action, correctDecision, handNotation, positionDisplay, situationDisplay);
     }
 
-    setHighlightedAction(null); // Clear highlight after decision
+    setHighlightedAction(null); 
 
-    if (lives -1 === 0 && action !== correctDecision) { // Check if game over due to this incorrect decision
-        setGameOver(true);
-    } else if (action === correctDecision) { // Only deal new hand on correct decision
-        dealNewHand();
-    }
-    // If incorrect, player stays on the same hand until timer runs out or they get it right (if that's the desired mechanic)
-    // For this setup, an incorrect answer doesn't auto-deal; it waits for timer or next action.
-
+    // Game over check is now primarily handled by the useEffect watching `lives`.
+    // However, an explicit check might be needed if a wrong action itself ends the game before lives are 0 (not typical).
+    // For instance, if lives was 1, and wrong action taken, lives becomes 0.
+    // The useEffect for lives will set gameOver.
+    // if (lives -1 === 0 && action !== correctDecision) { 
+    //     setGameOver(true);
+    // }
   }, [
     gameOver, 
-    logGameState, // Stable
+    logGameState, 
     lives, 
-    getLogicHandNotation, // Stable
+    getLogicHandNotation, 
     hand, 
     situationKey, 
     positionKey, 
-    getLogicCorrectDecision, // Stable
-    handleCorrectDecision, // Stable
-    handleIncorrectDecision, // Stable
-    dealNewHand, // Stable
+    getLogicCorrectDecision, 
+    handleCorrectDecision, 
+    handleIncorrectDecision, 
+    dealNewHand, 
     setGameOver,
-    setHighlightedAction, // Added
-    positionDisplay, // Added for passing to handleIncorrectDecision
-    situationDisplay // Added for passing to handleIncorrectDecision
+    setHighlightedAction, 
+    positionDisplay, 
+    situationDisplay 
   ]);
 
-  // 8. useHint Function
   const useHint = useCallback(() => {
     if (hints > 0 && !highlightedAction && !gameOver && hand.length === 2) {
       decrementHints();
@@ -240,7 +241,7 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
         const correctDecision = getLogicCorrectDecision(handNotation, situationKey, positionKey);
         setHighlightedAction(correctDecision);
       } else {
-        console.warn("Could not provide hint: missing hand notation, situation, or position key.");
+        // console.warn("Could not provide hint: missing hand notation, situation, or position key.");
       }
     }
   }, [
@@ -249,17 +250,16 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
     gameOver, 
     hand, 
     decrementHints, 
-    getLogicHandNotation, // Stable
+    getLogicHandNotation, 
     situationKey, 
     positionKey, 
-    getLogicCorrectDecision, // Stable
-    setHighlightedAction
+    getLogicCorrectDecision, 
+    setHighlightedAction,
+    availableActions 
   ]);
 
-  // 9. isInitialMount ref is removed.
 
   return {
-    // Existing states and functions
     hand,
     situationKey,
     positionKey,
@@ -273,17 +273,13 @@ const usePokerGame = ({ showSettings, showRules }) => { // 1. Argument Update
     gameOver,
     availableActions,
     makeDecision,
-    restartGame, // Ensure restartGame is exported
-    // 11. Export New Values
+    restartGame, 
     difficulty,
     hints,
     timer,
     useHint,
     highlightedAction,
     answerFeedback,
-    // Also exporting setters and other functions if they need to be accessed from UI directly
-    // For example, if settings tab directly modifies difficulty or other states.
-    // setDifficulty, setHints, setTimer (usually managed by game logic, but can be exposed)
   };
 };
 

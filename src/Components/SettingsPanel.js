@@ -4,7 +4,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import SettingsTab from "./SettingsTab";
 import ErrorBoundary from "./ErrorBoundary"; 
 
-const SettingsPanel = ({ open, onClose, onOpen }) => {
+const SettingsPanel = ({ open, onClose, onOpen, onApplyDifficultyAndRestart }) => { // Added onApplyDifficultyAndRestart prop
   return (
     <SwipeableDrawer anchor="right" open={open} onClose={onClose} onOpen={onOpen}>
       <Box sx={{ width: 250, p: 2 }}>
@@ -15,7 +15,7 @@ const SettingsPanel = ({ open, onClose, onOpen }) => {
           </IconButton>
         </Box>
         <ErrorBoundary fallbackMessage="There was an error in the settings panel. Please try closing and reopening it.">
-          <SettingsTab />
+          <SettingsTab onApplyDifficultyAndRestart={onApplyDifficultyAndRestart} /> {/* Pass prop down */}
         </ErrorBoundary>
       </Box>
     </SwipeableDrawer>

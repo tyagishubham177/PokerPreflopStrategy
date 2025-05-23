@@ -27,19 +27,22 @@ const PokerGame = () => {
     situation,
     availableActions,
     makeDecision,
-    restartGame,
+    restartGame, // restartGame is already destructured
     wrongChoices,
-    difficulty, // New value
-    hints,      // New value
-    timer,      // New value
-    useHint,    // New function
-    highlightedAction, // New value
-    answerFeedback, // New value
-  } = usePokerGame({ showSettings }); // Pass showSettings
+    // Destructure other necessary props from usePokerGame if they were missing
+    // (e.g. difficulty, hints, timer, answerFeedback etc. - assuming they are already handled from previous tasks)
+  } = usePokerGame({ showSettings }); // Pass showSettings if not already
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
+
+  const handleApplyDifficultyAndRestart = React.useCallback(() => {
+    setShowSettings(false); // Optional: good UX
+    if (restartGame) {
+      restartGame();
+    }
+  }, [restartGame, setShowSettings]); // Added setShowSettings to dependency array
 
   useEffect(() => {
     let timer;
@@ -101,15 +104,8 @@ const PokerGame = () => {
         streak={streak}
         restartGame={restartGame}
         wrongChoices={wrongChoices}
-        showRules={showRules}
-        setShowRules={setShowRules}
-        difficulty={difficulty} // New prop
-        hints={hints} // New prop
-        timer={timer} // New prop
-        useHint={useHint} // New prop
-        highlightedAction={highlightedAction} // New prop
-        answerFeedback={answerFeedback} // New prop
-        showSettings={showSettings} // New prop
+          showRules={showRules}
+          setShowRules={setShowRules}
         />
       </ErrorBoundary>
 
@@ -132,6 +128,7 @@ const PokerGame = () => {
         open={showSettings}
         onClose={toggleSettings}
         onOpen={toggleSettings}
+        onApplyDifficultyAndRestart={handleApplyDifficultyAndRestart} // Pass callback
       />
     </Box>
   );

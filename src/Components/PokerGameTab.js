@@ -18,10 +18,10 @@ const PokerGameTab = ({
   streak,
   restartGame,
   wrongChoices,
-  // New props
+  // Add missing props
   highlightedAction,
   answerFeedback,
-  difficulty, // difficulty is available if needed
+  difficulty, 
 }) => {
   return (
     <Box
@@ -69,18 +69,43 @@ const PokerGameTab = ({
               What's your decision?
             </Typography>
 
-            {/* Answer Feedback Display */}
-            {answerFeedback && (
-              <Typography 
-                variant="h5" 
-                align="center" 
-                sx={{ 
+            {/* Enhanced Answer Feedback Display */}
+            {answerFeedback === "correct" && (
+              <Typography
+                data-testid="correct-feedback"
+                align="center"
+                sx={{
                   my: 2, 
-                  fontWeight: "bold",
-                  color: answerFeedback === "correct" ? "success.main" : "error.main" 
+                  fontWeight: 'bold', 
+                  color: 'success.contrastText', 
+                  backgroundColor: 'success.main', 
+                  border: '1px solid',
+                  borderColor: 'success.dark',
+                  padding: '8px 16px', 
+                  borderRadius: '4px', 
+                  fontSize: '1.25rem', 
                 }}
               >
-                {answerFeedback === "correct" ? "Correct!" : "Incorrect!"}
+                Correct!
+              </Typography>
+            )}
+            {answerFeedback === "incorrect" && (
+              <Typography
+                data-testid="incorrect-feedback"
+                align="center"
+                sx={{
+                  my: 2, 
+                  fontWeight: 'bold', 
+                  color: 'error.contrastText', 
+                  backgroundColor: 'error.main', 
+                  border: '1px solid',
+                  borderColor: 'error.dark',
+                  padding: '8px 16px',
+                  borderRadius: '4px',
+                  fontSize: '1.25rem', 
+                }}
+              >
+                Incorrect!
               </Typography>
             )}
           </Box>
