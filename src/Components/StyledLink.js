@@ -5,6 +5,7 @@ const StyledLink = () => {
   const theme = useTheme();
 
   return (
+    /*
     <Link
       href="https://poker-coaching.s3.amazonaws.com/tools/preflop-charts/full-preflop-charts.pdf"
       target="_blank"
@@ -29,6 +30,8 @@ const StyledLink = () => {
     >
       Click here to see charts
     </Link>
+    */
+   null
   );
 };
 

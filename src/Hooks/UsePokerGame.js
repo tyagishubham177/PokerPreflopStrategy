@@ -236,6 +236,13 @@ const usePokerGame = () => {
     }
   }, [lives, gameOver, setGameOver, logGameState]);
 
+  // useEffect to reset lastAnswerCorrectness when gameOver becomes true
+  useEffect(() => {
+    if (gameOver) {
+      setLastAnswerCorrectness(null);
+    }
+  }, [gameOver]);
+
   // useEffect to update timerDuration when difficulty changes
   useEffect(() => {
     setTimerDuration(DIFFICULTY_LEVELS[difficulty].timerDuration);

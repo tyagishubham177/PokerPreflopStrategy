@@ -34,19 +34,8 @@ const RulesDialog = ({ showRules, setShowRules }) => {
           6. After the game ends you'll be shown the incorrect decisions made by you. So you can review and improve. 
           Flip those cards to see more details.
         </Typography>
-        <Typography variant="body1">
-          7. In future we wish to support customizable ranges.
-          <br />
-          But as of now the preflop strategy is based on these charts.{" "}
-          <br />
-          <Link
-            href="https://poker-coaching.s3.amazonaws.com/tools/preflop-charts/full-preflop-charts.pdf"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Check out the charts!!
-          </Link>
-          .
+        <Typography variant="body1" paragraph>
+          7. You can set customizable ranges and game difficulty in settings.
         </Typography>
       </DialogContent>
       <DialogActions>
