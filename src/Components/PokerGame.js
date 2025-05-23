@@ -5,15 +5,18 @@ import SettingsPanel from "./SettingsPanel";
 import GameDisplay from "./GameDisplay"; 
 import ErrorBoundary from "./ErrorBoundary"; 
 import usePokerGame from "../Hooks/UsePokerGame";
+import BottomGameBar from "./BottomGameBar"; // Import BottomGameBar
 import wallpaperImage from "../Assets/wallpaper.png";
 
 const PokerGame = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [longPress, setLongPress] = useState(false);
+  const [hintedAction, setHintedAction] = useState(null); // Add hintedAction state
 
   const longPressTimeout = useRef(null);
 
+  // Ensure all necessary props are destructured
   const {
     hand,
     position,
@@ -34,13 +37,28 @@ const PokerGame = () => {
     currentCorrectAction, // Destructure currentCorrectAction
     hints, // Destructure hints
     decrementHints, // Destructure decrementHints
-    lastAnswerCorrectness, // Destructure lastAnswerCorrectness
-    timeLeft, // Destructure timeLeft
+    lastAnswerCorrectness, 
+    timeLeft, 
+    // hand, lives, hints, decrementHints, currentCorrectAction, gameOver are already destructured
   } = usePokerGame();
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
+
+  // useEffect to reset hintedAction when hand changes
+  useEffect(() => {
+    setHintedAction(null);
+  }, [hand]);
+
+  const handleHintClick = () => {
+    if (hints > 0 && !hintedAction && !gameOver) {
+      decrementHints();
+      setHintedAction(currentCorrectAction);
+    }
+  };
+
+  const isHintButtonDisabled = hints <= 0 || !!hintedAction || gameOver;
 
   useEffect(() => {
     let timer;
@@ -109,8 +127,17 @@ const PokerGame = () => {
           decrementHints={decrementHints} // Pass decrementHints
           lastAnswerCorrectness={lastAnswerCorrectness} // Pass lastAnswerCorrectness
           timeLeft={timeLeft} // Pass timeLeft
+          hintedAction={hintedAction} // Pass hintedAction to GameDisplay
         />
       </ErrorBoundary>
+
+      <BottomGameBar
+        lives={lives}
+        timeLeft={timeLeft}
+        hints={hints}
+        onHintClick={handleHintClick}
+        isHintDisabled={isHintButtonDisabled}
+      />
 
       <Fab
         color="primary"

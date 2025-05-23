@@ -1,11 +1,14 @@
-import React, { useState, useEffect } from 'react'; // Imported useState, useEffect
-import { Card, CardContent, Box, Typography, Button } from "@mui/material"; // Added Button
-import FavoriteIcon from '@mui/icons-material/Favorite'; // Import FavoriteIcon
+import React, { useState, useEffect } from 'react'; 
+import { Card, CardContent, Box, Typography, Button, Fade, useTheme } from "@mui/material"; // Added Fade, useTheme
+import FavoriteIcon from '@mui/icons-material/Favorite'; 
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'; // Import CheckCircleOutlineIcon
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'; // Import HighlightOffIcon
 import GameHeader from "./GameHeader";
 import PokerGameTab from "./PokerGameTab";
 import RulesDialog from "./RulesDialog";
 
 const GameDisplay = (props) => {
+  const theme = useTheme(); // Add useTheme hook
   const {
     collapsed,
     onInfoClick,
@@ -25,39 +28,29 @@ const GameDisplay = (props) => {
     wrongChoices,
     showRules,
     setShowRules,
-    currentCorrectAction, // Destructure currentCorrectAction
-    hints, // Destructure hints
-    decrementHints, // Destructure decrementHints
+    currentCorrectAction, // Destructure currentCorrectAction (no longer used for hint logic here)
+    hints, // Destructure hints (no longer used for hint logic here)
+    decrementHints, // Destructure decrementHints (no longer used for hint logic here)
     lastAnswerCorrectness, // Destructure lastAnswerCorrectness
-    timeLeft, // Destructure timeLeft
+    timeLeft, // Destructure timeLeft (no longer displayed here)
+    hintedAction, // Receive hintedAction as a prop
   } = props;
 
-  const [hintedAction, setHintedAction] = useState(null); // State for hinted action
-  const [animationTrigger, setAnimationTrigger] = useState(null); // State for animation trigger
+  const [feedbackTrigger, setFeedbackTrigger] = useState(null); // Renamed state variable
 
-  // Effect to reset hintedAction when a new hand is dealt
-  useEffect(() => {
-    setHintedAction(null);
-  }, [hand]);
-
-  // Effect to trigger animation based on lastAnswerCorrectness
+  // Effect to trigger feedback based on lastAnswerCorrectness
   useEffect(() => {
     let timer;
     if (lastAnswerCorrectness === 'CORRECT' || lastAnswerCorrectness === 'INCORRECT') {
-      setAnimationTrigger(lastAnswerCorrectness);
+      setFeedbackTrigger(lastAnswerCorrectness); // Use renamed setter
       timer = setTimeout(() => {
-        setAnimationTrigger(null);
-      }, 1000); // Animation duration
+        setFeedbackTrigger(null); // Use renamed setter
+      }, 1500); // Updated timeout to 1500ms
     }
     return () => clearTimeout(timer); // Cleanup timeout
   }, [lastAnswerCorrectness]);
 
-  const handleHintClick = () => {
-    if (hints > 0 && !hintedAction) {
-      decrementHints();
-      setHintedAction(currentCorrectAction);
-    }
-  };
+  // Removed handleHintClick as it's now in PokerGame.js
 
   if (collapsed) {
     return null;
@@ -78,14 +71,48 @@ const GameDisplay = (props) => {
           xs: "80vh",
           sm: "85vh",
         },
-        border: animationTrigger === 'CORRECT' 
-                  ? '3px solid green' 
-                  : animationTrigger === 'INCORRECT' 
-                  ? '3px solid red' 
-                  : '3px solid transparent', // Default or no border
-        transition: 'border 0.3s ease-in-out', // Smooth transition for border
+        position: 'relative', // Needed for absolute positioning of the feedback Box
+        // Removed border styling
+        // transition: 'border 0.3s ease-in-out', 
       }}
     >
+      <Fade in={!!feedbackTrigger} timeout={500}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            padding: theme.spacing(3), // Increased padding for better visual
+            backgroundColor: feedbackTrigger === 'CORRECT' 
+                              ? 'rgba(46, 125, 50, 0.8)' // Darker green with opacity
+                              : (feedbackTrigger === 'INCORRECT' 
+                                ? 'rgba(211, 47, 47, 0.8)' // Darker red with opacity
+                                : 'transparent'),
+            borderRadius: theme.shape.borderRadius * 2, // More rounded
+            textAlign: 'center',
+            zIndex: 10,
+            pointerEvents: 'none',
+            display: 'flex', // For centering icon and text
+            flexDirection: 'column', // Stack icon and text vertically
+            alignItems: 'center', // Center items horizontally
+            boxShadow: theme.shadows[6], // Add some shadow
+          }}
+        >
+          {feedbackTrigger === 'CORRECT' && (
+            <>
+              <CheckCircleOutlineIcon sx={{ color: theme.palette.common.white, fontSize: 60, mb: 1 }} />
+              <Typography variant="h5" sx={{ color: theme.palette.common.white, fontWeight: 'bold' }}>Correct!</Typography>
+            </>
+          )}
+          {feedbackTrigger === 'INCORRECT' && (
+            <>
+              <HighlightOffIcon sx={{ color: theme.palette.common.white, fontSize: 60, mb: 1 }} />
+              <Typography variant="h5" sx={{ color: theme.palette.common.white, fontWeight: 'bold' }}>Incorrect!</Typography>
+            </>
+          )}
+        </Box>
+      </Fade>
       <GameHeader
         onInfoClick={onInfoClick}
         onLongPressStart={onLongPressStart}
@@ -101,41 +128,7 @@ const GameDisplay = (props) => {
           justifyContent: "space-between",
         }}
       >
-        {/* Container for Lives and Timer Display */}
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', p: 1, px: {xs: 2, md: 3} }}> 
-          {/* Lives Display */}
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Typography variant="h6" sx={{ mr: 1, color: "text.secondary" }}>Lives:</Typography>
-            <Box sx={{ display: 'flex' }}>
-              {Array.from({ length: lives }).map((_, index) => (
-                <FavoriteIcon key={index} sx={{ color: 'red', fontSize: '24px', marginRight: '4px' }} />
-              ))}
-            </Box>
-          </Box>
-          {/* Timer Display */}
-          {!gameOver && (
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
-              <Typography variant="h6" sx={{ mr: 1, color: "text.secondary" }}>Time:</Typography>
-              <Typography variant="h6" sx={{ color: timeLeft <= 10 && timeLeft > 5 ? "orange" : timeLeft <= 5 ? "red" : "text.primary", fontWeight: 'bold' }}>
-                {String(Math.floor(timeLeft / 60)).padStart(2, '0')}:{String(timeLeft % 60).padStart(2, '0')}
-              </Typography>
-            </Box>
-          )}
-        </Box>
-
-        {/* Hint Button Area */}
-        {!gameOver && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 1 }}>
-            <Button
-              variant="contained"
-              onClick={handleHintClick}
-              disabled={hints <= 0 || !!hintedAction || gameOver}
-              sx={{ backgroundColor: 'secondary.main', '&:hover': { backgroundColor: 'secondary.dark' } }}
-            >
-              Hint ({hints})
-            </Button>
-          </Box>
-        )}
+        {/* Lives, Timer, and Hint Button UI elements removed from here */}
 
         <PokerGameTab
           gameOver={gameOver}
@@ -146,7 +139,7 @@ const GameDisplay = (props) => {
           position={position}
           availableActions={availableActions}
           makeDecision={makeDecision}
-          lives={lives}
+          lives={lives} // lives is still passed for other potential uses in PokerGameTab
           streak={streak}
           restartGame={restartGame}
           wrongChoices={wrongChoices}

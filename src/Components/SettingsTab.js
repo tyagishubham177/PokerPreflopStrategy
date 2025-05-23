@@ -12,13 +12,17 @@ import {
 import StrategyCustomizationModal from './StrategyCustomizationModal.js';
 import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
 import { POSITION_LABELS } from '../Constants/GameLabels.js';
+// Import DIFFICULTY_LEVELS to map over for MenuItems if needed, or use hardcoded values
+import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
+
 
 const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
 
-const SettingsTab = () => {
+// Update props to include difficulty and handleDifficultyChange
+const SettingsTab = ({ difficulty, handleDifficultyChange }) => { 
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [username, setUsername] = useState("");
-  const [difficulty, setDifficulty] = useState("medium");
+  // Removed local difficulty state: const [difficulty, setDifficulty] = useState("medium");
   const [showStrategyModal, setShowStrategyModal] = useState(false);
 
   const [currentStrategy, setCurrentStrategy] = useState(() => {
@@ -49,10 +53,11 @@ const SettingsTab = () => {
     setUsername(event.target.value);
   };
 
-  const handleDifficultyChange = (event) => {
-    handleInteraction();
-    setDifficulty(event.target.value);
-  };
+  // Removed local handleDifficultyChange function
+  // const handleDifficultyChange = (event) => {
+  //   handleInteraction();
+  //   setDifficulty(event.target.value);
+  // };
 
   const handleSaveSettings = () => {
     handleInteraction();
@@ -115,14 +120,15 @@ const SettingsTab = () => {
       <Select
         fullWidth
         label="Difficulty" 
-        value={difficulty}
-        onChange={handleDifficultyChange}
+        value={difficulty} // Use difficulty prop
+        onChange={(event) => handleDifficultyChange(event.target.value)} // Use handleDifficultyChange prop
         margin="dense"
         sx={{ mb: 2 }}
       >
-        <MenuItem value="easy">Easy</MenuItem>
-        <MenuItem value="medium">Medium</MenuItem>
-        <MenuItem value="hard">Hard</MenuItem>
+        {/* Ensure MenuItem values are capitalized to match DIFFICULTY_LEVELS keys */}
+        <MenuItem value="Easy">Easy</MenuItem>
+        <MenuItem value="Medium">Medium</MenuItem>
+        <MenuItem value="Hard">Hard</MenuItem>
       </Select>
 
       <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium', mt: 3, mb:1, color: "text.secondary" }}>

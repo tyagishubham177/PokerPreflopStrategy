@@ -1,9 +1,11 @@
 import React from 'react';
-import { SwipeableDrawer, Box, Typography, IconButton, FormControl, InputLabel, Select, MenuItem } from "@mui/material";
+// Removed FormControl, InputLabel, Select, MenuItem from this import as they are no longer used directly here
+import { SwipeableDrawer, Box, Typography, IconButton } from "@mui/material"; 
 import CloseIcon from "@mui/icons-material/Close";
 import SettingsTab from "./SettingsTab";
 import ErrorBoundary from "./ErrorBoundary"; 
-import { DIFFICULTY_LEVELS } from "../Constants/GameConstants";
+// DIFFICULTY_LEVELS import is no longer needed here
+// import { DIFFICULTY_LEVELS } from "../Constants/GameConstants";
 
 const SettingsPanel = ({ open, onClose, onOpen, difficulty, handleDifficultyChange }) => {
   return (
@@ -16,25 +18,11 @@ const SettingsPanel = ({ open, onClose, onOpen, difficulty, handleDifficultyChan
           </IconButton>
         </Box>
 
-        <FormControl fullWidth sx={{ mb: 2 }}>
-          <InputLabel id="difficulty-select-label">Difficulty</InputLabel>
-          <Select
-            labelId="difficulty-select-label"
-            id="difficulty-select"
-            value={difficulty}
-            label="Difficulty"
-            onChange={(e) => handleDifficultyChange(e.target.value)}
-          >
-            {Object.keys(DIFFICULTY_LEVELS).map((level) => (
-              <MenuItem key={level} value={level}>
-                {level}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        {/* Difficulty FormControl removed from here */}
 
         <ErrorBoundary fallbackMessage="There was an error in the settings panel. Please try closing and reopening it.">
-          <SettingsTab />
+          {/* Pass difficulty and handleDifficultyChange to SettingsTab */}
+          <SettingsTab difficulty={difficulty} handleDifficultyChange={handleDifficultyChange} />
         </ErrorBoundary>
       </Box>
     </SwipeableDrawer>
