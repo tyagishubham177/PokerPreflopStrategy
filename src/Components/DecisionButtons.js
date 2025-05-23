@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, Box, useTheme, useMediaQuery } from "@mui/material";
 
-const DecisionButtons = ({ availableActions, makeDecision }) => {
+const DecisionButtons = ({ availableActions, makeDecision, hintedAction }) => { // Added hintedAction prop
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
@@ -31,12 +31,19 @@ const DecisionButtons = ({ availableActions, makeDecision }) => {
       {availableActions.map((action, index) => (
         <Button
           key={action}
-          variant="contained"
+          variant={action === hintedAction ? "outlined" : "contained"} // Conditional variant
           color={action === "Fold" ? "secondary" : "primary"}
           onClick={() => makeDecision(action)}
           sx={{
             ...buttonStyle,
             width: isMobile && availableActions.length % 2 !== 0 && index === availableActions.length - 1 ? "100%" : buttonStyle.width,
+            // Conditional styling for hinted action
+            ...(action === hintedAction && {
+              borderColor: theme.palette.warning.main, // Example: Orange border
+              color: theme.palette.warning.dark, // Example: Darker orange text
+              borderWidth: 2,
+              backgroundColor: theme.palette.warning.light + '40', // Light orange background with opacity
+            }),
           }}
         >
           {action}

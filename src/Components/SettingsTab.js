@@ -15,7 +15,7 @@ import { POSITION_LABELS } from '../Constants/GameLabels.js';
 
 const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
 
-const SettingsTab = ({ onApplyDifficultyAndRestart }) => { // Added onApplyDifficultyAndRestart prop
+const SettingsTab = () => {
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [username, setUsername] = useState("");
   const [difficulty, setDifficulty] = useState("medium");
@@ -56,17 +56,7 @@ const SettingsTab = ({ onApplyDifficultyAndRestart }) => { // Added onApplyDiffi
 
   const handleSaveSettings = () => {
     handleInteraction();
-    localStorage.setItem('gameDifficulty', difficulty); // Ensure this is here
     console.log("Settings saved:", { soundEnabled, username, difficulty });
-
-    if (typeof onApplyDifficultyAndRestart === 'function') {
-      const confirmRestart = window.confirm(
-        "New difficulty settings saved. Do you want to start a new game now with these settings? Choosing 'Cancel' will apply them from the next game you start manually."
-      );
-      if (confirmRestart) {
-        onApplyDifficultyAndRestart();
-      }
-    }
   };
 
   const handleOpenStrategyModal = () => {

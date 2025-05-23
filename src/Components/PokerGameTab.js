@@ -18,10 +18,7 @@ const PokerGameTab = ({
   streak,
   restartGame,
   wrongChoices,
-  // Add missing props
-  highlightedAction,
-  answerFeedback,
-  difficulty, 
+  hintedAction, // Added hintedAction prop
 }) => {
   return (
     <Box
@@ -68,55 +65,11 @@ const PokerGameTab = ({
             <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold" }}>
               What's your decision?
             </Typography>
-
-            {/* Enhanced Answer Feedback Display */}
-            {answerFeedback === "correct" && (
-              <Typography
-                data-testid="correct-feedback"
-                align="center"
-                sx={{
-                  my: 2, 
-                  fontWeight: 'bold', 
-                  color: 'success.contrastText', 
-                  backgroundColor: 'success.main', 
-                  border: '1px solid',
-                  borderColor: 'success.dark',
-                  padding: '8px 16px', 
-                  borderRadius: '4px', 
-                  fontSize: '1.25rem', 
-                }}
-              >
-                Correct!
-              </Typography>
-            )}
-            {answerFeedback === "incorrect" && (
-              <Typography
-                data-testid="incorrect-feedback"
-                align="center"
-                sx={{
-                  my: 2, 
-                  fontWeight: 'bold', 
-                  color: 'error.contrastText', 
-                  backgroundColor: 'error.main', 
-                  border: '1px solid',
-                  borderColor: 'error.dark',
-                  padding: '8px 16px',
-                  borderRadius: '4px',
-                  fontSize: '1.25rem', 
-                }}
-              >
-                Incorrect!
-              </Typography>
-            )}
           </Box>
 
           {/* Center section - Decision Buttons */}
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <DecisionButtons 
-              availableActions={availableActions} 
-              makeDecision={makeDecision} 
-              highlightedAction={highlightedAction} // Pass prop
-            />
+            <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} hintedAction={hintedAction} />
           </Box>
 
           {/* Bottom section */}

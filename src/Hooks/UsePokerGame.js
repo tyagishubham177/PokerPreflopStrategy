@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import useGameState from "./useGameState";
 import useGameLogic from "./useGameLogic";
+import { DIFFICULTY_LEVELS } from "../Constants/GameConstants"; // Import DIFFICULTY_LEVELS
 
 const usePokerGame = () => {
   const {
@@ -32,6 +33,10 @@ const usePokerGame = () => {
     decrementLives,
     resetLives,
     resetGameScoreAndStats,
+    difficulty, // Destructure difficulty
+    setDifficulty, // Destructure setDifficulty
+    hints, // Destructure hints
+    decrementHints, // Destructure decrementHints
   } = useGameState();
 
   const {
@@ -43,6 +48,11 @@ const usePokerGame = () => {
   } = useGameLogic();
 
   const [showRules, setShowRules] = useState(false); // UI state, can remain here or move to UI component
+  const [timerDuration, setTimerDuration] = useState(DIFFICULTY_LEVELS[difficulty].timerDuration); // Initialize timerDuration
+  const [currentCorrectAction, setCurrentCorrectAction] = useState(null); // Added state for current correct action
+  const [lastAnswerCorrectness, setLastAnswerCorrectness] = useState(null); // For correct/incorrect answer feedback
+  const [timeLeft, setTimeLeft] = useState(0); // Added state for timer
+  const [isTimerActive, setIsTimerActive] = useState(false); // Added state for timer activity
   const isInitialMount = useRef(true);
   const dealCount = useRef(0); // For logging/debugging
 
@@ -51,8 +61,11 @@ const usePokerGame = () => {
   }, []);
 
   const dealNewHand = useCallback(() => {
+    setLastAnswerCorrectness(null); // Reset before new hand details are set
+    setTimeLeft(timerDuration); // Set time for the new hand
+    setIsTimerActive(true); // Start the timer
     dealCount.current += 1;
-    logGameState("Dealing New Hand");
+    logGameState("Dealing New Hand", { timerDuration });
 
     const newHand = generateNewHand();
     setHand(newHand); // newHand could be a fallback hand from generateNewHand
@@ -77,10 +90,23 @@ const usePokerGame = () => {
 
     const newActions = getLogicAvailableActions(newSituationKey, newPositionKey);
     setAvailableActions(newActions);
+
+    // Calculate and set currentCorrectAction
+    const handNotation = getLogicHandNotation(newHand);
+    if (handNotation && handNotation !== "") {
+      const correctAction = getLogicCorrectDecision(handNotation, newSituationKey, newPositionKey);
+      setCurrentCorrectAction(correctAction);
+      logGameState("Correct Action Set", { correctAction });
+    } else {
+      setCurrentCorrectAction(null); // Or handle as an error, though getLogicHandNotation should be robust
+      logGameState("Correct Action Not Set - Invalid Hand Notation", { hand: newHand });
+    }
   }, [
     generateNewHand, 
     selectSituationAndPosition, 
     getLogicAvailableActions, 
+    getLogicHandNotation, // Added dependency
+    getLogicCorrectDecision, // Added dependency
     setHand, 
     setSituationKey, 
     setPositionKey, 
@@ -88,7 +114,9 @@ const usePokerGame = () => {
     setPositionDisplay, 
     setAvailableActions, 
     logGameState,
-    setGameOver // Added setGameOver as a dependency
+    setGameOver, // Added setGameOver as a dependency
+    // setCurrentCorrectAction is not needed in deps as it's a setter from useState
+    timerDuration, // Added timerDuration as a dependency for setting timeLeft
   ]);
 
   useEffect(() => {
@@ -106,12 +134,14 @@ const usePokerGame = () => {
     setScore(newScore);
     setStreak((prevStreak) => prevStreak + 1);
     updateHighScore(newScore);
+    setLastAnswerCorrectness('CORRECT'); // Set for correct decision
     logGameState("Correct Decision", { points, newStreak: streak + 1, currentScore: newScore });
-  }, [streak, score, setScore, setStreak, updateHighScore, logGameState]);
+  }, [streak, score, setScore, setStreak, updateHighScore, logGameState]); // setLastAnswerCorrectness is stable
 
   const handleIncorrectDecision = useCallback((correctDecision, yourChoice, handNotation) => {
     logGameState("Incorrect Decision", { correctDecision, yourChoice, handNotation, position: positionDisplay, situation: situationDisplay });
     setStreak(0);
+    setLastAnswerCorrectness('INCORRECT'); // Set for incorrect decision
     decrementLives();
     setWrongChoices((prevWrongChoices) => [
       ...prevWrongChoices,
@@ -124,6 +154,7 @@ const usePokerGame = () => {
       logGameState("Decision Attempted - Game Over");
       return; // Don't process decisions if game is over
     }
+    setIsTimerActive(false); // Stop the timer as soon as a decision is made
     logGameState("Decision Made", { decision, currentLives: lives, numWrongChoices: wrongChoices.length });
 
     const handNotation = getLogicHandNotation(hand);
@@ -154,15 +185,17 @@ const usePokerGame = () => {
     // Check for game over condition after processing decision and updating lives
     // Note: lives state updates asynchronously, so we check against the current value
     // If lives becomes 0 or less due to this incorrect decision, set gameOver.
-    if (!isCorrect && lives -1 <= 0) {
+    if (!isCorrect && lives - 1 <= 0) {
         setGameOver(true);
         logGameState("Game Over");
-    } else if (!isCorrect && lives -1 > 0) {
+        setCurrentCorrectAction(null); // Reset on game over
+    } else if (!isCorrect && lives - 1 > 0) {
         // If incorrect but game is not over, deal new hand
-        // Delay slightly to allow state updates to be perceived if necessary, though often not needed for logic
+        setCurrentCorrectAction(null); // Reset before new hand
         setTimeout(() => dealNewHand(), 0); 
     } else if (isCorrect) {
         // If correct, deal new hand
+        setCurrentCorrectAction(null); // Reset before new hand
         setTimeout(() => dealNewHand(), 0);
     }
   }, 
@@ -172,11 +205,13 @@ const usePokerGame = () => {
     handleCorrectDecision, handleIncorrectDecision, 
     dealNewHand, setGameOver, logGameState,
     // Added situationKey, positionKey as they are used in getLogicCorrectDecision
-    situationKey, positionKey 
+    situationKey, positionKey
+    // setCurrentCorrectAction is not needed in deps
   ]);
 
   const restartGame = useCallback(() => {
     logGameState("Restarting Game");
+    setIsTimerActive(false); // Stop any existing timer
     resetLives();
     resetGameScoreAndStats();
     setGameOver(false);
@@ -188,9 +223,43 @@ const usePokerGame = () => {
   useEffect(() => {
     if (lives <= 0 && !gameOver) {
       setGameOver(true);
+      setIsTimerActive(false); // Stop timer on game over
       logGameState("Game Over - Lives Depleted");
     }
   }, [lives, gameOver, setGameOver, logGameState]);
+
+  // useEffect to update timerDuration when difficulty changes
+  useEffect(() => {
+    setTimerDuration(DIFFICULTY_LEVELS[difficulty].timerDuration);
+    // When difficulty changes, the timer for the current hand should ideally reset or adapt.
+    // For now, it will affect the *next* hand's timerDuration.
+    // If immediate reset is needed, setTimeLeft(DIFFICULTY_LEVELS[difficulty].timerDuration) here.
+  }, [difficulty]);
+
+  // Timer logic useEffect
+  useEffect(() => {
+    let interval = null;
+    if (isTimerActive && timeLeft > 0) {
+      interval = setInterval(() => {
+        setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
+      }, 1000);
+    } else if (isTimerActive && timeLeft === 0) {
+      setIsTimerActive(false);
+      logGameState("Timer Expired");
+      handleIncorrectDecision('TIMEOUT', 'No decision', getLogicHandNotation(hand) || 'N/A');
+      
+      // Check for game over after timeout
+      if (lives - 1 <= 0) {
+        setGameOver(true);
+        logGameState("Game Over - Timer expired on last life");
+      } else {
+        // Delay slightly before dealing new hand to allow state updates (like score/lives) to be seen
+        setTimeout(() => dealNewHand(), 500); 
+      }
+    }
+    return () => clearInterval(interval); // Cleanup interval on unmount or re-render
+  }, [isTimerActive, timeLeft, lives, hand, handleIncorrectDecision, dealNewHand, getLogicHandNotation, setGameOver, logGameState]);
+
 
   return {
     hand,
@@ -207,6 +276,14 @@ const usePokerGame = () => {
     makeDecision,
     restartGame,
     wrongChoices,
+    difficulty, // Export difficulty
+    setDifficulty, // Export setDifficulty
+    hints, // Export hints
+    decrementHints, // Export decrementHints
+    timerDuration, // Export timerDuration
+    currentCorrectAction, // Export currentCorrectAction
+    lastAnswerCorrectness, // Export lastAnswerCorrectness
+    timeLeft, // Export timeLeft
   };
 };
 

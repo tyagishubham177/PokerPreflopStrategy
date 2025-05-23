@@ -27,22 +27,20 @@ const PokerGame = () => {
     situation,
     availableActions,
     makeDecision,
-    restartGame, // restartGame is already destructured
+    restartGame,
     wrongChoices,
-    // Destructure other necessary props from usePokerGame if they were missing
-    // (e.g. difficulty, hints, timer, answerFeedback etc. - assuming they are already handled from previous tasks)
-  } = usePokerGame({ showSettings }); // Pass showSettings if not already
+    difficulty, // Destructure difficulty
+    setDifficulty, // Destructure setDifficulty
+    currentCorrectAction, // Destructure currentCorrectAction
+    hints, // Destructure hints
+    decrementHints, // Destructure decrementHints
+    lastAnswerCorrectness, // Destructure lastAnswerCorrectness
+    timeLeft, // Destructure timeLeft
+  } = usePokerGame();
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
-
-  const handleApplyDifficultyAndRestart = React.useCallback(() => {
-    setShowSettings(false); // Optional: good UX
-    if (restartGame) {
-      restartGame();
-    }
-  }, [restartGame, setShowSettings]); // Added setShowSettings to dependency array
 
   useEffect(() => {
     let timer;
@@ -106,6 +104,11 @@ const PokerGame = () => {
         wrongChoices={wrongChoices}
           showRules={showRules}
           setShowRules={setShowRules}
+          currentCorrectAction={currentCorrectAction} // Pass currentCorrectAction
+          hints={hints} // Pass hints
+          decrementHints={decrementHints} // Pass decrementHints
+          lastAnswerCorrectness={lastAnswerCorrectness} // Pass lastAnswerCorrectness
+          timeLeft={timeLeft} // Pass timeLeft
         />
       </ErrorBoundary>
 
@@ -128,7 +131,8 @@ const PokerGame = () => {
         open={showSettings}
         onClose={toggleSettings}
         onOpen={toggleSettings}
-        onApplyDifficultyAndRestart={handleApplyDifficultyAndRestart} // Pass callback
+        difficulty={difficulty} // Pass difficulty state
+        handleDifficultyChange={setDifficulty} // Pass setDifficulty function
       />
     </Box>
   );
