@@ -16,6 +16,24 @@ export const positions = [
 export const suits = ["♠", "♥", "♦", "♣"];
 export const ranks = ["2", "3", "4", "5", "6", "7", "8", "9", "T", "J", "Q", "K", "A"];
 
+export const DIFFICULTY_LEVELS = {
+  Easy: {
+    lives: 5,
+    hints: 3,
+    timerDuration: 90,
+  },
+  Medium: {
+    lives: 3,
+    hints: 1,
+    timerDuration: 60,
+  },
+  Hard: {
+    lives: 3,
+    hints: 0,
+    timerDuration: 40,
+  },
+};
+
 export const InfoIcon = () => (
   <Info
     fontSize="small"

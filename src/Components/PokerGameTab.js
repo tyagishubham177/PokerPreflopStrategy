@@ -1,5 +1,6 @@
 import React from "react";
-import { Box, Grid, Typography, Paper } from "@mui/material";
+import { Box, Grid, Typography, Paper, Button, useTheme } from "@mui/material"; // Added Button, useTheme
+import FavoriteIcon from '@mui/icons-material/Favorite'; // Added FavoriteIcon
 import HandDealer from "./HandDealer";
 import DecisionButtons from "./DecisionButtons";
 import GameOver from "./GameOver";
@@ -18,7 +19,21 @@ const PokerGameTab = ({
   streak,
   restartGame,
   wrongChoices,
+  hintedAction, 
+  // New props for the bottom bar UI
+  timeLeft,
+  hints,
+  handleHintClick,
+  isHintButtonDisabled,
 }) => {
+  const theme = useTheme(); // Added useTheme
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+  };
+
   return (
     <Box
       sx={{
@@ -68,7 +83,7 @@ const PokerGameTab = ({
 
           {/* Center section - Decision Buttons */}
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} />
+            <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} hintedAction={hintedAction} />
           </Box>
 
           {/* Bottom section */}
@@ -77,17 +92,48 @@ const PokerGameTab = ({
               mt: 3,
               pt: 2,
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "space-between", // Ensure this is set
               alignItems: "center",
               borderTop: "1px solid rgba(0, 0, 0, 0.12)", 
             }}
           >
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
-              Lives: {lives}
-            </Typography>
+            {/* Lives (Hearts) Display */}
+            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              {Array.from({ length: lives }).map((_, index) => (
+                <FavoriteIcon
+                  key={`life-${index}`}
+                  sx={{ color: 'red', fontSize: '1.25rem', mr: 0.5 }} 
+                />
+              ))}
+            </Box>
+
+            {/* Timer Display */}
+            {!gameOver && ( // Only show timer if game is not over
+              <Typography 
+                variant="body1" 
+                sx={{ 
+                  fontWeight: 'bold',
+                  color: timeLeft <= 5 ? theme.palette.error.main : (timeLeft <= 10 ? theme.palette.warning.main : 'inherit')
+                }}
+              >
+                {formatTime(timeLeft)}
+              </Typography>
+            )}
+            
+            {/* Hint Button */}
+            <Button
+              size="small"
+              variant="outlined"
+              onClick={handleHintClick}
+              disabled={isHintButtonDisabled || gameOver} // Also disable if game over
+            >
+              Hint ({hints})
+            </Button>
+
+            {/* Streak Display */}
             <Typography variant="body1" sx={{ fontWeight: "bold" }}>
               Streak: {streak}{" "}
-              {streak > 0 && <span style={{ color: "#4caf50" }}>(+{streak * 10}% bonus)</span>}
+              {streak > 0 && <span style={{ color: theme.palette.success.main }}>(+{streak * 10}% bonus)</span>}
             </Typography>
           </Box>
         </>

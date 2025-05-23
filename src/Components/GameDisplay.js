@@ -1,10 +1,14 @@
-import React from 'react';
-import { Card, CardContent, Box } from "@mui/material";
+import React, { useState, useEffect } from 'react'; 
+import { Card, CardContent, Box, Typography, Button, Fade, useTheme } from "@mui/material"; // Added Fade, useTheme
+import FavoriteIcon from '@mui/icons-material/Favorite'; 
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'; // Import CheckCircleOutlineIcon
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'; // Import HighlightOffIcon
 import GameHeader from "./GameHeader";
 import PokerGameTab from "./PokerGameTab";
 import RulesDialog from "./RulesDialog";
 
 const GameDisplay = (props) => {
+  const theme = useTheme(); // Add useTheme hook
   const {
     collapsed,
     onInfoClick,
@@ -24,7 +28,44 @@ const GameDisplay = (props) => {
     wrongChoices,
     showRules,
     setShowRules,
+    currentCorrectAction, 
+    // hints, decrementHints are removed from here as they are passed directly to PokerGameTab
+    lastAnswerCorrectness, 
+    // timeLeft is removed from here as it is passed directly to PokerGameTab
+    hintedAction, 
+    // New props from PokerGame.js to be passed down
+    timeLeft, 
+    hints, 
+    handleHintClick, 
+    isHintButtonDisabled,
   } = props;
+
+  const [feedbackTrigger, setFeedbackTrigger] = useState(null); // Renamed state variable
+
+  // Effect to trigger feedback based on lastAnswerCorrectness
+  useEffect(() => {
+    let timerId; // timerId must be declared inside the effect so it's unique to each run.
+
+    if (lastAnswerCorrectness) {
+      setFeedbackTrigger(lastAnswerCorrectness); // Show feedback
+
+      timerId = setTimeout(() => {
+        setFeedbackTrigger(null); // Hide feedback after 1.5 seconds
+      }, 1500);
+    }
+    // It's important that if lastAnswerCorrectness becomes null (e.g. reset by parent),
+    // this effect runs, and if no new timer is set, feedbackTrigger just remains what it was (null if timeout completed).
+    // If lastAnswerCorrectness is null, feedbackTrigger is not set here, preserving its current state (ideally null from timeout).
+
+    // Cleanup function:
+    // This runs when the component unmounts, or BEFORE the effect runs again if lastAnswerCorrectness changes.
+    // This is critical to prevent memory leaks and incorrect behavior if lastAnswerCorrectness changes rapidly.
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [lastAnswerCorrectness]); // Only re-run if lastAnswerCorrectness changes.
+
+  // Removed handleHintClick as it's now in PokerGame.js
 
   if (collapsed) {
     return null;
@@ -45,8 +86,48 @@ const GameDisplay = (props) => {
           xs: "80vh",
           sm: "85vh",
         },
+        position: 'relative', // Needed for absolute positioning of the feedback Box
+        // Removed border styling
+        // transition: 'border 0.3s ease-in-out', 
       }}
     >
+      <Fade in={!!feedbackTrigger} timeout={500}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            padding: theme.spacing(3), // Increased padding for better visual
+            backgroundColor: feedbackTrigger === 'CORRECT' 
+                              ? 'rgba(46, 125, 50, 0.8)' // Darker green with opacity
+                              : (feedbackTrigger === 'INCORRECT' 
+                                ? 'rgba(211, 47, 47, 0.8)' // Darker red with opacity
+                                : 'transparent'),
+            borderRadius: theme.shape.borderRadius * 2, // More rounded
+            textAlign: 'center',
+            zIndex: 10,
+            pointerEvents: 'none',
+            display: 'flex', // For centering icon and text
+            flexDirection: 'column', // Stack icon and text vertically
+            alignItems: 'center', // Center items horizontally
+            boxShadow: theme.shadows[6], // Add some shadow
+          }}
+        >
+          {feedbackTrigger === 'CORRECT' && (
+            <>
+              <CheckCircleOutlineIcon sx={{ color: theme.palette.common.white, fontSize: 60, mb: 1 }} />
+              <Typography variant="h5" sx={{ color: theme.palette.common.white, fontWeight: 'bold' }}>Correct!</Typography>
+            </>
+          )}
+          {feedbackTrigger === 'INCORRECT' && (
+            <>
+              <HighlightOffIcon sx={{ color: theme.palette.common.white, fontSize: 60, mb: 1 }} />
+              <Typography variant="h5" sx={{ color: theme.palette.common.white, fontWeight: 'bold' }}>Incorrect!</Typography>
+            </>
+          )}
+        </Box>
+      </Fade>
       <GameHeader
         onInfoClick={onInfoClick}
         onLongPressStart={onLongPressStart}
@@ -62,6 +143,8 @@ const GameDisplay = (props) => {
           justifyContent: "space-between",
         }}
       >
+        {/* Lives, Timer, and Hint Button UI elements removed from here */}
+
         <PokerGameTab
           gameOver={gameOver}
           score={score}
@@ -71,10 +154,16 @@ const GameDisplay = (props) => {
           position={position}
           availableActions={availableActions}
           makeDecision={makeDecision}
-          lives={lives}
+          lives={lives} 
           streak={streak}
           restartGame={restartGame}
           wrongChoices={wrongChoices}
+          hintedAction={hintedAction} 
+          // Pass new props for the bottom bar functionality
+          timeLeft={timeLeft}
+          hints={hints}
+          handleHintClick={handleHintClick}
+          isHintButtonDisabled={isHintButtonDisabled}
         />
       </CardContent>
       <RulesDialog showRules={showRules} setShowRules={setShowRules} />

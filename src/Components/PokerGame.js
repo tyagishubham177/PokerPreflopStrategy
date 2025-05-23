@@ -5,15 +5,18 @@ import SettingsPanel from "./SettingsPanel";
 import GameDisplay from "./GameDisplay"; 
 import ErrorBoundary from "./ErrorBoundary"; 
 import usePokerGame from "../Hooks/UsePokerGame";
+// Removed BottomGameBar import
 import wallpaperImage from "../Assets/wallpaper.png";
 
 const PokerGame = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [longPress, setLongPress] = useState(false);
+  const [hintedAction, setHintedAction] = useState(null); // Add hintedAction state
 
   const longPressTimeout = useRef(null);
 
+  // Ensure all necessary props are destructured
   const {
     hand,
     position,
@@ -29,11 +32,33 @@ const PokerGame = () => {
     makeDecision,
     restartGame,
     wrongChoices,
+    difficulty, // Destructure difficulty
+    setDifficulty, // Destructure setDifficulty
+    currentCorrectAction, // Destructure currentCorrectAction
+    hints, // Destructure hints
+    decrementHints, // Destructure decrementHints
+    lastAnswerCorrectness, 
+    timeLeft, 
+    // hand, lives, hints, decrementHints, currentCorrectAction, gameOver are already destructured
   } = usePokerGame();
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
+
+  // useEffect to reset hintedAction when hand changes
+  useEffect(() => {
+    setHintedAction(null);
+  }, [hand]);
+
+  const handleHintClick = () => {
+    if (hints > 0 && !hintedAction && !gameOver) {
+      decrementHints();
+      setHintedAction(currentCorrectAction);
+    }
+  };
+
+  const isHintButtonDisabled = hints <= 0 || !!hintedAction || gameOver;
 
   useEffect(() => {
     let timer;
@@ -97,8 +122,20 @@ const PokerGame = () => {
         wrongChoices={wrongChoices}
           showRules={showRules}
           setShowRules={setShowRules}
+          currentCorrectAction={currentCorrectAction} // Pass currentCorrectAction
+          hints={hints} // Pass hints
+          decrementHints={decrementHints} // Pass decrementHints
+          lastAnswerCorrectness={lastAnswerCorrectness} // Pass lastAnswerCorrectness
+          timeLeft={timeLeft} // Pass timeLeft
+          hintedAction={hintedAction} // Pass hintedAction to GameDisplay
+          // Pass additional props for PokerGameTab via GameDisplay
+          handleHintClick={handleHintClick}
+          isHintButtonDisabled={isHintButtonDisabled}
+          streak={streak} // streak was already passed, ensuring it remains
         />
       </ErrorBoundary>
+
+      {/* BottomGameBar rendering removed */}
 
       <Fab
         color="primary"
@@ -119,6 +156,8 @@ const PokerGame = () => {
         open={showSettings}
         onClose={toggleSettings}
         onOpen={toggleSettings}
+        difficulty={difficulty} // Pass difficulty state
+        handleDifficultyChange={setDifficulty} // Pass setDifficulty function
       />
     </Box>
   );
