@@ -44,18 +44,26 @@ const GameDisplay = (props) => {
 
   // Effect to trigger feedback based on lastAnswerCorrectness
   useEffect(() => {
-    let timerId; // Renamed to timerId for clarity in cleanup
-    if (lastAnswerCorrectness) { // Simplified condition: if not null (i.e., 'CORRECT' or 'INCORRECT')
-      setFeedbackTrigger(lastAnswerCorrectness);
+    let timerId; // timerId must be declared inside the effect so it's unique to each run.
+
+    if (lastAnswerCorrectness) {
+      setFeedbackTrigger(lastAnswerCorrectness); // Show feedback
+
       timerId = setTimeout(() => {
-        setFeedbackTrigger(null);
+        setFeedbackTrigger(null); // Hide feedback after 1.5 seconds
       }, 1500);
     }
-    // The cleanup function will clear the timerId from the effect's closure
-    // from the run where lastAnswerCorrectness was not null.
-    // If lastAnswerCorrectness is null, timerId will be undefined, and clearTimeout(undefined) is safe.
-    return () => clearTimeout(timerId);
-  }, [lastAnswerCorrectness]);
+    // It's important that if lastAnswerCorrectness becomes null (e.g. reset by parent),
+    // this effect runs, and if no new timer is set, feedbackTrigger just remains what it was (null if timeout completed).
+    // If lastAnswerCorrectness is null, feedbackTrigger is not set here, preserving its current state (ideally null from timeout).
+
+    // Cleanup function:
+    // This runs when the component unmounts, or BEFORE the effect runs again if lastAnswerCorrectness changes.
+    // This is critical to prevent memory leaks and incorrect behavior if lastAnswerCorrectness changes rapidly.
+    return () => {
+      clearTimeout(timerId);
+    };
+  }, [lastAnswerCorrectness]); // Only re-run if lastAnswerCorrectness changes.
 
   // Removed handleHintClick as it's now in PokerGame.js
 
