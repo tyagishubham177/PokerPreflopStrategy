@@ -209,12 +209,12 @@ const usePokerGame = () => {
         setCurrentCorrectAction(null); // Reset before new hand if not game over
     }
 
-    // Common logic for post-decision: wait 1.5s then deal new hand if not game over
+    // Common logic for post-decision: wait 2s then deal new hand if not game over
     setTimeout(() => {
       if (!gameOverRef.current) { // Check the ref here
         dealNewHand();
       }
-    }, 1500);
+    }, 2000); // Changed from 1500 to 2000
   }, 
   [
     hand, situationKey, positionKey, gameOver, lives, wrongChoices.length, // Include all dependencies

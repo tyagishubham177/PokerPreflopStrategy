@@ -41,23 +41,6 @@ const GameDisplay = (props) => {
   } = props;
 
   const [feedbackTrigger, setFeedbackTrigger] = useState(null); // Renamed state variable
-  const [isHandVisible, setIsHandVisible] = useState(true);
-
-  // Effect to handle fade animation for hand changes
-  useEffect(() => {
-    let timerId;
-    // When hand changes, start by making the content invisible
-    setIsHandVisible(false);
-
-    // After a short delay, make it visible again to trigger the fade-in
-    timerId = setTimeout(() => {
-      setIsHandVisible(true);
-    }, 200); // 200ms delay before fading in
-
-    return () => {
-      clearTimeout(timerId); // Cleanup timeout on unmount or if hand changes again
-    };
-  }, [hand]); // Re-run this effect when the hand prop changes
 
   // Effect 1: Set feedbackTrigger when lastAnswerCorrectness changes
   useEffect(() => {
@@ -156,32 +139,26 @@ const GameDisplay = (props) => {
       >
         {/* Lives, Timer, and Hint Button UI elements removed from here */}
 
-        <Fade in={isHandVisible} timeout={400}>
-          {/* MUI Fade ideally expects a single child element to apply transition.
-              Wrapping PokerGameTab in a div ensures Fade works as expected. */}
-          <div>
-            <PokerGameTab
-              gameOver={gameOver}
-              score={score}
-              highScore={highScore}
-              hand={hand}
-              situation={situation}
-              position={position}
-              availableActions={availableActions}
-              makeDecision={makeDecision}
-              lives={lives}
-              streak={streak}
-              restartGame={restartGame}
-              wrongChoices={wrongChoices}
-              hintedAction={hintedAction}
-              // Pass new props for the bottom bar functionality
-              timeLeft={timeLeft}
-              hints={hints}
-              handleHintClick={handleHintClick}
-              isHintButtonDisabled={isHintButtonDisabled}
-            />
-          </div>
-        </Fade>
+        <PokerGameTab
+          gameOver={gameOver}
+          score={score}
+          highScore={highScore}
+          hand={hand}
+          situation={situation}
+          position={position}
+          availableActions={availableActions}
+          makeDecision={makeDecision}
+          lives={lives}
+          streak={streak}
+          restartGame={restartGame}
+          wrongChoices={wrongChoices}
+          hintedAction={hintedAction}
+          // Pass new props for the bottom bar functionality
+          timeLeft={timeLeft}
+          hints={hints}
+          handleHintClick={handleHintClick}
+          isHintButtonDisabled={isHintButtonDisabled}
+        />
       </CardContent>
       <RulesDialog showRules={showRules} setShowRules={setShowRules} />
     </Card>
