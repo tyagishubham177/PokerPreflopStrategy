@@ -5,6 +5,7 @@ import SettingsPanel from "./SettingsPanel";
 import GameDisplay from "./GameDisplay"; 
 import ErrorBoundary from "./ErrorBoundary"; 
 import usePokerGame from "../Hooks/UsePokerGame";
+import { playSound } from '../Utils/soundUtils'; // Import playSound
 // Removed BottomGameBar import
 import wallpaperImage from "../Assets/wallpaper.png";
 
@@ -15,6 +16,7 @@ const PokerGame = () => {
   const [hintedAction, setHintedAction] = useState(null); // Add hintedAction state
 
   const longPressTimeout = useRef(null);
+  const lowTimeSoundPlayedRef = useRef(false); // Ref for timer tick sound
 
   // Ensure all necessary props are destructured
   const {
@@ -44,6 +46,27 @@ const PokerGame = () => {
     // hand, lives, hints, decrementHints, currentCorrectAction, gameOver are already destructured
   } = usePokerGame();
 
+  useEffect(() => {
+    if (lastAnswerCorrectness === true) {
+      playSound('correct_decision');
+    } else if (lastAnswerCorrectness === false) {
+      playSound('wrong_decision');
+    }
+  }, [lastAnswerCorrectness]);
+
+  // useEffect for timer sound:
+  useEffect(() => {
+    if (timeLeft < 10 && timeLeft > 0 && !gameOver && !isPaused) {
+      if (!lowTimeSoundPlayedRef.current) {
+        playSound('timer_tick');
+        lowTimeSoundPlayedRef.current = true; // Set flag to true after playing
+      }
+    } else {
+      // Reset the flag if time goes above 10 (e.g. new round) or game ends/pauses
+      lowTimeSoundPlayedRef.current = false;
+    }
+  }, [timeLeft, gameOver, isPaused, playSound]);
+
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
@@ -57,6 +80,7 @@ const PokerGame = () => {
     if (hints > 0 && !hintedAction && !gameOver) {
       decrementHints();
       setHintedAction(currentCorrectAction);
+      playSound('hint_used'); // Play sound when hint is successfully used
     }
   };
 
