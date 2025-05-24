@@ -80,47 +80,61 @@ const StrategyCustomizationModal = ({
     }
   }, [modifiedStrategies, originalStrategiesOnOpen]);
 
+  // Effect for when selectedSituation changes (e.g., user selection)
+  // This should update position, which in turn will update decision via the next effect.
   useEffect(() => {
-    if (selectedSituation && modifiedStrategies[selectedSituation]) {
-      const positionKeys = Object.keys(modifiedStrategies[selectedSituation]);
-      if (positionKeys.length > 0 && !modifiedStrategies[selectedSituation][selectedPosition]) { 
-        const firstPosition = positionKeys[0];
-        setSelectedPosition(firstPosition);
-        const decisionKeys = Object.keys(modifiedStrategies[selectedSituation][firstPosition] || {});
-        if (decisionKeys.length > 0) {
-          setSelectedDecision(decisionKeys[0]);
-        } else {
-          setSelectedDecision('');
-        }
-      } else if (positionKeys.length === 0) {
+    // Guard against running with stale modifiedStrategies during initial load,
+    // or if selectedSituation is not yet valid with current strategies.
+    if (!modifiedStrategies || Object.keys(modifiedStrategies).length === 0 || !selectedSituation) {
+      if (!selectedSituation) { // if situation is cleared externally or invalid
         setSelectedPosition('');
         setSelectedDecision('');
-      } else if (modifiedStrategies[selectedSituation][selectedPosition]) { 
-        const decisionKeys = Object.keys(modifiedStrategies[selectedSituation][selectedPosition] || {});
-         if (decisionKeys.length > 0 && !modifiedStrategies[selectedSituation][selectedPosition][selectedDecision]) {
-            setSelectedDecision(decisionKeys[0]);
-        } else if (decisionKeys.length === 0) {
-            setSelectedDecision('');
-        }
       }
-    } else if (!selectedSituation) { 
-        setSelectedPosition('');
-        setSelectedDecision('');
+      return;
     }
-  }, [selectedSituation, modifiedStrategies, selectedPosition, selectedDecision]); 
 
-  useEffect(() => {
-    if (selectedSituation && selectedPosition && modifiedStrategies[selectedSituation] && modifiedStrategies[selectedSituation][selectedPosition]) {
-      const decisionKeys = Object.keys(modifiedStrategies[selectedSituation][selectedPosition]);
-      if (decisionKeys.length > 0 && !modifiedStrategies[selectedSituation][selectedPosition][selectedDecision]) { 
-        setSelectedDecision(decisionKeys[0]);
-      } else if (decisionKeys.length === 0) {
-        setSelectedDecision('');
+    const situationExists = modifiedStrategies[selectedSituation];
+    if (situationExists) {
+      const positionKeys = Object.keys(modifiedStrategies[selectedSituation]);
+      if (positionKeys.length > 0) {
+        const currentPositionIsValid = modifiedStrategies[selectedSituation][selectedPosition];
+        if (!currentPositionIsValid) { // If current position is not valid for new situation
+          setSelectedPosition(positionKeys[0]); // Set to first available, triggers next effect
+        }
+        // If current position IS valid, we don't change it, let user action or next effect handle decision
+      } else {
+        setSelectedPosition(''); // No positions for this situation
+        setSelectedDecision(''); // Cascade to clear decision as well
       }
-    } else if (selectedSituation && !selectedPosition) { 
-        setSelectedDecision('');
+    } else {
+      // selectedSituation is not a key in modifiedStrategies (e.g. strategy loaded, situation doesn't exist)
+      setSelectedPosition('');
+      setSelectedDecision('');
     }
-  }, [selectedPosition, selectedSituation, modifiedStrategies, selectedDecision]); 
+  }, [selectedSituation, modifiedStrategies]); // Only depends on situation and strategies
+
+  // Effect for when selectedPosition changes (e.g., user selection or due to situation change)
+  // This should update decision.
+  useEffect(() => {
+    // If situation or position is missing, or if the path in strategy is invalid, clear decision and return.
+    if (!selectedSituation || !selectedPosition || 
+        !modifiedStrategies?.[selectedSituation]?.[selectedPosition]) {
+      setSelectedDecision('');
+      return;
+    }
+    
+    // At this point, modifiedStrategies[selectedSituation][selectedPosition] is a valid object.
+    const decisionKeys = Object.keys(modifiedStrategies[selectedSituation][selectedPosition]);
+    if (decisionKeys.length > 0) {
+      // Only update if the current decision is not valid for the new position/situation,
+      // or if selectedDecision is currently empty.
+      if (!selectedDecision || !modifiedStrategies[selectedSituation][selectedPosition][selectedDecision]) {
+          setSelectedDecision(decisionKeys[0]);
+      }
+    } else {
+      setSelectedDecision(''); // No decisions for this position
+    }
+  }, [selectedPosition, selectedSituation, modifiedStrategies]); // Depends on position, situation, and strategies
 
 
   const handleStrategySelectionChange = (newHandsForCurrentDecision) => {
@@ -166,11 +180,9 @@ const StrategyCustomizationModal = ({
     executeClose(); // Close after attempting save or if no changes
   };
   
-  const currentStrategyData = modifiedStrategies; 
+  const currentStrategyData = modifiedStrategies; // Remains for clarity if used elsewhere, but handsForEditor will use modifiedStrategies directly
 
-  const handsForEditor = (selectedSituation && selectedPosition && selectedDecision && currentStrategyData[selectedSituation] && currentStrategyData[selectedSituation][selectedPosition] && currentStrategyData[selectedSituation][selectedPosition][selectedDecision])
-    ? currentStrategyData[selectedSituation][selectedPosition][selectedDecision]
-    : [];
+  const handsForEditor = modifiedStrategies?.[selectedSituation]?.[selectedPosition]?.[selectedDecision] || [];
 
   if (!open) {
     return null;

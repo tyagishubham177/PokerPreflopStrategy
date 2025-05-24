@@ -19,8 +19,8 @@ import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
 const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
 const SOUND_SETTINGS_LS_KEY = 'soundSettings';
 
-// Update props to include difficulty and handleDifficultyChange
-const SettingsTab = ({ difficulty, handleDifficultyChange }) => { 
+// Update props to include difficulty, handleDifficultyChange, and onPanelClose
+const SettingsTab = ({ difficulty, handleDifficultyChange, onPanelClose }) => { 
   const [soundEnabled, setSoundEnabled] = useState(() => {
     try {
       const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
@@ -112,6 +112,10 @@ const SettingsTab = ({ difficulty, handleDifficultyChange }) => {
       console.log("Settings saved:", settingsToSave);
     } catch (error) {
       console.error("Failed to save settings to localStorage:", error);
+    }
+    // Call the passed-in function to close the panel
+    if (onPanelClose) {
+      onPanelClose();
     }
   };
 
