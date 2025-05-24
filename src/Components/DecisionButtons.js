@@ -39,10 +39,10 @@ const DecisionButtons = ({ availableActions, makeDecision, hintedAction }) => { 
             width: isMobile && availableActions.length % 2 !== 0 && index === availableActions.length - 1 ? "100%" : buttonStyle.width,
             // Conditional styling for hinted action
             ...(action === hintedAction && {
-              borderColor: theme.palette.warning.main, // Example: Orange border
-              color: theme.palette.warning.dark, // Example: Darker orange text
+              borderColor: theme.palette.success.main, // Changed to success.main
+              color: theme.palette.success.dark,      // Changed to success.dark
               borderWidth: 2,
-              backgroundColor: theme.palette.warning.light + '40', // Light orange background with opacity
+              backgroundColor: theme.palette.success.light + '40', // Changed to success.light with opacity
             }),
           }}
         >
