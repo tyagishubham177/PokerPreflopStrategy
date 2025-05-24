@@ -21,8 +21,12 @@ const SettingsPanel = ({ open, onClose, onOpen, difficulty, handleDifficultyChan
         {/* Difficulty FormControl removed from here */}
 
         <ErrorBoundary fallbackMessage="There was an error in the settings panel. Please try closing and reopening it.">
-          {/* Pass difficulty and handleDifficultyChange to SettingsTab */}
-          <SettingsTab difficulty={difficulty} handleDifficultyChange={handleDifficultyChange} />
+          {/* Pass difficulty, handleDifficultyChange, and onClose (as onPanelClose) to SettingsTab */}
+          <SettingsTab 
+            difficulty={difficulty} 
+            handleDifficultyChange={handleDifficultyChange} 
+            onPanelClose={onClose} 
+          />
         </ErrorBoundary>
       </Box>
     </SwipeableDrawer>

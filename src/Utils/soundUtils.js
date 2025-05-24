@@ -1,3 +1,11 @@
+// At the top of src/Utils/soundUtils.js
+const soundFiles = {
+  'correct_decision': require('../Assets/sounds/correct_decision.mp3'),
+  'wrong_decision': require('../Assets/sounds/wrong_decision.mp3'),
+  'hint_used': require('../Assets/sounds/hint_used.mp3'),
+  'timer_tick': require('../Assets/sounds/timer_tick.mp3'),
+};
+
 /**
  * Plays a sound effect.
  *
@@ -33,17 +41,31 @@ export const playSound = (soundName, volume = 1) => {
       return;
     }
 
-    const soundFilePath = `../Assets/sounds/${soundName}.mp3`;
-    const audio = new Audio(soundFilePath);
+    const actualSoundPath = soundFiles[soundName]; // Get path from map
+
+    if (!actualSoundPath) {
+      console.error(`Sound resource for '${soundName}' not found in soundFiles map.`);
+      return;
+    }
+    
+    // Enhanced logging from previous step, now using actualSoundPath
+    console.log('Attempting to play sound:', soundName, 'at path:', actualSoundPath);
+
+    const audio = new Audio(actualSoundPath);
     audio.volume = Math.max(0, Math.min(1, volume)); // Ensure volume is between 0 and 1
 
     audio.play()
+      .then(() => { // Added for successful play log
+        console.log('Sound', soundName, 'played successfully.');
+      })
       .catch(playError => {
-        console.error(`Error playing sound ${soundName} at path ${soundFilePath}:`, playError);
+        console.error(`Error playing sound ${soundName} at path ${actualSoundPath}:`, playError);
       });
 
     audio.onerror = (errorEvent) => {
-      console.error(`Error loading sound ${soundName} at path ${soundFilePath}:`, errorEvent);
+      // Enhanced logging from previous step
+      // Ensure the error event itself is logged for more details
+      console.error(`Audio onerror event for ${soundName} with path ${actualSoundPath}:`, errorEvent); 
     };
 
   } catch (e) {
