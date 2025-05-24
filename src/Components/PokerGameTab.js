@@ -111,13 +111,21 @@ const PokerGameTab = ({
               mt: 3,
               pt: 2,
               display: "flex",
-              justifyContent: "space-between", // Ensure this is set
-              alignItems: "center",
-              borderTop: "1px solid rgba(0, 0, 0, 0.12)", 
+              borderTop: "1px solid rgba(0, 0, 0, 0.12)",
+              // Desktop styles (default)
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              // Mobile overrides
+              [theme.breakpoints.down('sm')]: {
+                flexDirection: 'column',
+                alignItems: 'center', // Center items when stacked
+                gap: theme.spacing(1.5), // Add vertical gap between stacked items
+              },
             }}
           >
             {/* Lives (Hearts) Display */}
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
               {Array.from({ length: lives }).map((_, index) => (
                 <FavoriteIcon
                   key={`life-${index}`}
@@ -128,7 +136,7 @@ const PokerGameTab = ({
 
             {/* Timer Display */}
             {!gameOver && ( // Only show timer if game is not over
-              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 1, minWidth: 'auto' }}>
                 <Typography 
                   variant="body1" 
                   sx={{ 
@@ -151,13 +159,24 @@ const PokerGameTab = ({
               variant="outlined"
               onClick={handleHintClick}
               disabled={isHintButtonDisabled || gameOver} // Also disable if game over
-              sx={{ px: 1 }} // Reduced horizontal padding
+              sx={{ px: 1, flexShrink: 0 }} // Keep padding, set flexShrink
             >
               Hint ({hints})
             </Button>
 
             {/* Streak Display */}
-            <Typography variant="body1" sx={{ fontWeight: "bold", flexShrink: 1, textAlign: 'right' }}> {/* Added flexShrink and textAlign */}
+            <Typography
+              variant="body1"
+              sx={{
+                fontWeight: "bold",
+                flexShrink: 1, // Crucial for allowing it to shrink
+                minWidth: 0, // Helps if the text content itself resists shrinking
+                textAlign: 'right',
+                [theme.breakpoints.down('sm')]: {
+                  textAlign: 'center', // Center when stacked
+                },
+              }}
+            >
               Streak: {streak}{" "}
               {streak > 0 && <span style={{ color: theme.palette.success.main }}>(+{streak * 10}% bonus)</span>}
             </Typography>
