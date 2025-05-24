@@ -16,7 +16,8 @@ const PokerGame = () => {
   const [hintedAction, setHintedAction] = useState(null); // Add hintedAction state
 
   const longPressTimeout = useRef(null);
-  const lowTimeSoundPlayedRef = useRef(false); // Ref for timer tick sound
+  // lowTimeSoundPlayedRef is no longer needed for the new timer sound logic.
+  // const lowTimeSoundPlayedRef = useRef(false); 
 
   // Ensure all necessary props are destructured
   const {
@@ -48,24 +49,33 @@ const PokerGame = () => {
 
   useEffect(() => {
     if (lastAnswerCorrectness === true) {
+      console.log('PokerGame: Attempting to play correct_decision sound. lastAnswerCorrectness:', lastAnswerCorrectness);
       playSound('correct_decision');
     } else if (lastAnswerCorrectness === false) {
+      console.log('PokerGame: Attempting to play wrong_decision sound. lastAnswerCorrectness:', lastAnswerCorrectness);
       playSound('wrong_decision');
     }
   }, [lastAnswerCorrectness]);
 
-  // useEffect for timer sound:
+  // useEffect for timer sound (plays continuously when low):
   useEffect(() => {
+    let intervalId = null;
+
     if (timeLeft < 10 && timeLeft > 0 && !gameOver && !isPaused) {
-      if (!lowTimeSoundPlayedRef.current) {
+      // Play immediately once, then set interval
+      playSound('timer_tick'); 
+      intervalId = setInterval(() => {
         playSound('timer_tick');
-        lowTimeSoundPlayedRef.current = true; // Set flag to true after playing
-      }
-    } else {
-      // Reset the flag if time goes above 10 (e.g. new round) or game ends/pauses
-      lowTimeSoundPlayedRef.current = false;
+      }, 1500); // Play every 1.5 seconds
     }
-  }, [timeLeft, gameOver, isPaused, playSound]);
+
+    // Cleanup function to clear the interval
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, [timeLeft, gameOver, isPaused, playSound]); // playSound is stable, so it's fine in deps
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
