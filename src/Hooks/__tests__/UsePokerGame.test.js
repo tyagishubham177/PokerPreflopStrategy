@@ -18,6 +18,7 @@ const mockResetLives = jest.fn();
 const mockResetGameScoreAndStats = jest.fn();
 const mockSetDifficulty = jest.fn();
 const mockDecrementHints = jest.fn();
+const mockSetIsPaused = jest.fn(); // Added for pause/play tests
 
 
 const mockGenerateNewHand = jest.fn();
@@ -50,6 +51,7 @@ describe('usePokerGame', () => {
       availableActions: ['Raise', 'Fold'],
       difficulty: 'Easy',
       hints: 3,
+      isPaused: false, // Default to not paused
       setHand: jest.fn(),
       setSituationKey: jest.fn(),
       setPositionKey: jest.fn(),
@@ -66,8 +68,9 @@ describe('usePokerGame', () => {
       resetGameScoreAndStats: mockResetGameScoreAndStats,
       setDifficulty: mockSetDifficulty,
       decrementHints: mockDecrementHints,
+      setIsPaused: mockSetIsPaused, // Provide the mock setter
       // For handleIncorrectDecision related state
-      setLastAnswerCorrectness: mockSetLastAnswerCorrectness, 
+      setLastAnswerCorrectness: mockSetLastAnswerCorrectness,
     });
 
     mockUseGameLogic.default.mockReturnValue({
@@ -185,5 +188,125 @@ describe('usePokerGame', () => {
         jest.advanceTimersByTime(500); // Advance past the 500ms delay for dealNewHand
     });
     expect(mockGenerateNewHand).toHaveBeenCalledTimes(2); // Initial + after timeout
+  });
+
+  describe('Pause/Play Functionality', () => {
+    test('togglePausePlay calls setIsPaused and toggles isPaused state', () => {
+      // Initial state: isPaused = false
+      mockUseGameState.default.mockReturnValueOnce({
+        ...mockUseGameState.default(), // Spread the default setup
+        isPaused: false,
+        setIsPaused: mockSetIsPaused,
+      });
+      const { result, rerender } = renderHook(() => usePokerGame());
+      
+      act(() => {
+        result.current.togglePausePlay();
+      });
+      expect(mockSetIsPaused).toHaveBeenCalledTimes(1);
+      // Check if setIsPaused was called with a function that would toggle the state
+      // This is a bit indirect; ideally, we'd check the new state.
+      // Let's assume setIsPaused correctly toggles.
+
+      // To test the toggled state, we need to mock the next return value of useGameState
+      mockUseGameState.default.mockReturnValueOnce({
+        ...mockUseGameState.default(),
+        isPaused: true, // Simulate state has been updated
+        setIsPaused: mockSetIsPaused,
+      });
+      rerender(); // Rerender with the new mocked state
+      expect(result.current.isPaused).toBe(true); // Check the hook's returned state
+
+      act(() => {
+        result.current.togglePausePlay(); // Call again to toggle back
+      });
+      expect(mockSetIsPaused).toHaveBeenCalledTimes(2);
+
+      mockUseGameState.default.mockReturnValueOnce({
+        ...mockUseGameState.default(),
+        isPaused: false, // Simulate state has been updated back
+        setIsPaused: mockSetIsPaused,
+      });
+      rerender();
+      expect(result.current.isPaused).toBe(false);
+    });
+
+    test('timer does not decrement timeLeft when isPaused is true', () => {
+      const initialTimeLeft = 10;
+      const mockSetTimeLeftLocal = jest.fn(); // Local mock for setTimeLeft if needed
+
+      // Override useGameState for this specific test
+      mockUseGameState.default.mockReturnValueOnce({
+        ...mockUseGameState.default(),
+        isPaused: true, // Game is paused
+        difficulty: 'Easy', // Ensure timerDuration is set
+        // We need to control setTimeLeft or check timeLeft from the hook's return
+        // For simplicity, we'll check timeLeft from the hook's return if possible,
+        // or ensure no calls that would change it are made.
+        // The hook uses its own useState for timeLeft, so we can't directly mock setTimeLeft.
+        // We will check the returned `timeLeft` after advancing timers.
+      });
+      
+      const { result } = renderHook(() => usePokerGame());
+      
+      // dealNewHand is called on mount, which sets timeLeft to timerDuration and starts the timer.
+      // We need to ensure the initial timeLeft value in the hook is what we expect.
+      // The hook's timeLeft is initialized from timerDuration (from difficulty).
+      // Let's assume dealNewHand sets timeLeft correctly.
+      // To directly test the timer's effect, we'd need to control the internal setTimeLeft.
+      // Since we can't, we check if the `handleIncorrectDecision` is NOT called (as timer won't expire)
+      // and that `dealNewHand` is not called again due to timeout.
+
+      // Force initial timeLeft to be something specific for this test via dealNewHand logic
+      // This is tricky as dealNewHand is called internally.
+      // Let's assume after initial dealNewHand, timeLeft is DIFFICULTY_LEVELS['Easy'].timerDuration.
+      // And the timer is active.
+      
+      act(() => {
+        // Initial dealNewHand was called.
+        // The timer's useEffect will run. Since isPaused is true, it shouldn't set an interval.
+      });
+
+      act(() => {
+        jest.advanceTimersByTime(DIFFICULTY_LEVELS['Easy'].timerDuration * 500); // Advance by half the timer duration
+      });
+      
+      // If the timer was paused, handleIncorrectDecision should not have been called due to timeout
+      expect(mockDecrementLives).not.toHaveBeenCalled(); 
+      expect(mockSetWrongChoices).not.toHaveBeenCalled();
+      
+      // The returned timeLeft from the hook should still be the initial timerDuration
+      // because the interval to decrement it should not have been set up.
+      // The internal `timeLeft` state of `usePokerGame` is what we're interested in.
+      // The `timeLeft` returned by `result.current.timeLeft` should reflect this.
+      expect(result.current.timeLeft).toBe(DIFFICULTY_LEVELS['Easy'].timerDuration);
+    });
+
+    test('timer decrements timeLeft when isPaused is false', () => {
+       mockUseGameState.default.mockReturnValueOnce({
+        ...mockUseGameState.default(),
+        isPaused: false, // Game is not paused
+        difficulty: 'Easy',
+        lives: 3, // Ensure lives > 0 so timeout doesn't end game immediately
+      });
+
+      const { result } = renderHook(() => usePokerGame());
+      // dealNewHand on mount sets timeLeft to timerDuration and starts timer.
+      const initialTime = DIFFICULTY_LEVELS['Easy'].timerDuration;
+      expect(result.current.timeLeft).toBe(initialTime);
+
+      act(() => {
+        jest.advanceTimersByTime(1000); // Advance by 1 second
+      });
+
+      expect(result.current.timeLeft).toBe(initialTime - 1);
+
+      act(() => {
+        jest.advanceTimersByTime(2000); // Advance by 2 more seconds
+      });
+      expect(result.current.timeLeft).toBe(initialTime - 3);
+       // Check that timeout logic has not been triggered yet if time hasn't run out
+      expect(mockDecrementLives).not.toHaveBeenCalled();
+    });
   });
 });

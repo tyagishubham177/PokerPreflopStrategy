@@ -37,6 +37,8 @@ const usePokerGame = () => {
     setDifficulty, // Destructure setDifficulty
     hints, // Destructure hints
     decrementHints, // Destructure decrementHints
+    isPaused, // Added for pause/play
+    setIsPaused, // Added for pause/play
   } = useGameState();
 
   const {
@@ -62,8 +64,14 @@ const usePokerGame = () => {
   }, [gameOver]);
 
   const logGameState = useCallback((action, details = {}) => {
+    // Optional: Could add a check here: if (isPaused && action.includes("Timer")) return;
     console.log(`[PokerGame - ${action}]`, { ...details, dealCount: dealCount.current });
-  }, []);
+  }, []); // isPaused not strictly needed as a dep if only used for conditional logging inside
+
+  const togglePausePlay = useCallback(() => {
+    setIsPaused(prevIsPaused => !prevIsPaused);
+    logGameState(!isPaused ? "Game Paused" : "Game Resumed"); // Use the current value of isPaused before state update
+  }, [setIsPaused, logGameState, isPaused]); // Added isPaused here for the logGameState call
 
   const dealNewHand = useCallback(() => {
     setLastAnswerCorrectness(null); // Reset before new hand details are set
@@ -264,26 +272,33 @@ const usePokerGame = () => {
   // Timer logic useEffect
   useEffect(() => {
     let interval = null;
-    if (isTimerActive && timeLeft > 0) {
+    // Only set up the interval if the timer is active, not paused, and timeLeft > 0
+    if (isTimerActive && !isPaused && timeLeft > 0) {
       interval = setInterval(() => {
         setTimeLeft((prevTimeLeft) => prevTimeLeft - 1);
       }, 1000);
-    } else if (isTimerActive && timeLeft === 0) {
-      setIsTimerActive(false);
+    } else if (isTimerActive && !isPaused && timeLeft === 0) {
+      // Timeout logic
+      setIsTimerActive(false); // Stop the timer activities
       logGameState("Timer Expired");
       handleIncorrectDecision(currentCorrectAction, 'No decision', getLogicHandNotation(hand) || 'N/A');
       
       // Check for game over after timeout
-      if (lives - 1 <= 0) {
+      if (lives - 1 <= 0) { // Check against current lives state
         setGameOver(true);
         logGameState("Game Over - Timer expired on last life");
       } else {
-        // Delay slightly before dealing new hand to allow state updates (like score/lives) to be seen
+        // Delay slightly before dealing new hand
         setTimeout(() => dealNewHand(), 500); 
       }
     }
-    return () => clearInterval(interval); // Cleanup interval on unmount or re-render
-  }, [isTimerActive, timeLeft, lives, hand, handleIncorrectDecision, dealNewHand, getLogicHandNotation, setGameOver, logGameState, currentCorrectAction]);
+    // Cleanup: Clear interval if it was set
+    return () => {
+      if (interval) {
+        clearInterval(interval);
+      }
+    };
+  }, [isTimerActive, timeLeft, isPaused, lives, hand, handleIncorrectDecision, dealNewHand, getLogicHandNotation, setGameOver, logGameState, currentCorrectAction, setIsTimerActive]); // Added isPaused and other relevant dependencies
 
 
   return {
@@ -309,6 +324,8 @@ const usePokerGame = () => {
     currentCorrectAction, // Export currentCorrectAction
     lastAnswerCorrectness, // Export lastAnswerCorrectness
     timeLeft, // Export timeLeft
+    isPaused, // Export isPaused
+    togglePausePlay, // Export togglePausePlay
   };
 };
 

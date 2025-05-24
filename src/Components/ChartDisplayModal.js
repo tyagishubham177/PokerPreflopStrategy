@@ -36,10 +36,9 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
           <ReadOnlyStrategyChartViewer
             situationKey={situationKey}
             positionKey={positionKey}
-            decisionKey={decisionKey} // This is the correct action, used to select the chart.
-            handToHighlight={!highlightFoldCell ? handNotation : null} // Only pass handNotation if not highlighting a fold range
-            actionToHighlightRange={highlightFoldCell ? yourChoice : null} // Pass yourChoice if highlighting a fold range
-            highlightFoldCell={highlightFoldCell} // Pass this new prop through
+            decisionKey={decisionKey} // Base action for the chart (correct action)
+            incorrectActionName={yourChoice} // The user's incorrect action
+            handToHighlight={handNotation} // For single hand gold outline
           />
         ) : (
           <Typography sx={{ mt: 2, textAlign: 'center' }}>

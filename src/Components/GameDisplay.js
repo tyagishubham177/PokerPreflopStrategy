@@ -38,6 +38,8 @@ const GameDisplay = (props) => {
     hints, 
     handleHintClick, 
     isHintButtonDisabled,
+    isPaused, // Added for pause/play
+    togglePausePlay, // Added for pause/play
   } = props;
 
   const [feedbackTrigger, setFeedbackTrigger] = useState(null); // Renamed state variable
@@ -158,6 +160,8 @@ const GameDisplay = (props) => {
           hints={hints}
           handleHintClick={handleHintClick}
           isHintButtonDisabled={isHintButtonDisabled}
+          isPaused={isPaused} // Pass isPaused
+          togglePausePlay={togglePausePlay} // Pass togglePausePlay
         />
       </CardContent>
       <RulesDialog showRules={showRules} setShowRules={setShowRules} />

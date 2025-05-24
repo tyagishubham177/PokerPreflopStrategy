@@ -27,6 +27,7 @@ const useGameState = () => {
   const [wrongChoices, setWrongChoices] = useState([]); // Array of incorrect decisions made by the player
   const [gameOver, setGameOver] = useState(false);
   const [availableActions, setAvailableActions] = useState([]); // Possible actions for the current hand
+  const [isPaused, setIsPaused] = useState(false); // Added for pause/play functionality
 
   const updateHighScore = useCallback((newScore) => {
     setHighScore((prevHighScore) => {
@@ -109,6 +110,10 @@ const useGameState = () => {
     decrementHints, // Export decrementHints
     resetLives,
     resetGameScoreAndStats,
+
+    // Pause/Play state
+    isPaused,
+    setIsPaused,
   };
 };
 
