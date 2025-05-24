@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { DIFFICULTY_LEVELS } from "../Constants/GameConstants";
 
 const SOUND_SETTINGS_LS_KEY = 'soundSettings';
