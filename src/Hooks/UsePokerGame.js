@@ -141,6 +141,11 @@ const usePokerGame = () => {
     updateHighScore(newScore);
     setLastAnswerCorrectness('CORRECT'); // Set for correct decision
     logGameState("Correct Decision", { points, newStreak: streak + 1, currentScore: newScore });
+
+    // Add this timeout
+    setTimeout(() => {
+      setLastAnswerCorrectness(null);
+    }, 1400);
   }, [streak, score, setScore, setStreak, updateHighScore, logGameState]); // setLastAnswerCorrectness is stable
 
   const handleIncorrectDecision = useCallback((correctDecision, yourChoice, handNotation) => {
@@ -152,6 +157,11 @@ const usePokerGame = () => {
       ...prevWrongChoices,
       { handNotation, position: positionDisplay, situation: situationDisplay, correctDecision, yourChoice, situationKey: situationKey, positionKey: positionKey },
     ]);
+
+    // Add this timeout
+    setTimeout(() => {
+      setLastAnswerCorrectness(null);
+    }, 1400);
   }, [decrementLives, setStreak, setWrongChoices, positionDisplay, situationDisplay, logGameState, situationKey, positionKey]);
   
   const makeDecision = useCallback((decision) => {
