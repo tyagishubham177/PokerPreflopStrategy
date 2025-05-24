@@ -40,16 +40,24 @@ const GameDisplay = (props) => {
     isHintButtonDisabled,
     isPaused, // Added for pause/play
     togglePausePlay, // Added for pause/play
+    playSound, // Accept playSound prop
   } = props;
 
   const [feedbackTrigger, setFeedbackTrigger] = useState(null); // Renamed state variable
 
-  // Effect 1: Set feedbackTrigger when lastAnswerCorrectness changes
+  // Effect 1: Set feedbackTrigger and play sound when lastAnswerCorrectness changes
   useEffect(() => {
-    if (lastAnswerCorrectness) {
+    if (lastAnswerCorrectness) { // e.g., 'CORRECT' or 'INCORRECT'
       setFeedbackTrigger(lastAnswerCorrectness);
+      if (lastAnswerCorrectness === 'CORRECT') {
+        console.log('GameDisplay: Playing correct_decision sound.'); // Add log
+        playSound('correct_decision');
+      } else if (lastAnswerCorrectness === 'INCORRECT') {
+        console.log('GameDisplay: Playing wrong_decision sound.'); // Add log
+        playSound('wrong_decision');
+      }
     }
-  }, [lastAnswerCorrectness]);
+  }, [lastAnswerCorrectness, playSound]); // Added playSound to dependencies
 
   // Effect 2: Manage the timer for feedbackTrigger visibility
   useEffect(() => {

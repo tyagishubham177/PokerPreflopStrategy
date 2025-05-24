@@ -47,15 +47,16 @@ const PokerGame = () => {
     // hand, lives, hints, decrementHints, currentCorrectAction, gameOver are already destructured
   } = usePokerGame();
 
-  useEffect(() => {
-    if (lastAnswerCorrectness === true) {
-      console.log('PokerGame: Attempting to play correct_decision sound. lastAnswerCorrectness:', lastAnswerCorrectness);
-      playSound('correct_decision');
-    } else if (lastAnswerCorrectness === false) {
-      console.log('PokerGame: Attempting to play wrong_decision sound. lastAnswerCorrectness:', lastAnswerCorrectness);
-      playSound('wrong_decision');
-    }
-  }, [lastAnswerCorrectness]);
+  // REMOVED useEffect for playing decision sounds here, as it's moved to GameDisplay.js
+  // useEffect(() => {
+  //   if (lastAnswerCorrectness === true) {
+  //     console.log('PokerGame: Attempting to play correct_decision sound. lastAnswerCorrectness:', lastAnswerCorrectness);
+  //     playSound('correct_decision');
+  //   } else if (lastAnswerCorrectness === false) {
+  //     console.log('PokerGame: Attempting to play wrong_decision sound. lastAnswerCorrectness:', lastAnswerCorrectness);
+  //     playSound('wrong_decision');
+  //   }
+  // }, [lastAnswerCorrectness]);
 
   // useEffect for timer sound (plays continuously when low):
   useEffect(() => {
@@ -162,6 +163,7 @@ const PokerGame = () => {
           hints={hints} // Pass hints
           decrementHints={decrementHints} // Pass decrementHints
           lastAnswerCorrectness={lastAnswerCorrectness} // Pass lastAnswerCorrectness
+          playSound={playSound} // Pass playSound down
           timeLeft={timeLeft} // Pass timeLeft
           hintedAction={hintedAction} // Pass hintedAction to GameDisplay
           // Pass additional props for PokerGameTab via GameDisplay
