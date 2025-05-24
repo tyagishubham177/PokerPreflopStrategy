@@ -13,7 +13,9 @@ const IncorrectAnswers = ({ wrongChoices }) => {
     situationKey: '',
     positionKey: '',
     decisionKey: '',
-    handNotation: '' // Add handNotation
+    handNotation: '', // Add handNotation
+    yourChoice: '', 
+    highlightFoldCell: false
   });
 
   const toggleFlip = (index) => {
@@ -25,7 +27,9 @@ const IncorrectAnswers = ({ wrongChoices }) => {
       situationKey: choice.situationKey,
       positionKey: choice.positionKey,
       decisionKey: choice.correctDecision, // choice.correctDecision is the action like "Raise"
-      handNotation: choice.handNotation // Add this line
+      handNotation: choice.handNotation, // Add this line
+      yourChoice: choice.yourChoice,
+      highlightFoldCell: choice.correctDecision === 'Fold' && choice.yourChoice !== 'Fold'
     });
     setModalOpen(true);
   };
@@ -76,6 +80,8 @@ const IncorrectAnswers = ({ wrongChoices }) => {
         positionKey={currentChartData.positionKey} // Pass positionKey
         decisionKey={currentChartData.decisionKey} // Pass decisionKey
         handNotation={currentChartData.handNotation} // Add this prop
+        yourChoice={currentChartData.yourChoice}
+        highlightFoldCell={currentChartData.highlightFoldCell}
       />
     </Paper>
   );

@@ -39,6 +39,8 @@ const PokerGame = () => {
     decrementHints, // Destructure decrementHints
     lastAnswerCorrectness, 
     timeLeft, 
+    isPaused, // Added for pause/play
+    togglePausePlay, // Added for pause/play
     // hand, lives, hints, decrementHints, currentCorrectAction, gameOver are already destructured
   } = usePokerGame();
 
@@ -132,6 +134,8 @@ const PokerGame = () => {
           handleHintClick={handleHintClick}
           isHintButtonDisabled={isHintButtonDisabled}
           streak={streak} // streak was already passed, ensuring it remains
+          isPaused={isPaused} // Pass isPaused
+          togglePausePlay={togglePausePlay} // Pass togglePausePlay
         />
       </ErrorBoundary>
 

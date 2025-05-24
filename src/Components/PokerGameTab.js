@@ -1,6 +1,9 @@
 import React from "react";
-import { Box, Grid, Typography, Paper, Button, useTheme } from "@mui/material"; // Added Button, useTheme
+import { Box, Grid, Typography, Paper, Button, useTheme, IconButton } from "@mui/material"; // Added Button, useTheme, IconButton
 import FavoriteIcon from '@mui/icons-material/Favorite'; // Added FavoriteIcon
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline'; // Added for pause UI
 import HandDealer from "./HandDealer";
 import DecisionButtons from "./DecisionButtons";
 import GameOver from "./GameOver";
@@ -25,6 +28,8 @@ const PokerGameTab = ({
   hints,
   handleHintClick,
   isHintButtonDisabled,
+  isPaused, // Added for pause/play
+  togglePausePlay, // Added for pause/play
 }) => {
   const theme = useTheme(); // Added useTheme
 
@@ -52,28 +57,42 @@ const PokerGameTab = ({
               <Typography variant="body1">High Score: {highScore}</Typography>
             </Grid>
 
-            {/* Increase spacing for HandDealer */}
-            <Box sx={{ my: 3 }}>
-              <HandDealer hand={hand} />
-            </Box>
+            {/* HandDealer or Paused Placeholder */}
+            {isPaused ? (
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100px', /* Adjusted height */ my: 3, p: 2, border: '1px dashed grey', borderRadius: 1, backgroundColor: 'rgba(0,0,0,0.02)' }}>
+                <PauseCircleOutlineIcon sx={{ fontSize: 40, color: 'text.disabled', mb: 1 }} />
+                <Typography variant="h6" sx={{ color: 'text.disabled' }}>Game Paused</Typography>
+              </Box>
+            ) : (
+              <Box sx={{ my: 3 }}> {/* Original Box wrapper for HandDealer */}
+                <HandDealer hand={hand} />
+              </Box>
+            )}
 
-            {/* Increase padding and margin for situation info */}
-            <Paper elevation={3} sx={{ p: 2, my: 3, backgroundColor: "rgba(255, 255, 255, 0.9)" }}>
-              <Typography variant="body1" sx={{ textAlign: "center", fontWeight: "bold" }}>
-                {(() => {
-                  const parts = position.split(" - ");
-                  return (
-                    <>
-                      <span style={{ color: "#1976d2" }}>Situation:</span> {parts[0]}
-                      <br />
-                      <span style={{ color: "#d32f2f" }}>Villain:</span> {parts[2]}
-                      <br />
-                      <span style={{ color: "#388e3c" }}>Hero:</span> {parts[1]}
-                    </>
-                  );
-                })()}
-              </Typography>
-            </Paper>
+            {/* Situation Info or Paused Placeholder */}
+            {isPaused ? (
+              <Paper elevation={0} sx={{ p: 2, my: 3, textAlign: 'center', border: '1px dashed grey', backgroundColor: 'rgba(0,0,0,0.02)', height: '110px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+                <PauseCircleOutlineIcon sx={{ fontSize: 30, color: 'text.disabled', mb: 0.5 }} />
+                <Typography variant="body1" sx={{ color: 'text.disabled' }}>Situation Hidden</Typography>
+              </Paper>
+            ) : (
+              <Paper elevation={3} sx={{ p: 2, my: 3, backgroundColor: "rgba(255, 255, 255, 0.9)", height: '110px' }}>
+                <Typography variant="body1" sx={{ textAlign: "center", fontWeight: "bold" }}>
+                  {(() => {
+                    const parts = position.split(" - ");
+                    return (
+                      <>
+                        <span style={{ color: "#1976d2" }}>Situation:</span> {parts[0]}
+                        <br />
+                        <span style={{ color: "#d32f2f" }}>Villain:</span> {parts[2]}
+                        <br />
+                        <span style={{ color: "#388e3c" }}>Hero:</span> {parts[1]}
+                      </>
+                    );
+                  })()}
+                </Typography>
+              </Paper>
+            )}
 
             {/* Add more space before the decision prompt */}
             <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold" }}>
@@ -92,13 +111,21 @@ const PokerGameTab = ({
               mt: 3,
               pt: 2,
               display: "flex",
-              justifyContent: "space-between", // Ensure this is set
-              alignItems: "center",
-              borderTop: "1px solid rgba(0, 0, 0, 0.12)", 
+              borderTop: "1px solid rgba(0, 0, 0, 0.12)",
+              // Desktop styles (default)
+              flexDirection: 'row',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              // Mobile overrides
+              [theme.breakpoints.down('sm')]: {
+                flexDirection: 'column',
+                alignItems: 'center', // Center items when stacked
+                gap: theme.spacing(1.5), // Add vertical gap between stacked items
+              },
             }}
           >
             {/* Lives (Hearts) Display */}
-            <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
               {Array.from({ length: lives }).map((_, index) => (
                 <FavoriteIcon
                   key={`life-${index}`}
@@ -109,15 +136,21 @@ const PokerGameTab = ({
 
             {/* Timer Display */}
             {!gameOver && ( // Only show timer if game is not over
-              <Typography 
-                variant="body1" 
-                sx={{ 
-                  fontWeight: 'bold',
-                  color: timeLeft <= 5 ? theme.palette.error.main : (timeLeft <= 10 ? theme.palette.warning.main : 'inherit')
-                }}
-              >
-                {formatTime(timeLeft)}
-              </Typography>
+              <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 1, minWidth: 'auto' }}>
+                <Typography 
+                  variant="body1" 
+                  sx={{ 
+                    fontWeight: 'bold',
+                    color: timeLeft <= 5 ? theme.palette.error.main : (timeLeft <= 10 ? theme.palette.warning.main : 'inherit'),
+                    mr: 0.5, // Reduced margin
+                  }}
+                >
+                  {formatTime(timeLeft)}
+                </Typography>
+                <IconButton onClick={togglePausePlay} color="primary" size="small" aria-label={isPaused ? "play" : "pause"} sx={{ p: 0.5 }}> {/* Reduced padding */}
+                  {isPaused ? <PlayArrowIcon fontSize="inherit" /> : <PauseIcon fontSize="inherit" />}
+                </IconButton>
+              </Box>
             )}
             
             {/* Hint Button */}
@@ -126,12 +159,24 @@ const PokerGameTab = ({
               variant="outlined"
               onClick={handleHintClick}
               disabled={isHintButtonDisabled || gameOver} // Also disable if game over
+              sx={{ px: 1, flexShrink: 0 }} // Keep padding, set flexShrink
             >
               Hint ({hints})
             </Button>
 
             {/* Streak Display */}
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Typography
+              variant="body1"
+              sx={{
+                fontWeight: "bold",
+                flexShrink: 1, // Crucial for allowing it to shrink
+                minWidth: 0, // Helps if the text content itself resists shrinking
+                textAlign: 'right',
+                [theme.breakpoints.down('sm')]: {
+                  textAlign: 'center', // Center when stacked
+                },
+              }}
+            >
               Streak: {streak}{" "}
               {streak > 0 && <span style={{ color: theme.palette.success.main }}>(+{streak * 10}% bonus)</span>}
             </Typography>
