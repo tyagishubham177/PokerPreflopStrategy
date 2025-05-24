@@ -17,8 +17,8 @@ const style = {
   alignItems: 'center', // Center content including the chart
 };
 
-// Props will change: open, onClose, title, situationKey, positionKey, decisionKey, handNotation
-const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, decisionKey, handNotation = null }) => {
+// Props will change: open, onClose, title, situationKey, positionKey, decisionKey, handNotation, yourChoice, highlightFoldCell
+const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, decisionKey, handNotation = null, yourChoice, highlightFoldCell }) => {
   return (
     <Modal
       open={open}
@@ -36,8 +36,10 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
           <ReadOnlyStrategyChartViewer
             situationKey={situationKey}
             positionKey={positionKey}
-            decisionKey={decisionKey}
-            handToHighlight={handNotation} // Add this line
+            decisionKey={decisionKey} // This is the correct action, used to select the chart.
+            handToHighlight={!highlightFoldCell ? handNotation : null} // Only pass handNotation if not highlighting a fold range
+            actionToHighlightRange={highlightFoldCell ? yourChoice : null} // Pass yourChoice if highlighting a fold range
+            highlightFoldCell={highlightFoldCell} // Pass this new prop through
           />
         ) : (
           <Typography sx={{ mt: 2, textAlign: 'center' }}>

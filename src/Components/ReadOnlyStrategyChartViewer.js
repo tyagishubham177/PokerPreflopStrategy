@@ -4,9 +4,14 @@ import StrategyEditor from './StrategyEditor';
 import { initialPokerStrategy } from '../Constants/InitialStrategy';
 import { SITUATION_LABELS, POSITION_LABELS } from '../Constants/GameLabels';
 
-const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey, handToHighlight = null }) => {
+const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey, handToHighlight = null, actionToHighlightRange, highlightFoldCell }) => {
   // Defensive lookup for hands
   const hands = initialPokerStrategy[situationKey]?.[positionKey]?.[decisionKey] || [];
+
+  let handsForRangeHighlight = [];
+  if (highlightFoldCell && actionToHighlightRange && initialPokerStrategy[situationKey]?.[positionKey]) {
+    handsForRangeHighlight = initialPokerStrategy[situationKey][positionKey][actionToHighlightRange] || [];
+  }
 
   // Constructing a title
   const situationLabel = SITUATION_LABELS[situationKey] || situationKey;
@@ -32,6 +37,8 @@ const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey, h
         isReadOnly={true}
         highlightedHand={handToHighlight} // Add this line
         // onSelectionChange can be omitted as it's read-only
+        rangeToHighlight={handsForRangeHighlight} // new prop
+        highlightFoldCellActive={highlightFoldCell} // new prop (renamed to avoid confusion with cell-level prop later)
       />
     </Box>
   );

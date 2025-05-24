@@ -271,7 +271,7 @@ const usePokerGame = () => {
     } else if (isTimerActive && timeLeft === 0) {
       setIsTimerActive(false);
       logGameState("Timer Expired");
-      handleIncorrectDecision('TIMEOUT', 'No decision', getLogicHandNotation(hand) || 'N/A');
+      handleIncorrectDecision(currentCorrectAction, 'No decision', getLogicHandNotation(hand) || 'N/A');
       
       // Check for game over after timeout
       if (lives - 1 <= 0) {
@@ -283,7 +283,7 @@ const usePokerGame = () => {
       }
     }
     return () => clearInterval(interval); // Cleanup interval on unmount or re-render
-  }, [isTimerActive, timeLeft, lives, hand, handleIncorrectDecision, dealNewHand, getLogicHandNotation, setGameOver, logGameState]);
+  }, [isTimerActive, timeLeft, lives, hand, handleIncorrectDecision, dealNewHand, getLogicHandNotation, setGameOver, logGameState, currentCorrectAction]);
 
 
   return {

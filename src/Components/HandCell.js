@@ -1,6 +1,6 @@
 import React from 'react';
 
-const HandCell = ({ hand, isSelected, onClick, isHighlighted = false }) => {
+const HandCell = ({ hand, isSelected, onClick, isHighlighted = false, isInRangeToHighlight }) => {
   const cellStyle = {
     display: 'flex',
     alignItems: 'center',
@@ -16,6 +16,10 @@ const HandCell = ({ hand, isSelected, onClick, isHighlighted = false }) => {
     WebkitUserSelect: 'none',
     msUserSelect: 'none',
   };
+
+  if (isInRangeToHighlight) {
+    cellStyle.backgroundColor = 'rgba(255, 0, 0, 0.3)'; // Light reddish
+  }
 
   // Apply highlighting styles
   if (isHighlighted) {
