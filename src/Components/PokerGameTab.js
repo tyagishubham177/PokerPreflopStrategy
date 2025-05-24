@@ -134,12 +134,12 @@ const PokerGameTab = ({
                   sx={{ 
                     fontWeight: 'bold',
                     color: timeLeft <= 5 ? theme.palette.error.main : (timeLeft <= 10 ? theme.palette.warning.main : 'inherit'),
-                    mr: 1, // Add some margin to the right of the timer
+                    mr: 0.5, // Reduced margin
                   }}
                 >
                   {formatTime(timeLeft)}
                 </Typography>
-                <IconButton onClick={togglePausePlay} color="primary" size="small" aria-label={isPaused ? "play" : "pause"}>
+                <IconButton onClick={togglePausePlay} color="primary" size="small" aria-label={isPaused ? "play" : "pause"} sx={{ p: 0.5 }}> {/* Reduced padding */}
                   {isPaused ? <PlayArrowIcon fontSize="inherit" /> : <PauseIcon fontSize="inherit" />}
                 </IconButton>
               </Box>
@@ -151,12 +151,13 @@ const PokerGameTab = ({
               variant="outlined"
               onClick={handleHintClick}
               disabled={isHintButtonDisabled || gameOver} // Also disable if game over
+              sx={{ px: 1 }} // Reduced horizontal padding
             >
               Hint ({hints})
             </Button>
 
             {/* Streak Display */}
-            <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+            <Typography variant="body1" sx={{ fontWeight: "bold", flexShrink: 1, textAlign: 'right' }}> {/* Added flexShrink and textAlign */}
               Streak: {streak}{" "}
               {streak > 0 && <span style={{ color: theme.palette.success.main }}>(+{streak * 10}% bonus)</span>}
             </Typography>
