@@ -1,5 +1,7 @@
-import { useState, useCallback } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { DIFFICULTY_LEVELS } from "../Constants/GameConstants";
+
+const SOUND_SETTINGS_LS_KEY = 'soundSettings';
 
 // This hook manages the primary game state.
 const useGameState = () => {
@@ -8,8 +10,22 @@ const useGameState = () => {
   const [positionKey, setPositionKey] = useState(""); // Key for the player's current position (e.g., "UTG")
   const [situationDisplay, setSituationDisplay] = useState(""); // User-friendly situation label
   const [positionDisplay, setPositionDisplay] = useState(""); // User-friendly position label
-  const [difficulty, setDifficultyState] = useState("Medium"); // Default difficulty
-  const [lives, setLives] = useState(DIFFICULTY_LEVELS.Medium.lives); // Initialize lives based on default difficulty
+  const [difficulty, setDifficultyState] = useState(() => {
+    try {
+      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+      if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        // Ensure the saved difficulty is a valid one using DIFFICULTY_LEVELS keys
+        if (settings.difficulty && Object.keys(DIFFICULTY_LEVELS).includes(settings.difficulty)) {
+          return settings.difficulty;
+        }
+      }
+    } catch (error) {
+      console.error("Failed to load difficulty from localStorage:", error);
+    }
+    return "Medium"; // Default difficulty
+  });
+  const [lives, setLives] = useState(DIFFICULTY_LEVELS[difficulty].lives); // Initialize lives based on current difficulty
   const [hints, setHints] = useState(DIFFICULTY_LEVELS[difficulty].hints); // Initialize hints
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => {
@@ -25,6 +41,14 @@ const useGameState = () => {
   });
   const [streak, setStreak] = useState(0);
   const [wrongChoices, setWrongChoices] = useState([]); // Array of incorrect decisions made by the player
+  // Initialize lives based on potentially loaded difficulty
+  // This useEffect handles the case where difficulty is loaded from localStorage
+  // and lives/hints need to be set accordingly.
+  useEffect(() => {
+    setLives(DIFFICULTY_LEVELS[difficulty].lives);
+    setHints(DIFFICULTY_LEVELS[difficulty].hints);
+  }, [difficulty]);
+
   const [gameOver, setGameOver] = useState(false);
   const [availableActions, setAvailableActions] = useState([]); // Possible actions for the current hand
   const [isPaused, setIsPaused] = useState(false); // Added for pause/play functionality
