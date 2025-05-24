@@ -42,28 +42,22 @@ const GameDisplay = (props) => {
 
   const [feedbackTrigger, setFeedbackTrigger] = useState(null); // Renamed state variable
 
-  // Effect to trigger feedback based on lastAnswerCorrectness
+  // Effect 1: Set feedbackTrigger when lastAnswerCorrectness changes
   useEffect(() => {
-    let timerId; // timerId must be declared inside the effect so it's unique to each run.
-
     if (lastAnswerCorrectness) {
-      setFeedbackTrigger(lastAnswerCorrectness); // Show feedback
+      setFeedbackTrigger(lastAnswerCorrectness);
+    }
+  }, [lastAnswerCorrectness]);
 
-      timerId = setTimeout(() => {
+  // Effect 2: Manage the timer for feedbackTrigger visibility
+  useEffect(() => {
+    if (feedbackTrigger) {
+      const timerId = setTimeout(() => {
         setFeedbackTrigger(null); // Hide feedback after 1.5 seconds
       }, 1500);
+      return () => clearTimeout(timerId); // Cleanup timer
     }
-    // It's important that if lastAnswerCorrectness becomes null (e.g. reset by parent),
-    // this effect runs, and if no new timer is set, feedbackTrigger just remains what it was (null if timeout completed).
-    // If lastAnswerCorrectness is null, feedbackTrigger is not set here, preserving its current state (ideally null from timeout).
-
-    // Cleanup function:
-    // This runs when the component unmounts, or BEFORE the effect runs again if lastAnswerCorrectness changes.
-    // This is critical to prevent memory leaks and incorrect behavior if lastAnswerCorrectness changes rapidly.
-    return () => {
-      clearTimeout(timerId);
-    };
-  }, [lastAnswerCorrectness]); // Only re-run if lastAnswerCorrectness changes.
+  }, [feedbackTrigger]);
 
   // Removed handleHintClick as it's now in PokerGame.js
 
@@ -154,11 +148,11 @@ const GameDisplay = (props) => {
           position={position}
           availableActions={availableActions}
           makeDecision={makeDecision}
-          lives={lives} 
+          lives={lives}
           streak={streak}
           restartGame={restartGame}
           wrongChoices={wrongChoices}
-          hintedAction={hintedAction} 
+          hintedAction={hintedAction}
           // Pass new props for the bottom bar functionality
           timeLeft={timeLeft}
           hints={hints}
