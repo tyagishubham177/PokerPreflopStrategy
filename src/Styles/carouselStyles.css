@@ -2,7 +2,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 80%; /* Set width to 60% */
+  width: 80%;
   margin: auto;
 }
 
@@ -19,5 +19,5 @@
 }
 
 .slick-prev, .slick-next {
-  display: block !important; /* Ensure buttons are always displayed */
+  display: block !important;
 }

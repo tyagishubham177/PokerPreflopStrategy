@@ -1,25 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Box, Fab } from "@mui/material"; 
+import { Box, Fab } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import SettingsPanel from "./SettingsPanel"; 
-import GameDisplay from "./GameDisplay"; 
-import ErrorBoundary from "./ErrorBoundary"; 
+import SettingsPanel from "./SettingsPanel";
+import GameDisplay from "./GameDisplay";
+import ErrorBoundary from "./ErrorBoundary";
 import usePokerGame from "../Hooks/UsePokerGame";
-import { playSound } from '../Utils/soundUtils'; // Import playSound
-// Removed BottomGameBar import
+import { playSound } from '../Utils/soundUtils';
 import wallpaperImage from "../Assets/wallpaper.png";
 
 const PokerGame = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const [longPress, setLongPress] = useState(false);
-  const [hintedAction, setHintedAction] = useState(null); // Add hintedAction state
+  // const [longPress, setLongPress] = useState(false); // Replaced by longPressActionTakenRef
+  const [hintedAction, setHintedAction] = useState(null);
 
   const longPressTimeout = useRef(null);
-  // lowTimeSoundPlayedRef is no longer needed for the new timer sound logic.
-  // const lowTimeSoundPlayedRef = useRef(false); 
+  const longPressActionTakenRef = useRef(false); // To track if long press action was executed
 
-  // Ensure all necessary props are destructured
   const {
     hand,
     position,
@@ -35,54 +32,38 @@ const PokerGame = () => {
     makeDecision,
     restartGame,
     wrongChoices,
-    difficulty, // Destructure difficulty
-    setDifficulty, // Destructure setDifficulty
-    currentCorrectAction, // Destructure currentCorrectAction
-    hints, // Destructure hints
-    decrementHints, // Destructure decrementHints
-    lastAnswerCorrectness, 
-    timeLeft, 
-    isPaused, // Added for pause/play
-    togglePausePlay, // Added for pause/play
-    // hand, lives, hints, decrementHints, currentCorrectAction, gameOver are already destructured
+    difficulty,
+    setDifficulty,
+    currentCorrectAction,
+    hints,
+    decrementHints,
+    lastAnswerCorrectness,
+    timeLeft,
+    isPaused,
+    togglePausePlay,
   } = usePokerGame();
 
-  // REMOVED useEffect for playing decision sounds here, as it's moved to GameDisplay.js
-  // useEffect(() => {
-  //   if (lastAnswerCorrectness === true) {
-  //     console.log('PokerGame: Attempting to play correct_decision sound. lastAnswerCorrectness:', lastAnswerCorrectness);
-  //     playSound('correct_decision');
-  //   } else if (lastAnswerCorrectness === false) {
-  //     console.log('PokerGame: Attempting to play wrong_decision sound. lastAnswerCorrectness:', lastAnswerCorrectness);
-  //     playSound('wrong_decision');
-  //   }
-  // }, [lastAnswerCorrectness]);
-
-  // useEffect for timer sound (plays continuously when low):
   useEffect(() => {
     let intervalId = null;
 
     if (timeLeft < 10 && timeLeft > 0 && !gameOver && !isPaused) {
-      // Play immediately once, then set interval
-      playSound('timer_tick'); 
+      playSound('timer_tick');
       intervalId = setInterval(() => {
         playSound('timer_tick');
-      }, 1500); // Play every 1.5 seconds
+      }, 1500);
     }
 
-    // Cleanup function to clear the interval
     return () => {
       if (intervalId) {
         clearInterval(intervalId);
       }
     };
-  }, [timeLeft, gameOver, isPaused, playSound]); // playSound is stable, so it's fine in deps
+  }, [timeLeft, gameOver, isPaused, playSound]);
 
   const toggleSettings = () => {
     setShowSettings(!showSettings);
   };
 
-  // useEffect to reset hintedAction when hand changes
   useEffect(() => {
     setHintedAction(null);
   }, [hand]);
@@ -91,7 +72,7 @@ const PokerGame = () => {
     if (hints > 0 && !hintedAction && !gameOver) {
       decrementHints();
       setHintedAction(currentCorrectAction);
-      playSound('hint_used'); // Play sound when hint is successfully used
+      playSound('hint_used');
     }
   };
 
@@ -108,10 +89,11 @@ const PokerGame = () => {
   }, [collapsed]);
 
   const handleLongPressStart = () => {
+    longPressActionTakenRef.current = false; // Reset on new press
     longPressTimeout.current = setTimeout(() => {
       setCollapsed(true);
-      setLongPress(false);
-    }, 2000); 
+      longPressActionTakenRef.current = true; // Mark that long press action was taken
+    }, 2000);
   };
 
   const handleLongPressEnd = () => {
@@ -119,9 +101,12 @@ const PokerGame = () => {
   };
 
   const handleClick = () => {
-    if (!longPress) {
+    // Only show rules if the long press action (collapse) hasn't been taken
+    if (!longPressActionTakenRef.current) {
       setShowRules(true);
     }
+    // Reset the ref after click evaluation, for the next interaction cycle
+    longPressActionTakenRef.current = false; 
   };
 
   return (
@@ -159,23 +144,20 @@ const PokerGame = () => {
         wrongChoices={wrongChoices}
           showRules={showRules}
           setShowRules={setShowRules}
-          currentCorrectAction={currentCorrectAction} // Pass currentCorrectAction
-          hints={hints} // Pass hints
-          decrementHints={decrementHints} // Pass decrementHints
-          lastAnswerCorrectness={lastAnswerCorrectness} // Pass lastAnswerCorrectness
-          playSound={playSound} // Pass playSound down
-          timeLeft={timeLeft} // Pass timeLeft
-          hintedAction={hintedAction} // Pass hintedAction to GameDisplay
-          // Pass additional props for PokerGameTab via GameDisplay
+          currentCorrectAction={currentCorrectAction}
+          hints={hints}
+          decrementHints={decrementHints}
+          lastAnswerCorrectness={lastAnswerCorrectness}
+          playSound={playSound}
+          timeLeft={timeLeft}
+          hintedAction={hintedAction}
           handleHintClick={handleHintClick}
           isHintButtonDisabled={isHintButtonDisabled}
-          streak={streak} // streak was already passed, ensuring it remains
-          isPaused={isPaused} // Pass isPaused
-          togglePausePlay={togglePausePlay} // Pass togglePausePlay
+          streak={streak}
+          isPaused={isPaused}
+          togglePausePlay={togglePausePlay}
         />
       </ErrorBoundary>
-
-      {/* BottomGameBar rendering removed */}
 
       <Fab
         color="primary"
@@ -196,8 +178,8 @@ const PokerGame = () => {
         open={showSettings}
         onClose={toggleSettings}
         onOpen={toggleSettings}
-        difficulty={difficulty} // Pass difficulty state
-        handleDifficultyChange={setDifficulty} // Pass setDifficulty function
+        difficulty={difficulty}
+        handleDifficultyChange={setDifficulty}
       />
     </Box>
   );

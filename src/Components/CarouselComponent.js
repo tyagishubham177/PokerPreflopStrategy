@@ -7,7 +7,7 @@ import "slick-carousel/slick/slick-theme.css";
 import { SampleNextArrow, SamplePrevArrow } from "./CarouselButtons";
 import FlipCard from "./FlipCard";
 
-const CarouselComponent = ({ wrongChoices, flippedCards, toggleFlip, onInfoClick }) => {
+const CarouselComponent = ({ wrongChoices = [], flippedCards, toggleFlip, onInfoClick }) => {
   const theme = useTheme();
   const isDesktop = useMediaQuery(theme.breakpoints.up("md"));
 
@@ -41,8 +41,7 @@ const CarouselComponent = ({ wrongChoices, flippedCards, toggleFlip, onInfoClick
                   top: 8,
                   right: 8,
                   zIndex: 1,
-                  color: 'black', // Changed to black
-                  // backgroundColor: 'transparent', // IconButton is transparent by default
+                  color: 'black',
                 }}
               >
                 <InfoIcon />

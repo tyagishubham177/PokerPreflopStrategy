@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 
-const FlipCardBack = ({ flipped, choice }) => {
+const FlipCardBack = ({ flipped, choice = {} }) => {
   return (
     <Box
       sx={{
@@ -29,14 +29,14 @@ const FlipCardBack = ({ flipped, choice }) => {
         color="error.main"
         sx={{ fontStyle: "italic", textAlign: "center", mb: 2, fontSize: "0.875rem" }}
       >
-        Your choice: {choice.yourChoice}
+        Your choice: {choice?.yourChoice}
       </Typography>
       <Typography
         variant="body1"
         color="success.main"
         sx={{ fontWeight: "bold", textAlign: "center", fontSize: "0.875rem" }}
       >
-        Correct choice: {choice.correctDecision}
+        Correct choice: {choice?.correctDecision}
       </Typography>
       <IconButton
         sx={{

@@ -44,16 +44,16 @@ const CustomCard = ({ card }) => {
   );
 };
 
-const CardDisplay = ({ hand }) => {
+const CardDisplay = ({ hand = [] }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
 
   return (
     <Box
-      component={motion.div} // Changed
-      initial={{ opacity: 0 }} // Added
-      animate={{ opacity: 1 }} // Added
-      exit={{ opacity: 0 }} // Added
+      component={motion.div}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
       sx={{
         display: "flex",
         justifyContent: "center",
@@ -67,7 +67,7 @@ const CardDisplay = ({ hand }) => {
           key={card}
           initial={{ opacity: 0, rotateY: 180, y: -30 }}
           animate={{ opacity: 1, rotateY: 0, y: 0 }}
-          exit={{ opacity: 0, rotateY: 180, y: 30 }} // Added this line
+          exit={{ opacity: 0, rotateY: 180, y: 30 }}
           transition={{ duration: 0.4, delay: index * 0.15 }}
         >
           <CustomCard card={card} />

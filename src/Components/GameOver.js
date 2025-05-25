@@ -3,10 +3,10 @@ import { Typography, Button } from '@mui/material';
 
 const GameOver = ({ score, highScore, restartGame }) => (
   <>
-    <Typography variant="h5" align="center" style={{ marginBottom: 16 }}>
+    <Typography variant="h5" align="center" sx={{ mb: 2 }}>
       Game Over!
     </Typography>
-    <Typography align="center" style={{ marginBottom: 16 }}>
+    <Typography align="center" sx={{ mb: 2 }}>
       Your score: {score}
       <br />
       High score: {highScore}

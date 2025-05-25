@@ -1,23 +1,22 @@
 import React from 'react';
-import { Modal, Box, Typography, Button } from '@mui/material'; // Keep Button for Close
-import ReadOnlyStrategyChartViewer from './ReadOnlyStrategyChartViewer'; // Import new component
+import { Modal, Box, Typography, Button } from '@mui/material';
+import ReadOnlyStrategyChartViewer from './ReadOnlyStrategyChartViewer';
 
 const style = {
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  minWidth: 480, // Adjusted width
+  minWidth: 480,
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
   p: 4,
   display: 'flex',
   flexDirection: 'column',
-  alignItems: 'center', // Center content including the chart
+  alignItems: 'center',
 };
 
-// Props will change: open, onClose, title, situationKey, positionKey, decisionKey, handNotation, yourChoice, highlightFoldCell
 const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, decisionKey, handNotation = null, yourChoice, highlightFoldCell }) => {
   return (
     <Modal
@@ -27,18 +26,16 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
     >
       <Box sx={style}>
         <Typography id="chart-modal-title" variant="h6" component="h2" sx={{ mb: 2, textAlign: 'center' }}>
-          {/* The title for ReadOnlyStrategyChartViewer is internal to it. This is modal's title. */}
           {title || "Strategy Chart"} 
         </Typography>
         
-        {/* Render the chart viewer if keys are provided */}
         {situationKey && positionKey && decisionKey ? (
           <ReadOnlyStrategyChartViewer
             situationKey={situationKey}
             positionKey={positionKey}
-            decisionKey={decisionKey} // Base action for the chart (correct action)
-            incorrectActionName={yourChoice} // The user's incorrect action
-            handToHighlight={handNotation} // For single hand gold outline
+            decisionKey={decisionKey}
+            incorrectActionName={yourChoice}
+            handToHighlight={handNotation}
           />
         ) : (
           <Typography sx={{ mt: 2, textAlign: 'center' }}>

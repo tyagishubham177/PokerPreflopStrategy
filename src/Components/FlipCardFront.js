@@ -2,7 +2,12 @@ import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import RotateRightIcon from '@mui/icons-material/RotateRight';
 
-const FlipCardFront = ({ flipped, choice }) => {
+const FlipCardFront = ({ flipped, choice = {} }) => {
+  const positionParts = typeof choice.position === 'string' ? choice.position.split(" - ") : [];
+  const situation = positionParts[0] || '';
+  const heroPosition = positionParts[1] || '';
+  const villainPosition = positionParts[2] || '';
+
   return (
     <Box
       sx={{
@@ -31,20 +36,20 @@ const FlipCardFront = ({ flipped, choice }) => {
             fontSize: "0.875rem",
           }}
         >
-          Hand: {choice.handNotation}
+          Hand: {choice?.handNotation}
         </Typography>
         <Box>
           <Typography variant="body1" sx={{ mb: 1, textAlign: "left", fontSize: "0.75rem" }}>
-            <strong>Situation:</strong> {choice.position.split(" - ")[0]}
+            <strong>Situation:</strong> {situation}
           </Typography>
           <Typography
             variant="body1"
             sx={{ mb: 1, color: "error.main", textAlign: "left", fontSize: "0.75rem" }}
           >
-            <strong>Villain:</strong> {choice.position.split(" - ")[2]}
+            <strong>Villain:</strong> {villainPosition}
           </Typography>
           <Typography variant="body1" sx={{ color: "success.main", textAlign: "left", fontSize: "0.75rem" }}>
-            <strong>Hero:</strong> {choice.position.split(" - ")[1]}
+            <strong>Hero:</strong> {heroPosition}
           </Typography>
         </Box>
       </Box>

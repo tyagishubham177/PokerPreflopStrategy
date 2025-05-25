@@ -2,18 +2,17 @@ import React, { useState } from "react";
 import { Typography, Paper, useTheme } from "@mui/material";
 import StyledLink from "./StyledLink";
 import CarouselComponent from "./CarouselComponent";
-import ChartDisplayModal from "./ChartDisplayModal"; // Import the modal
+import ChartDisplayModal from "./ChartDisplayModal";
 
-const IncorrectAnswers = ({ wrongChoices }) => {
+const IncorrectAnswers = ({ wrongChoices = [] }) => {
   const theme = useTheme();
   const [flippedCards, setFlippedCards] = useState({});
   const [modalOpen, setModalOpen] = useState(false);
-  // Updated state structure for currentChartData
   const [currentChartData, setCurrentChartData] = useState({
     situationKey: '',
     positionKey: '',
     decisionKey: '',
-    handNotation: '', // Add handNotation
+    handNotation: '',
     yourChoice: '', 
     highlightFoldCell: false
   });
@@ -26,8 +25,8 @@ const IncorrectAnswers = ({ wrongChoices }) => {
     setCurrentChartData({
       situationKey: choice.situationKey,
       positionKey: choice.positionKey,
-      decisionKey: choice.correctDecision, // choice.correctDecision is the action like "Raise"
-      handNotation: choice.handNotation, // Add this line
+      decisionKey: choice.correctDecision,
+      handNotation: choice.handNotation,
       yourChoice: choice.yourChoice,
       highlightFoldCell: choice.correctDecision === 'Fold' && choice.yourChoice !== 'Fold'
     });
@@ -65,21 +64,20 @@ const IncorrectAnswers = ({ wrongChoices }) => {
       >
         Incorrect Answers
       </Typography>
-      {/* <StyledLink /> */}
       <CarouselComponent 
         wrongChoices={wrongChoices} 
         flippedCards={flippedCards} 
         toggleFlip={toggleFlip} 
-        onInfoClick={handleInfoClick} // Pass the handler
+        onInfoClick={handleInfoClick}
       />
       <ChartDisplayModal
         open={modalOpen}
         onClose={handleCloseModal}
-        title="Strategy Chart" // Updated title
-        situationKey={currentChartData.situationKey} // Pass situationKey
-        positionKey={currentChartData.positionKey} // Pass positionKey
-        decisionKey={currentChartData.decisionKey} // Pass decisionKey
-        handNotation={currentChartData.handNotation} // Add this prop
+        title="Strategy Chart"
+        situationKey={currentChartData.situationKey}
+        positionKey={currentChartData.positionKey}
+        decisionKey={currentChartData.decisionKey}
+        handNotation={currentChartData.handNotation}
         yourChoice={currentChartData.yourChoice}
         highlightFoldCell={currentChartData.highlightFoldCell}
       />
