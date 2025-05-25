@@ -45,7 +45,7 @@ const StrategyEditor = ({ initialHands = [], onSelectionChange, isReadOnly = fal
             <HandCell
               key={hand}
               hand={hand}
-              isSelected={selectedHands.has(hand)} // Retained: determines if part of the base strategy loaded
+              isSelected={selectedHands.has(hand)}
               onClick={isReadOnly ? () => {} : handleHandClick} 
               isHighlighted={highlightedHand ? hand === highlightedHand : false} 
               isCorrectActionRange={isCorrectRange} 

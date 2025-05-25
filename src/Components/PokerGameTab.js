@@ -1,9 +1,9 @@
 import React from "react";
-import { Box, Grid, Typography, Paper, Button, useTheme, IconButton } from "@mui/material"; // Added Button, useTheme, IconButton
-import FavoriteIcon from '@mui/icons-material/Favorite'; // Added FavoriteIcon
+import { Box, Grid, Typography, Paper, Button, useTheme, IconButton } from "@mui/material";
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
-import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline'; // Added for pause UI
+import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import HandDealer from "./HandDealer";
 import DecisionButtons from "./DecisionButtons";
 import GameOver from "./GameOver";
@@ -22,16 +22,22 @@ const PokerGameTab = ({
   streak,
   restartGame,
   wrongChoices,
-  hintedAction, 
-  // New props for the bottom bar UI
+  hintedAction,
   timeLeft,
   hints,
   handleHintClick,
   isHintButtonDisabled,
-  isPaused, // Added for pause/play
-  togglePausePlay, // Added for pause/play
+  isPaused,
+  togglePausePlay,
 }) => {
-  const theme = useTheme(); // Added useTheme
+  const theme = useTheme();
+
+  // Pre-calculate position parts for clarity and robustness
+  const positionString = typeof position === 'string' ? position : "N/A - N/A - N/A";
+  const parts = positionString.split(" - ");
+  const situationDisplayPart = parts[0] || "N/A";
+  const heroDisplayPart = parts[1] || "N/A";
+  const villainDisplayPart = parts[2] || "N/A";
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -51,25 +57,22 @@ const PokerGameTab = ({
       {!gameOver ? (
         <>
           <Box>
-            {/* Top section */}
             <Grid container justifyContent="space-between" sx={{ mb: 2, textAlign: "left" }}>
               <Typography variant="body1">Score: {score}</Typography>
               <Typography variant="body1">High Score: {highScore}</Typography>
             </Grid>
 
-            {/* HandDealer or Paused Placeholder */}
             {isPaused ? (
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100px', /* Adjusted height */ my: 3, p: 2, border: '1px dashed grey', borderRadius: 1, backgroundColor: 'rgba(0,0,0,0.02)' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100px', my: 3, p: 2, border: '1px dashed grey', borderRadius: 1, backgroundColor: 'rgba(0,0,0,0.02)' }}>
                 <PauseCircleOutlineIcon sx={{ fontSize: 40, color: 'text.disabled', mb: 1 }} />
                 <Typography variant="h6" sx={{ color: 'text.disabled' }}>Game Paused</Typography>
               </Box>
             ) : (
-              <Box sx={{ my: 3 }}> {/* Original Box wrapper for HandDealer */}
+              <Box sx={{ my: 3 }}>
                 <HandDealer hand={hand} />
               </Box>
             )}
 
-            {/* Situation Info or Paused Placeholder */}
             {isPaused ? (
               <Paper elevation={0} sx={{ p: 2, my: 3, textAlign: 'center', border: '1px dashed grey', backgroundColor: 'rgba(0,0,0,0.02)', height: '110px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <PauseCircleOutlineIcon sx={{ fontSize: 30, color: 'text.disabled', mb: 0.5 }} />
@@ -78,102 +81,88 @@ const PokerGameTab = ({
             ) : (
               <Paper elevation={3} sx={{ p: 2, my: 3, backgroundColor: "rgba(255, 255, 255, 0.9)", height: '110px' }}>
                 <Typography variant="body1" sx={{ textAlign: "center", fontWeight: "bold" }}>
-                  {(() => {
-                    const parts = position.split(" - ");
-                    return (
-                      <>
-                        <span style={{ color: "#1976d2" }}>Situation:</span> {parts[0]}
-                        <br />
-                        <span style={{ color: "#d32f2f" }}>Villain:</span> {parts[2]}
-                        <br />
-                        <span style={{ color: "#388e3c" }}>Hero:</span> {parts[1]}
-                      </>
-                    );
-                  })()}
+                  <>
+                    <span style={{ color: "#1976d2" }}>Situation:</span> {situationDisplayPart}
+                    <br />
+                    <span style={{ color: "#d32f2f" }}>Villain:</span> {villainDisplayPart}
+                    <br />
+                    <span style={{ color: "#388e3c" }}>Hero:</span> {heroDisplayPart}
+                  </>
                 </Typography>
               </Paper>
             )}
 
-            {/* Add more space before the decision prompt */}
             <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold" }}>
               What's your decision?
             </Typography>
           </Box>
 
-          {/* Center section - Decision Buttons */}
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
             <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} hintedAction={hintedAction} />
           </Box>
 
-          {/* Bottom section */}
           <Box
             sx={{
               mt: 3,
               pt: 2,
               display: "flex",
               borderTop: "1px solid rgba(0, 0, 0, 0.12)",
-              // Desktop styles (default)
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
-              // Mobile overrides
               [theme.breakpoints.down('sm')]: {
                 flexDirection: 'column',
-                alignItems: 'center', // Center items when stacked
-                gap: theme.spacing(1.5), // Add vertical gap between stacked items
+                alignItems: 'center',
+                gap: theme.spacing(1.5),
               },
             }}
           >
-            {/* Lives (Hearts) Display */}
             <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 0 }}>
               {Array.from({ length: lives }).map((_, index) => (
                 <FavoriteIcon
                   key={`life-${index}`}
-                  sx={{ color: 'red', fontSize: '1.25rem', mr: 0.5 }} 
+                  sx={{ color: 'red', fontSize: '1.25rem', mr: 0.5 }}
                 />
               ))}
             </Box>
 
-            {/* Timer Display */}
-            {!gameOver && ( // Only show timer if game is not over
+            {!gameOver && (
               <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 1, minWidth: 'auto' }}>
-                <Typography 
-                  variant="body1" 
-                  sx={{ 
+                <Typography
+                  variant="body1"
+                  sx={{
                     fontWeight: 'bold',
                     color: timeLeft <= 5 ? theme.palette.error.main : (timeLeft <= 10 ? theme.palette.warning.main : 'inherit'),
-                    mr: 0.5, // Reduced margin
+                    mr: 0.5,
                   }}
                 >
                   {formatTime(timeLeft)}
                 </Typography>
-                <IconButton onClick={togglePausePlay} color="primary" size="small" aria-label={isPaused ? "play" : "pause"} sx={{ p: 0.5 }}> {/* Reduced padding */}
+                <IconButton onClick={togglePausePlay} color="primary" size="small" aria-label={isPaused ? "play" : "pause"} sx={{ p: 0.5 }}>
                   {isPaused ? <PlayArrowIcon fontSize="inherit" /> : <PauseIcon fontSize="inherit" />}
                 </IconButton>
               </Box>
             )}
             
-            {/* Hint Button */}
             <Button
               size="small"
               variant="outlined"
               onClick={handleHintClick}
-              disabled={isHintButtonDisabled || gameOver} // Also disable if game over
-              sx={{ px: 1, flexShrink: 0 }} // Keep padding, set flexShrink
+              disabled={isHintButtonDisabled || gameOver}
+              sx={{ px: 1, flexShrink: 0 }}
             >
               Hint ({hints})
             </Button>
 
-            {/* Streak Display */}
             <Typography
               variant="body1"
               sx={{
                 fontWeight: "bold",
-                flexShrink: 1, // Crucial for allowing it to shrink
-                minWidth: 0, // Helps if the text content itself resists shrinking
+                flexShrink: 1,
+                minWidth: 0,
                 textAlign: 'right',
                 [theme.breakpoints.down('sm')]: {
-                  textAlign: 'center', // Center when stacked
+                  textAlign: 'center',
                 },
               }}
             >

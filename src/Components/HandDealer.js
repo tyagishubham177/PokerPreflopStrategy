@@ -2,7 +2,7 @@ import React, { useMemo } from "react";
 import { AnimatePresence } from "framer-motion";
 import CardDisplay from "./CardDisplay";
 
-const HandDealer = ({ hand }) => {
+const HandDealer = ({ hand = [] }) => {
   const handKey = useMemo(() => hand.join(","), [hand]);
 
   return (

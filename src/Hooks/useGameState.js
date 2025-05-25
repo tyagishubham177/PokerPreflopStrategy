@@ -3,19 +3,17 @@ import { DIFFICULTY_LEVELS } from "../Constants/GameConstants";
 
 const SOUND_SETTINGS_LS_KEY = 'soundSettings';
 
-// This hook manages the primary game state.
 const useGameState = () => {
-  const [hand, setHand] = useState([]); // Player's current cards
-  const [situationKey, setSituationKey] = useState(""); // Key for the current game situation (e.g., "RFI")
-  const [positionKey, setPositionKey] = useState(""); // Key for the player's current position (e.g., "UTG")
-  const [situationDisplay, setSituationDisplay] = useState(""); // User-friendly situation label
-  const [positionDisplay, setPositionDisplay] = useState(""); // User-friendly position label
+  const [hand, setHand] = useState([]);
+  const [situationKey, setSituationKey] = useState("");
+  const [positionKey, setPositionKey] = useState("");
+  const [situationDisplay, setSituationDisplay] = useState("");
+  const [positionDisplay, setPositionDisplay] = useState("");
   const [difficulty, setDifficultyState] = useState(() => {
     try {
       const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
       if (savedSettings) {
         const settings = JSON.parse(savedSettings);
-        // Ensure the saved difficulty is a valid one using DIFFICULTY_LEVELS keys
         if (settings.difficulty && Object.keys(DIFFICULTY_LEVELS).includes(settings.difficulty)) {
           return settings.difficulty;
         }
@@ -23,35 +21,31 @@ const useGameState = () => {
     } catch (error) {
       console.error("Failed to load difficulty from localStorage:", error);
     }
-    return "Medium"; // Default difficulty
+    return "Medium";
   });
-  const [lives, setLives] = useState(DIFFICULTY_LEVELS[difficulty].lives); // Initialize lives based on current difficulty
-  const [hints, setHints] = useState(DIFFICULTY_LEVELS[difficulty].hints); // Initialize hints
+  const [lives, setLives] = useState(DIFFICULTY_LEVELS[difficulty].lives);
+  const [hints, setHints] = useState(DIFFICULTY_LEVELS[difficulty].hints);
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => {
     try {
       const savedHighScore = localStorage.getItem("highScore");
-      // Ensure savedHighScore is not null and parseInt result is a number
       const parsedHighScore = parseInt(savedHighScore, 10);
       return savedHighScore && !isNaN(parsedHighScore) ? parsedHighScore : 0;
     } catch (error) {
       console.error("Error reading highScore from localStorage:", error);
-      return 0; // Fallback to 0 if localStorage is inaccessible or value is corrupted
+      return 0;
     }
   });
   const [streak, setStreak] = useState(0);
-  const [wrongChoices, setWrongChoices] = useState([]); // Array of incorrect decisions made by the player
-  // Initialize lives based on potentially loaded difficulty
-  // This useEffect handles the case where difficulty is loaded from localStorage
-  // and lives/hints need to be set accordingly.
+  const [wrongChoices, setWrongChoices] = useState([]);
   useEffect(() => {
     setLives(DIFFICULTY_LEVELS[difficulty].lives);
     setHints(DIFFICULTY_LEVELS[difficulty].hints);
   }, [difficulty]);
 
   const [gameOver, setGameOver] = useState(false);
-  const [availableActions, setAvailableActions] = useState([]); // Possible actions for the current hand
-  const [isPaused, setIsPaused] = useState(false); // Added for pause/play functionality
+  const [availableActions, setAvailableActions] = useState([]);
+  const [isPaused, setIsPaused] = useState(false);
 
   const updateHighScore = useCallback((newScore) => {
     setHighScore((prevHighScore) => {
@@ -60,7 +54,6 @@ const useGameState = () => {
         localStorage.setItem("highScore", updatedHighScore.toString());
       } catch (error) {
         console.error("Error writing highScore to localStorage:", error);
-        // The highScore state will still update in React, but localStorage might not.
       }
       return updatedHighScore;
     });
@@ -70,18 +63,18 @@ const useGameState = () => {
     setScore(0);
     setStreak(0);
     setWrongChoices([]);
-    setHints(DIFFICULTY_LEVELS[difficulty].hints); // Reset hints
-  }, [difficulty]); // Add difficulty as a dependency
+    setHints(DIFFICULTY_LEVELS[difficulty].hints);
+  }, [difficulty]);
 
   const setDifficulty = useCallback((newDifficulty) => {
     if (DIFFICULTY_LEVELS[newDifficulty]) {
       setDifficultyState(newDifficulty);
       setLives(DIFFICULTY_LEVELS[newDifficulty].lives);
-      setHints(DIFFICULTY_LEVELS[newDifficulty].hints); // Reset hints on difficulty change
+      setHints(DIFFICULTY_LEVELS[newDifficulty].hints);
     } else {
       console.warn(`Attempted to set unknown difficulty: ${newDifficulty}`);
     }
-  }, []); // No need for DIFFICULTY_LEVELS in dependency array as it's a constant import
+  }, []);
 
   const decrementHints = useCallback(() => {
     setHints(prevHints => Math.max(0, prevHints - 1));
@@ -92,52 +85,57 @@ const useGameState = () => {
   }, []);
 
   const resetLives = useCallback(() => {
-    setLives(DIFFICULTY_LEVELS[difficulty].lives); // Reset lives based on current difficulty
-  }, [difficulty]); // Add difficulty as a dependency
+    setLives(DIFFICULTY_LEVELS[difficulty].lives);
+  }, [difficulty]);
 
-  return {
-    // State values
+  const stateValues = {
     hand,
     situationKey,
     positionKey,
     situationDisplay,
     positionDisplay,
-    difficulty, // Export new difficulty state
+    difficulty,
     lives,
-    hints, // Export hints
+    hints,
     score,
     highScore,
     streak,
     wrongChoices,
     gameOver,
     availableActions,
+    isPaused,
+  };
 
-    // State setters
+  const stateSetters = {
     setHand,
     setSituationKey,
     setPositionKey,
     setSituationDisplay,
     setPositionDisplay,
-    setDifficulty, // Export new difficulty setter
-    setLives, // Direct setter for lives, though decrementLives/resetLives are preferred
-    setHints, // Export setHints
+    setLives,
+    setHints,
     setScore,
-    setHighScore, // Direct setter, though updateHighScore is preferred for typical updates
-    updateHighScore, // Specific updater for high score logic
+    setHighScore,
+    setIsPaused,
     setStreak,
     setWrongChoices,
     setGameOver,
     setAvailableActions,
-    
-    // Specific game action state updaters
-    decrementLives,
-    decrementHints, // Export decrementHints
-    resetLives,
-    resetGameScoreAndStats,
+  };
 
-    // Pause/Play state
-    isPaused,
-    setIsPaused,
+  const gameActions = {
+    setDifficulty,
+    updateHighScore,
+    resetGameScoreAndStats,
+    decrementHints,
+    decrementLives,
+    resetLives,
+  };
+
+  return {
+    ...stateValues,
+    ...stateSetters,
+    ...gameActions,
   };
 };
 
