@@ -11,11 +11,10 @@ import wallpaperImage from "../Assets/wallpaper.png";
 const PokerGame = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  // const [longPress, setLongPress] = useState(false); // Replaced by longPressActionTakenRef
   const [hintedAction, setHintedAction] = useState(null);
 
   const longPressTimeout = useRef(null);
-  const longPressActionTakenRef = useRef(false); // To track if long press action was executed
+  const longPressActionTakenRef = useRef(false);
 
   const {
     hand,

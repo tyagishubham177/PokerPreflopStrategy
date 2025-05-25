@@ -112,22 +112,19 @@ const useGameState = () => {
     setPositionKey,
     setSituationDisplay,
     setPositionDisplay,
-    // Note: `setDifficulty` is the exposed callback that includes logic, 
-    // `setDifficultyState` is the raw setter for `difficulty` state.
-    // Exposing the logical one.
-    setLives, // Direct setter
-    setHints, // Direct setter
-    setScore, // Direct setter
-    setHighScore, // Direct setter, useful if needing to override without Math.max
+    setLives,
+    setHints,
+    setScore,
+    setHighScore,
     setIsPaused,
-    setStreak, 
+    setStreak,
     setWrongChoices,
     setGameOver,
     setAvailableActions,
   };
 
   const gameActions = {
-    setDifficulty, // This is the custom setter with logic
+    setDifficulty,
     updateHighScore,
     resetGameScoreAndStats,
     decrementHints,
