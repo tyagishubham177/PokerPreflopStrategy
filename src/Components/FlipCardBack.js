@@ -1,8 +1,10 @@
 import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import RotateRightIcon from '@mui/icons-material/RotateRight';
+import InfoIcon from '@mui/icons-material/Info'; // Import InfoIcon
 
-const FlipCardBack = ({ flipped, choice = {} }) => {
+// Accept onInfoClick and choice (choice is already accepted)
+const FlipCardBack = ({ flipped, choice = {}, onInfoClick }) => {
   return (
     <Box
       sx={{
@@ -14,7 +16,7 @@ const FlipCardBack = ({ flipped, choice = {} }) => {
         height: "100%",
         display: "flex",
         flexDirection: "column",
-        justifyContent: "center",
+        justifyContent: "center", // Main content centered
         alignItems: "center",
         p: 1,
         transform: "rotateY(180deg)",
@@ -24,6 +26,28 @@ const FlipCardBack = ({ flipped, choice = {} }) => {
         transition: "opacity 0.6s ease, transform 0.6s ease",
       }}
     >
+      {/* InfoIconButton added here */}
+      <IconButton
+        aria-label="info"
+        onClick={(e) => {
+            e.stopPropagation(); // Prevent card flip
+            if (onInfoClick) {
+              onInfoClick(choice);
+            }
+        }}
+        sx={{
+          position: 'absolute',
+          top: 4, // Changed from 8
+          right: 4, // Changed from 8
+          zIndex: 2,
+          color: 'black',
+          backgroundColor: 'transparent',
+        }}
+      >
+        <InfoIcon />
+      </IconButton>
+
+      {/* Existing content */}
       <Typography
         variant="body1"
         color="error.main"
@@ -38,6 +62,8 @@ const FlipCardBack = ({ flipped, choice = {} }) => {
       >
         Correct choice: {choice?.correctDecision}
       </Typography>
+
+      {/* Existing RotateRightIcon */}
       <IconButton
         sx={{
           position: "absolute",

@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import FlipCardFront from "./FlipCardFront";
 import FlipCardBack from "./FlipCardBack";
 
-const FlipCard = ({ index, choice, flippedCards, toggleFlip }) => {
+const FlipCard = ({ index, choice, flippedCards, toggleFlip, onInfoClick }) => { // Added onInfoClick
   return (
     <motion.div
       initial={{ scale: 0.85 }}
@@ -26,8 +26,16 @@ const FlipCard = ({ index, choice, flippedCards, toggleFlip }) => {
         }}
         onClick={() => toggleFlip(index)}
       >
-        <FlipCardFront flipped={flippedCards[index]} choice={choice} />
-        <FlipCardBack flipped={flippedCards[index]} choice={choice} />
+        <FlipCardFront
+          flipped={flippedCards[index]}
+          choice={choice}
+          onInfoClick={onInfoClick}
+        />
+        <FlipCardBack
+          flipped={flippedCards[index]}
+          choice={choice}
+          onInfoClick={onInfoClick} // Add onInfoClick prop here
+        />
       </Paper>
     </motion.div>
   );
