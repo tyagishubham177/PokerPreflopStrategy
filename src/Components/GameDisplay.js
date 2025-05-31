@@ -38,6 +38,8 @@ const GameDisplay = (props) => {
     isPaused,
     togglePausePlay,
     playSound,
+    isTimerVisible,
+    toggleTimerVisibility,
   } = props;
 
   const [feedbackTrigger, setFeedbackTrigger] = useState(null);
@@ -159,6 +161,8 @@ const GameDisplay = (props) => {
           isHintButtonDisabled={isHintButtonDisabled}
           isPaused={isPaused}
           togglePausePlay={togglePausePlay}
+          isTimerVisible={isTimerVisible}
+          toggleTimerVisibility={toggleTimerVisibility}
         />
       </CardContent>
       <RulesDialog showRules={showRules} setShowRules={setShowRules} />

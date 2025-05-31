@@ -3,6 +3,8 @@ import { Box, Grid, Typography, Paper, Button, useTheme, IconButton } from "@mui
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import HandDealer from "./HandDealer";
 import DecisionButtons from "./DecisionButtons";
@@ -29,6 +31,8 @@ const PokerGameTab = ({
   isHintButtonDisabled,
   isPaused,
   togglePausePlay,
+  isTimerVisible,
+  toggleTimerVisibility,
 }) => {
   const theme = useTheme();
 
@@ -98,7 +102,7 @@ const PokerGameTab = ({
           </Box>
 
           <Box sx={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center" }}>
-            <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} hintedAction={hintedAction} />
+            <DecisionButtons availableActions={availableActions} makeDecision={makeDecision} hintedAction={hintedAction} isPaused={isPaused} />
           </Box>
 
           <Box
@@ -128,18 +132,24 @@ const PokerGameTab = ({
 
             {!gameOver && (
               <Box sx={{ display: 'flex', alignItems: 'center', flexShrink: 1, minWidth: 'auto' }}>
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontWeight: 'bold',
-                    color: timeLeft <= 5 ? theme.palette.error.main : (timeLeft <= 10 ? theme.palette.warning.main : 'inherit'),
-                    mr: 0.5,
-                  }}
-                >
-                  {formatTime(timeLeft)}
-                </Typography>
-                <IconButton onClick={togglePausePlay} color="primary" size="small" aria-label={isPaused ? "play" : "pause"} sx={{ p: 0.5 }}>
-                  {isPaused ? <PlayArrowIcon fontSize="inherit" /> : <PauseIcon fontSize="inherit" />}
+                {isTimerVisible && (
+                  <>
+                    <IconButton onClick={togglePausePlay} color="primary" size="small" aria-label={isPaused ? "play" : "pause"} sx={{ p: 0.5, mr: 0.5 }}>
+                      {isPaused ? <PlayArrowIcon fontSize="inherit" /> : <PauseIcon fontSize="inherit" />}
+                    </IconButton>
+                    <Typography
+                      variant="body1"
+                      sx={{
+                        fontWeight: 'bold',
+                        color: timeLeft <= 5 ? theme.palette.error.main : (timeLeft <= 10 ? theme.palette.warning.main : 'inherit'),
+                      }}
+                    >
+                      {formatTime(timeLeft)}
+                    </Typography>
+                  </>
+                )}
+                <IconButton onClick={toggleTimerVisibility} color="primary" size="small" aria-label={isTimerVisible ? "hide timer" : "show timer"} sx={{ p: 0.5, ml: 0.5 }}>
+                  {isTimerVisible ? <VisibilityOffIcon fontSize="inherit" /> : <VisibilityIcon fontSize="inherit" />}
                 </IconButton>
               </Box>
             )}

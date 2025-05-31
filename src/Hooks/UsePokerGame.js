@@ -56,6 +56,7 @@ const usePokerGame = () => {
   const gameOverRef = useRef(gameOver);
   const isInitialMount = useRef(true);
   const dealCount = useRef(0);
+  const [isTimerVisible, setIsTimerVisible] = useState(true);
 
   useEffect(() => {
     gameOverRef.current = gameOver;
@@ -69,6 +70,10 @@ const usePokerGame = () => {
     setIsPaused(prevIsPaused => !prevIsPaused);
     logGameState(!isPaused ? "Game Paused" : "Game Resumed");
   }, [setIsPaused, logGameState, isPaused]);
+
+  const toggleTimerVisibility = useCallback(() => {
+    setIsTimerVisible(prev => !prev);
+  }, []);
 
   const dealNewHand = useCallback(() => {
     setLastAnswerCorrectness(null);
@@ -295,6 +300,8 @@ const usePokerGame = () => {
     timeLeft,
     isPaused,
     togglePausePlay,
+    isTimerVisible,
+    toggleTimerVisibility,
   };
 };
 
