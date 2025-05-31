@@ -10,6 +10,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import StrategyCustomizationModal from './StrategyCustomizationModal.js';
+import ShortcutConfigModal from './ShortcutConfigModal'; // Import the new modal
 import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
 import { POSITION_LABELS } from '../Constants/GameLabels.js';
 import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
@@ -18,7 +19,13 @@ import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
 const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
 const SOUND_SETTINGS_LS_KEY = 'soundSettings';
 
-const SettingsTab = ({ difficulty, handleDifficultyChange, onPanelClose }) => {
+const SettingsTab = ({
+  difficulty,
+  handleDifficultyChange,
+  onPanelClose,
+  shortcutConfig,
+  setShortcutConfig
+}) => {
   const [soundEnabled, setSoundEnabled] = useState(() => {
     try {
       const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
@@ -44,6 +51,7 @@ const SettingsTab = ({ difficulty, handleDifficultyChange, onPanelClose }) => {
     return "";
   });
   const [showStrategyModal, setShowStrategyModal] = useState(false);
+  const [showShortcutModal, setShowShortcutModal] = useState(false); // State for the new modal
 
   const [currentStrategy, setCurrentStrategy] = useState(() => {
     try {
@@ -57,6 +65,7 @@ const SettingsTab = ({ difficulty, handleDifficultyChange, onPanelClose }) => {
     return initialPokerStrategy;
   });
 
+  // handleShortcutKeyChange is removed from here, as it's in ShortcutConfigModal
 
   const handleSoundToggle = () => {
     const newSoundEnabled = !soundEnabled;
@@ -158,6 +167,17 @@ const SettingsTab = ({ difficulty, handleDifficultyChange, onPanelClose }) => {
         <MenuItem value="Hard">Hard</MenuItem>
       </Select>
 
+      {/* Button to open ShortcutConfigModal */}
+      <Button
+        variant="outlined"
+        color="info" // Using 'info' color for distinction, can be 'primary' or 'secondary'
+        onClick={() => setShowShortcutModal(true)}
+        fullWidth
+        sx={{ mt: 2, mb: 1 }}
+      >
+        Configure Keyboard Shortcuts
+      </Button>
+
       <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium', mt: 3, mb:1, color: "text.secondary" }}>
         Strategy Settings
       </Typography>
@@ -189,6 +209,13 @@ const SettingsTab = ({ difficulty, handleDifficultyChange, onPanelClose }) => {
         onClose={handleCloseStrategyModal}
         initialStrategy={currentStrategy}
         onSave={handleSaveStrategy}
+      />
+
+      <ShortcutConfigModal
+        open={showShortcutModal}
+        onClose={() => setShowShortcutModal(false)}
+        shortcutConfig={shortcutConfig}
+        setShortcutConfig={setShortcutConfig}
       />
     </Box>
   );

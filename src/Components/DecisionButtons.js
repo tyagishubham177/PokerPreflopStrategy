@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Box, useTheme, useMediaQuery } from "@mui/material";
+import { Button, Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 
 const DecisionButtons = ({ availableActions = [], makeDecision, hintedAction, isPaused }) => {
   const theme = useTheme();
@@ -47,6 +47,9 @@ const DecisionButtons = ({ availableActions = [], makeDecision, hintedAction, is
           }}
         >
           {action}
+          <Typography variant="caption" sx={{ ml: 0.5, fontWeight: 'bold' }}>
+            ({index + 1})
+          </Typography>
         </Button>
       ))}
     </Box>

@@ -13,6 +13,14 @@ import wallpaper1280 from "../Assets/wallpaper_1280_q80.webp";
 import wallpaper2048 from "../Assets/wallpaper_2048_q80.webp";
 import wallpaperDefault from "../Assets/wallpaper_q80.webp";
 
+const SHORTCUT_CONFIG_LS_KEY = 'pokerGameShortcutConfig';
+const defaultShortcutConfig = {
+  hint: 'h',
+  pause: 'p',
+  settings: 's',
+  rules: 'i',
+};
+
 const PokerGame = () => {
   // Temporarily use wallpaper640 as the initial wallpaper for testing the switching logic
   // This helps determine if wallpaper_blur.webp is the sole problem.
@@ -20,6 +28,20 @@ const PokerGame = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [hintedAction, setHintedAction] = useState(null);
+  const [shortcutConfig, setShortcutConfig] = useState(() => {
+    try {
+      const savedConfig = localStorage.getItem(SHORTCUT_CONFIG_LS_KEY);
+      if (savedConfig) {
+        // Add validation here if necessary to ensure savedConfig matches expected structure
+        const parsedConfig = JSON.parse(savedConfig);
+        // Ensure all keys are present, merge with defaults if some are missing
+        return { ...defaultShortcutConfig, ...parsedConfig };
+      }
+    } catch (error) {
+      console.error("Failed to load shortcut config from localStorage:", error);
+    }
+    return defaultShortcutConfig;
+  });
 
   const longPressTimeout = useRef(null);
   const longPressActionTakenRef = useRef(false);
@@ -51,6 +73,86 @@ const PokerGame = () => {
     isTimerVisible,
     toggleTimerVisibility,
   } = usePokerGame();
+
+  // useEffect for keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      const key = event.key.toLowerCase();
+
+      // Handle Enter for restarting game when gameOver is true
+      if (gameOver && key === 'enter') {
+        restartGame();
+        return;
+      }
+
+      // Handle numeric keys for decisions (1-4)
+      // These should only work if no modals are open and game is not over
+      if (['1', '2', '3', '4'].includes(key) && !gameOver && !showSettings && !showRules) {
+        const actionIndex = parseInt(key) - 1;
+        if (availableActions && availableActions[actionIndex]) {
+          makeDecision(availableActions[actionIndex]);
+          return; // Action taken
+        }
+      }
+
+      // Handle other shortcuts
+      // Special handling for settings (s) and rules (i) keys to allow closing modals
+      if (key === shortcutConfig.settings.toLowerCase()) {
+        setShowSettings(prev => !prev);
+      } else if (key === shortcutConfig.rules.toLowerCase()) {
+        setShowRules(prev => !prev);
+      }
+      // General shortcuts that should not work if a modal is open
+      else if (!showSettings && !showRules) {
+        if (key === shortcutConfig.hint.toLowerCase()) {
+          if (hints > 0 && !hintedAction && !gameOver && !isPaused) {
+            decrementHints();
+            setHintedAction(currentCorrectAction);
+            playSound('hint_used');
+          }
+        } else if (key === shortcutConfig.pause.toLowerCase()) {
+          togglePausePlay();
+        }
+        // Add other general shortcuts here if any
+      }
+      // If none of the above, event is not handled by these shortcuts
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [
+    // Dependencies from usePokerGame hook
+    gameOver,
+    restartGame,
+    showRules,
+    setShowRules,
+    hints,
+    decrementHints,
+    currentCorrectAction,
+    togglePausePlay,
+    availableActions,
+    makeDecision,
+    // Dependencies from local state
+    showSettings,
+    setShowSettings,
+    hintedAction,
+    setHintedAction,
+    isPaused, // Added isPaused as a dependency
+    shortcutConfig, // Added shortcutConfig as a dependency
+    // playSound is a stable import, not needed in deps
+  ]);
+
+  // useEffect to save shortcutConfig to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(SHORTCUT_CONFIG_LS_KEY, JSON.stringify(shortcutConfig));
+    } catch (error) {
+      console.error("Failed to save shortcut config to localStorage:", error);
+    }
+  }, [shortcutConfig]);
 
   useEffect(() => {
     // Logic for selecting and loading the appropriate wallpaper
@@ -110,14 +212,18 @@ const PokerGame = () => {
   }, [hand]);
 
   const handleHintClick = () => {
-    if (hints > 0 && !hintedAction && !gameOver) {
+    if (hints > 0 && !hintedAction && !gameOver && !isPaused) {
       decrementHints();
       setHintedAction(currentCorrectAction);
       playSound('hint_used');
     }
   };
 
-  const isHintButtonDisabled = hints <= 0 || !!hintedAction || gameOver;
+  const isHintButtonDisabled = hints <= 0 || !!hintedAction || gameOver || isPaused;
+  // The isHintButtonDisabled is also updated in GameDisplay directly, but for consistency,
+  // if it were used elsewhere in PokerGame.js, it would need !isPaused.
+  // For now, the direct modification of isHintButtonDisabled in GameDisplay props is sufficient for the UI.
+  // However, the handleHintClick and shortcut 'h' are the primary logic points in this component.
 
   useEffect(() => {
     let timer;
@@ -238,6 +344,8 @@ const PokerGame = () => {
         onOpen={toggleSettings}
         difficulty={difficulty}
         handleDifficultyChange={setDifficulty}
+        shortcutConfig={shortcutConfig}
+        setShortcutConfig={setShortcutConfig}
       />
     </Box>
     </>
