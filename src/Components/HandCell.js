@@ -14,17 +14,19 @@ const HandCell = ({ hand, isSelected, onClick, isHighlighted = false, isCorrectA
     MozUserSelect: 'none',
     WebkitUserSelect: 'none',
     msUserSelect: 'none',
-    backgroundColor: 'white',
+    backgroundColor: 'white', // Default background color
   };
 
+  // Determine background color based on props
   if (isCorrectActionRange) {
     cellStyle.backgroundColor = 'lightblue';
-  }
-
-  if (isIncorrectActionRange) {
+  } else if (isIncorrectActionRange) {
     cellStyle.backgroundColor = 'rgba(255, 0, 0, 0.3)';
+  } else if (isSelected) {
+    cellStyle.backgroundColor = '#90EE90'; // Light green for selected cells
   }
 
+  // Apply highlight style if needed, without overriding background
   if (isHighlighted) {
     cellStyle.outline = '2px solid #FFD700';
     cellStyle.outlineOffset = '-1px';
