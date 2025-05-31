@@ -6,6 +6,7 @@ import GameDisplay from "./GameDisplay";
 import ErrorBoundary from "./ErrorBoundary";
 import usePokerGame from "../Hooks/UsePokerGame";
 import { playSound } from '../Utils/soundUtils';
+import { initialPokerStrategy, CUSTOM_STRATEGY_LS_KEY } from '../Constants/InitialStrategy.js';
 // Import LQIP and WebP images
 import wallpaperBlur from "../Assets/wallpaper_blur.webp";
 import wallpaper640 from "../Assets/wallpaper_640_q80.webp";
@@ -29,6 +30,21 @@ const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
   const [isInputFocused, setIsInputFocused] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [hintedAction, setHintedAction] = useState(null);
+
+  const [currentStrategy, setCurrentStrategy] = useState(() => {
+    try {
+      const savedStrategy = localStorage.getItem(CUSTOM_STRATEGY_LS_KEY);
+      if (savedStrategy) {
+        return JSON.parse(savedStrategy);
+      }
+    } catch (error)
+      {
+      console.error("Failed to load custom strategy from localStorage:", error);
+    }
+    return initialPokerStrategy;
+  });
+  const [showStrategyModal, setShowStrategyModal] = useState(false);
+
   const [shortcutConfig, setShortcutConfig] = useState(() => {
     try {
       const savedConfig = localStorage.getItem(SHORTCUT_CONFIG_LS_KEY);
@@ -266,7 +282,36 @@ const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
       setShowRules(true);
     }
     // Reset the ref after click evaluation, for the next interaction cycle
-    longPressActionTakenRef.current = false; 
+    longPressActionTakenRef.current = false;
+  };
+
+  const handleOpenStrategyModal = () => {
+    setShowStrategyModal(true);
+  };
+
+  const handleCloseStrategyModal = () => {
+    setShowStrategyModal(false);
+  };
+
+  const handleSaveStrategy = (modifiedStrategies) => {
+    try {
+      localStorage.setItem(CUSTOM_STRATEGY_LS_KEY, JSON.stringify(modifiedStrategies));
+      setCurrentStrategy(modifiedStrategies);
+      console.log("Custom strategy saved to localStorage and state updated in PokerGame.");
+    } catch (error) {
+      console.error("Failed to save custom strategy to localStorage:", error);
+    }
+    handleCloseStrategyModal(); // Close modal on save
+  };
+
+  const handleResetStrategy = () => {
+    try {
+      localStorage.removeItem(CUSTOM_STRATEGY_LS_KEY);
+      setCurrentStrategy(initialPokerStrategy);
+      console.log("Custom strategy reset to default in PokerGame.");
+    } catch (error) {
+      console.error("Failed to reset custom strategy:", error);
+    }
   };
 
   return (
@@ -361,6 +406,12 @@ const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
         setShortcutConfig={setShortcutConfig}
         isInputFocused={isInputFocused}
         setIsInputFocused={setIsInputFocused}
+        currentStrategy={currentStrategy}
+        showStrategyModal={showStrategyModal}
+        handleOpenStrategyModal={handleOpenStrategyModal}
+        handleCloseStrategyModal={handleCloseStrategyModal}
+        handleSaveStrategy={handleSaveStrategy}
+        handleResetStrategy={handleResetStrategy}
       />
     </Box>
     </>

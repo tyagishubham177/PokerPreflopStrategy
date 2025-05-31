@@ -13,7 +13,14 @@ const SettingsPanel = ({
   shortcutConfig,
   setShortcutConfig,
   isInputFocused,
-  setIsInputFocused
+  setIsInputFocused,
+  // Strategy props
+  currentStrategy,
+  showStrategyModal,
+  handleOpenStrategyModal,
+  handleCloseStrategyModal,
+  handleSaveStrategy,
+  handleResetStrategy,
 }) => {
   return (
     <SwipeableDrawer anchor="right" open={open} onClose={onClose} onOpen={onOpen}>
@@ -34,6 +41,13 @@ const SettingsPanel = ({
             setShortcutConfig={setShortcutConfig}
             isInputFocused={isInputFocused}
             setIsInputFocused={setIsInputFocused}
+            // Strategy props
+            currentStrategy={currentStrategy}
+            showStrategyModal={showStrategyModal}
+            handleOpenStrategyModal={handleOpenStrategyModal}
+            handleCloseStrategyModal={handleCloseStrategyModal}
+            handleSaveStrategy={handleSaveStrategy}
+            handleResetStrategy={handleResetStrategy}
           />
         </ErrorBoundary>
       </Box>
