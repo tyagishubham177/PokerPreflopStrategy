@@ -51,8 +51,10 @@ export const playSound = (soundName, volume = 1) => {
     const audio = new Audio(actualSoundPath);
     // The 'volume' parameter now acts as a relative modifier to the masterVolume
     // e.g. playSound('click', 0.8) would play at 80% of masterVolume
-    const effectiveVolume = masterVolume * volume;
-    audio.volume = Math.max(0, Math.min(1, effectiveVolume));
+    let effectiveVolume = masterVolume * volume;
+    // Apply a non-linear curve (squaring the value for now)
+    let adjustedVolume = Math.pow(effectiveVolume, 2);
+    audio.volume = Math.max(0, Math.min(1, adjustedVolume));
 
     audio.play()
       .then(() => {
