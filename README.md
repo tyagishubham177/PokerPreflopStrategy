@@ -90,6 +90,9 @@ The game allows for strategy customization:
 - Save your custom strategy. This strategy will be stored in `localStorage` and used for future game sessions until reset.
 - You can reset the strategy back to the game's default at any time.
 
+## 📝 Future Enhancements / To-Do List
+For a detailed list of planned features, improvements, and bug fixes, please see our [To-Do List](ToDoReadme.md).
+
 ## 🤝 Contributing
 
 Feel free to fork this project, submit issues, and make pull requests. Contributions are always welcome! 🎉
