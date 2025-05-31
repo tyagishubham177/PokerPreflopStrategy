@@ -8,6 +8,7 @@ import {
   FormControlLabel,
   Select,
   MenuItem,
+  Slider,
 } from "@mui/material";
 import StrategyCustomizationModal from './StrategyCustomizationModal.js';
 import ShortcutConfigModal from './ShortcutConfigModal'; // Import the new modal
@@ -39,6 +40,18 @@ const SettingsTab = ({
       console.error("Failed to load sound settings from localStorage:", error);
     }
     return true;
+  });
+  const [soundVolume, setSoundVolume] = useState(() => {
+    try {
+      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+      if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        return settings.soundVolume !== undefined ? settings.soundVolume : 0.5;
+      }
+    } catch (error) {
+      console.error("Failed to load sound settings from localStorage:", error);
+    }
+    return 0.5;
   });
   const [username, setUsername] = useState(() => {
     try {
@@ -79,9 +92,28 @@ const SettingsTab = ({
         settings = JSON.parse(savedSettings);
       }
       settings.soundEnabled = newSoundEnabled;
+      // Also save soundVolume when sound is toggled
+      settings.soundVolume = soundVolume;
       localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settings));
     } catch (error) {
       console.error("Failed to save sound settings to localStorage:", error);
+    }
+  };
+
+  const handleVolumeChange = (event, newValue) => {
+    setSoundVolume(newValue);
+    // Save volume immediately on change
+    try {
+      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+      let settings = {};
+      if (savedSettings) {
+        settings = JSON.parse(savedSettings);
+      }
+      settings.soundVolume = newValue;
+      settings.soundEnabled = soundEnabled; // ensure soundEnabled is also saved
+      localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settings));
+    } catch (error) {
+      console.error("Failed to save sound volume to localStorage:", error);
     }
   };
 
@@ -92,6 +124,7 @@ const SettingsTab = ({
   const handleSaveSettings = () => {
     const settingsToSave = {
       soundEnabled,
+      soundVolume,
       username,
       difficulty,
     };
@@ -146,6 +179,19 @@ const SettingsTab = ({
         control={<Switch checked={soundEnabled} onChange={handleSoundToggle} color="primary" />}
         label="Sound Effects"
         sx={{ my: 2 }}
+      />
+      <Typography id="sound-volume-slider" gutterBottom sx={{ color: "text.secondary", mt: 1 }}>
+        Sound Volume
+      </Typography>
+      <Slider
+        value={soundVolume}
+        onChange={handleVolumeChange}
+        aria-labelledby="sound-volume-slider"
+        min={0}
+        max={1}
+        step={0.01}
+        disabled={!soundEnabled}
+        sx={{ mt: 0, mb: 2 }}
       />
       <TextField
         fullWidth
