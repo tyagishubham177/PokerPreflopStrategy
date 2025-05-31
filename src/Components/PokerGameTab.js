@@ -182,10 +182,20 @@ const PokerGameTab = ({
           </Box>
         </>
       ) : (
-        <>
-          <GameOver score={score} highScore={highScore} restartGame={restartGame} />
-          <IncorrectAnswers wrongChoices={wrongChoices} />
-        </>
+        (() => {
+          const isNewHighScore = score > highScore || (score === highScore && score > 0);
+          return (
+            <>
+              <GameOver
+                score={score}
+                highScore={highScore}
+                restartGame={restartGame}
+                isNewHighScore={isNewHighScore}
+              />
+              <IncorrectAnswers wrongChoices={wrongChoices} />
+            </>
+          );
+        })()
       )}
     </Box>
   );
