@@ -1,6 +1,6 @@
 import React from "react";
-import { useTheme, useMediaQuery, Box } from "@mui/material"; // IconButton removed from here
-// import InfoIcon from '@mui/icons-material/Info'; // Removed import
+import { useTheme, useMediaQuery, Box } from "@mui/material";
+// InfoIcon import is definitely removed.
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
