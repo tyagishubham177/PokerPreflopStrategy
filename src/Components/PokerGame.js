@@ -21,7 +21,7 @@ const defaultShortcutConfig = {
   rules: 'i',
 };
 
-const PokerGame = () => {
+const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
   // Temporarily use wallpaper640 as the initial wallpaper for testing the switching logic
   // This helps determine if wallpaper_blur.webp is the sole problem.
   const [currentWallpaper, setCurrentWallpaper] = useState(wallpaper640);
@@ -74,6 +74,16 @@ const PokerGame = () => {
     isTimerVisible,
     toggleTimerVisibility,
   } = usePokerGame();
+
+  // 2. Add useEffect for initialAction
+  useEffect(() => {
+    if (initialAction === 'settings') {
+      setShowSettings(true);
+    } else if (initialAction === 'rules') {
+      setShowRules(true);
+    }
+    // If 'play' or null, do nothing
+  }, [initialAction, setShowSettings, setShowRules]); // 3. Set dependencies
 
   // useEffect for keyboard shortcuts
   useEffect(() => {
