@@ -36,8 +36,8 @@ const FlipCardFront = ({ flipped, choice = {}, onInfoClick }) => { // Added onIn
         }}
         sx={{
           position: 'absolute',
-          top: 4, // Changed from 8
-          right: 4, // Changed from 8
+          top: 4,
+          right: 12, // Changed from 4
           zIndex: 2,
           color: 'black',
           backgroundColor: 'transparent',
@@ -78,7 +78,7 @@ const FlipCardFront = ({ flipped, choice = {}, onInfoClick }) => { // Added onIn
         sx={{
           position: "absolute",
           bottom: 8,
-          right: 8,
+          right: 12, // Changed from 8
           backgroundColor: "transparent",
           color: "black",
         }}
