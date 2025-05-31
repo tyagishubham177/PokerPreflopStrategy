@@ -27,18 +27,18 @@ const StartupDialog = ({ onPlay, onSettings, onRules, hasExistingSettings }) => 
     // Dialog for users with existing settings
     return (
       <Dialog open={true} PaperProps={{ style: { margin: '20px', padding: '20px' } }}>
-        <DialogTitle>Welcome Back!</DialogTitle>
+        <DialogTitle>Welcome Back, Poker Ace!</DialogTitle>
         <DialogContent>
           <Typography>
-            Would you like to change the difficulty level, or just lock and load with existing settings?
+            Ready to hit the tables? You can tweak the challenge or jump right in with your saved settings.
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center', paddingBottom: '20px', paddingTop: '20px' }}>
           <Button onClick={handleSettingsInternal} variant="contained" color="primary" sx={{ marginRight: '10px' }}>
-            Change Difficulty
+            Adjust Challenge
           </Button>
           <Button onClick={handlePlayInternal} variant="contained" color="secondary">
-            Lock and Load!
+            Deal Me In!
           </Button>
         </DialogActions>
       </Dialog>
@@ -47,21 +47,21 @@ const StartupDialog = ({ onPlay, onSettings, onRules, hasExistingSettings }) => 
     // Dialog for new users
     return (
       <Dialog open={true} PaperProps={{ style: { margin: '20px', padding: '20px' } }}>
-        <DialogTitle>Welcome to the Poker Trainer!</DialogTitle>
+        <DialogTitle>Ready to Master the Felt?</DialogTitle>
         <DialogContent>
           <Typography>
-            How would you like to start?
+            Your poker adventure starts now! Choose your path:
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center', flexDirection: 'column', gap: '15px', paddingBottom: '20px', paddingTop: '20px' }}>
           <Button onClick={handleSettingsInternal} variant="contained" color="primary" fullWidth>
-            Customize Game in Settings
+            Tailor Your Game
           </Button>
           <Button onClick={handleRulesInternal} variant="outlined" color="primary" fullWidth>
-            Read the Rules
+            Learn the Ropes
           </Button>
           <Button onClick={handlePlayInternal} variant="contained" color="secondary" fullWidth>
-            Play and Go!
+            Hit the Tables!
           </Button>
         </DialogActions>
       </Dialog>
