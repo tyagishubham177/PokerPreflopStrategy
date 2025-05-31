@@ -1,3 +1,5 @@
+const SOUND_SETTINGS_LS_KEY = 'soundSettings'; // Added constant
+
 const soundFiles = {
   'correct_decision': require('../Assets/sounds/correct_decision.mp3'),
   'wrong_decision': require('../Assets/sounds/wrong_decision.mp3'),
@@ -7,18 +9,24 @@ const soundFiles = {
 
 export const playSound = (soundName, volume = 1) => {
   try {
-    const soundSettingsString = localStorage.getItem('soundSettings');
+    const soundSettingsString = localStorage.getItem(SOUND_SETTINGS_LS_KEY); // Use constant
     let soundEnabled = true;
+    let masterVolume = 0.5; // Default master volume
 
     if (soundSettingsString) {
       try {
         const soundSettings = JSON.parse(soundSettingsString);
-        if (soundSettings && typeof soundSettings.soundEnabled === 'boolean') {
-          soundEnabled = soundSettings.soundEnabled;
+        if (soundSettings) {
+          if (typeof soundSettings.soundEnabled === 'boolean') {
+            soundEnabled = soundSettings.soundEnabled;
+          }
+          if (typeof soundSettings.soundVolume === 'number') {
+            masterVolume = soundSettings.soundVolume;
+          }
         }
       } catch (parseError) {
         console.error("Error parsing soundSettings from localStorage:", parseError);
-        soundEnabled = true;
+        // Keep default soundEnabled and masterVolume
       }
     }
 
@@ -41,7 +49,12 @@ export const playSound = (soundName, volume = 1) => {
     console.log('Attempting to play sound:', soundName, 'at path:', actualSoundPath);
 
     const audio = new Audio(actualSoundPath);
-    audio.volume = Math.max(0, Math.min(1, volume));
+    // The 'volume' parameter now acts as a relative modifier to the masterVolume
+    // e.g. playSound('click', 0.8) would play at 80% of masterVolume
+    let effectiveVolume = masterVolume * volume;
+    // Apply a non-linear curve (squaring the value for now)
+    let adjustedVolume = Math.pow(effectiveVolume, 2);
+    audio.volume = Math.max(0, Math.min(1, adjustedVolume));
 
     audio.play()
       .then(() => {
