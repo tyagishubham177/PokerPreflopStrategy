@@ -27,8 +27,10 @@ const StrategyEditor = ({ initialHands = [], onSelectionChange, isReadOnly = fal
     display: 'grid',
     gridTemplateColumns: `repeat(${ranks.length}, 1fr)`,
     gridTemplateRows: `repeat(${ranks.length}, 1fr)`,
-    width: '400px', 
-    height: '400px', 
+    width: '100%',
+    height: 'auto',
+    aspectRatio: '1 / 1',
+    maxWidth: '400px',
     border: '1px solid #ccc',
   };
 
