@@ -1,6 +1,5 @@
 import React from "react";
-import { useTheme, useMediaQuery, Box } from "@mui/material";
-// InfoIcon import is definitely removed.
+import { useTheme, useMediaQuery, Box } from "@mui/material"; // IconButton import is removed. InfoIcon import is removed.
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
@@ -33,20 +32,14 @@ const CarouselComponent = ({ wrongChoices = [], flippedCards, toggleFlip, onInfo
         {wrongChoices.map((choice, index) => (
           <div key={index}>
             <Box sx={{ position: 'relative' }}>
-              <IconButton
-                aria-label="info"
-                onClick={() => onInfoClick(choice)}
-                sx={{
-                  position: 'absolute',
-                  top: 8,
-                  right: 8,
-                  zIndex: 1,
-                  color: 'black',
-                }}
-              >
-                <InfoIcon />
-              </IconButton>
-              <FlipCard index={index} choice={choice} flippedCards={flippedCards} toggleFlip={toggleFlip} />
+              {/* The InfoIconButton has been removed from here */}
+              <FlipCard
+                index={index}
+                choice={choice}
+                flippedCards={flippedCards}
+                toggleFlip={toggleFlip}
+                onInfoClick={onInfoClick} /* onInfoClick prop is now correctly passed */
+              />
             </Box>
           </div>
         ))}
