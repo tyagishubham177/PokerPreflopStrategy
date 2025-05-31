@@ -48,6 +48,8 @@ const PokerGame = () => {
     timeLeft,
     isPaused,
     togglePausePlay,
+    isTimerVisible,
+    toggleTimerVisibility,
   } = usePokerGame();
 
   useEffect(() => {
@@ -210,6 +212,8 @@ const PokerGame = () => {
           streak={streak}
           isPaused={isPaused}
           togglePausePlay={togglePausePlay}
+          isTimerVisible={isTimerVisible}
+          toggleTimerVisibility={toggleTimerVisibility}
         />
       </ErrorBoundary>
 
