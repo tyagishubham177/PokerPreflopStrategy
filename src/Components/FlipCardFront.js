@@ -1,8 +1,9 @@
 import React from "react";
 import { Box, Typography, IconButton } from "@mui/material";
 import RotateRightIcon from '@mui/icons-material/RotateRight';
+import InfoIcon from '@mui/icons-material/Info'; // Added import
 
-const FlipCardFront = ({ flipped, choice = {} }) => {
+const FlipCardFront = ({ flipped, choice = {}, onInfoClick }) => { // Added onInfoClick prop
   const positionParts = typeof choice.position === 'string' ? choice.position.split(" - ") : [];
   const situation = positionParts[0] || '';
   const heroPosition = positionParts[1] || '';
@@ -25,7 +26,27 @@ const FlipCardFront = ({ flipped, choice = {} }) => {
         transition: "opacity 0.6s ease, transform 0.6s ease",
       }}
     >
-      <Box>
+      <IconButton
+        aria-label="info"
+        onClick={(e) => {
+            e.stopPropagation(); // Prevent card flip
+            if (onInfoClick) {
+              onInfoClick(choice);
+            }
+        }}
+        sx={{
+          position: 'absolute',
+          top: 8,
+          right: 8,
+          zIndex: 2,
+          color: 'black',
+          backgroundColor: 'transparent',
+        }}
+      >
+        <InfoIcon />
+      </IconButton>
+
+      <Box> {/* Existing content box */}
         <Typography
           variant="h6"
           sx={{

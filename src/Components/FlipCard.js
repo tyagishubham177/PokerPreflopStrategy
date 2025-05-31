@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import FlipCardFront from "./FlipCardFront";
 import FlipCardBack from "./FlipCardBack";
 
-const FlipCard = ({ index, choice, flippedCards, toggleFlip }) => {
+const FlipCard = ({ index, choice, flippedCards, toggleFlip, onInfoClick }) => { // Added onInfoClick
   return (
     <motion.div
       initial={{ scale: 0.85 }}

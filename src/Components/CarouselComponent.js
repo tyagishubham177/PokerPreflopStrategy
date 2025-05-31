@@ -1,6 +1,6 @@
 import React from "react";
-import { useTheme, useMediaQuery, Box, IconButton } from "@mui/material";
-import InfoIcon from '@mui/icons-material/Info';
+import { useTheme, useMediaQuery, Box } from "@mui/material"; // IconButton removed from here
+// import InfoIcon from '@mui/icons-material/Info'; // Removed import
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css"; 
 import "slick-carousel/slick/slick-theme.css";
