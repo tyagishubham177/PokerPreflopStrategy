@@ -13,6 +13,14 @@ import wallpaper1280 from "../Assets/wallpaper_1280_q80.webp";
 import wallpaper2048 from "../Assets/wallpaper_2048_q80.webp";
 import wallpaperDefault from "../Assets/wallpaper_q80.webp";
 
+const SHORTCUT_CONFIG_LS_KEY = 'pokerGameShortcutConfig';
+const defaultShortcutConfig = {
+  hint: 'h',
+  pause: 'p',
+  settings: 's',
+  rules: 'i',
+};
+
 const PokerGame = () => {
   // Temporarily use wallpaper640 as the initial wallpaper for testing the switching logic
   // This helps determine if wallpaper_blur.webp is the sole problem.
@@ -20,11 +28,19 @@ const PokerGame = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [hintedAction, setHintedAction] = useState(null);
-  const [shortcutConfig, setShortcutConfig] = useState({
-    hint: 'h',
-    pause: 'p',
-    settings: 's',
-    rules: 'i',
+  const [shortcutConfig, setShortcutConfig] = useState(() => {
+    try {
+      const savedConfig = localStorage.getItem(SHORTCUT_CONFIG_LS_KEY);
+      if (savedConfig) {
+        // Add validation here if necessary to ensure savedConfig matches expected structure
+        const parsedConfig = JSON.parse(savedConfig);
+        // Ensure all keys are present, merge with defaults if some are missing
+        return { ...defaultShortcutConfig, ...parsedConfig };
+      }
+    } catch (error) {
+      console.error("Failed to load shortcut config from localStorage:", error);
+    }
+    return defaultShortcutConfig;
   });
 
   const longPressTimeout = useRef(null);
@@ -128,6 +144,15 @@ const PokerGame = () => {
     shortcutConfig, // Added shortcutConfig as a dependency
     // playSound is a stable import, not needed in deps
   ]);
+
+  // useEffect to save shortcutConfig to localStorage whenever it changes
+  useEffect(() => {
+    try {
+      localStorage.setItem(SHORTCUT_CONFIG_LS_KEY, JSON.stringify(shortcutConfig));
+    } catch (error) {
+      console.error("Failed to save shortcut config to localStorage:", error);
+    }
+  }, [shortcutConfig]);
 
   useEffect(() => {
     // Logic for selecting and loading the appropriate wallpaper
