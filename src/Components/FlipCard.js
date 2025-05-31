@@ -26,8 +26,16 @@ const FlipCard = ({ index, choice, flippedCards, toggleFlip, onInfoClick }) => {
         }}
         onClick={() => toggleFlip(index)}
       >
-        <FlipCardFront flipped={flippedCards[index]} choice={choice} />
-        <FlipCardBack flipped={flippedCards[index]} choice={choice} />
+        <FlipCardFront
+          flipped={flippedCards[index]}
+          choice={choice}
+          onInfoClick={onInfoClick}
+        />
+        <FlipCardBack
+          flipped={flippedCards[index]}
+          choice={choice}
+          onInfoClick={onInfoClick} // Add onInfoClick prop here
+        />
       </Paper>
     </motion.div>
   );
