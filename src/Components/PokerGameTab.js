@@ -74,12 +74,12 @@ const PokerGameTab = ({
             )}
 
             {isPaused ? (
-              <Paper elevation={0} sx={{ p: 2, my: 3, textAlign: 'center', border: '1px dashed grey', backgroundColor: 'rgba(0,0,0,0.02)', height: '110px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <Paper elevation={0} sx={{ p: 2, textAlign: 'center', border: '1px dashed grey', backgroundColor: 'rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <PauseCircleOutlineIcon sx={{ fontSize: 30, color: 'text.disabled', mb: 0.5 }} />
                 <Typography variant="body1" sx={{ color: 'text.disabled' }}>Situation Hidden</Typography>
               </Paper>
             ) : (
-              <Paper elevation={3} sx={{ p: 2, my: 3, backgroundColor: "rgba(255, 255, 255, 0.9)", height: '110px' }}>
+              <Paper elevation={3} sx={{ p: 2, backgroundColor: "rgba(255, 255, 255, 0.9)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <Typography variant="body1" sx={{ textAlign: "center", fontWeight: "bold" }}>
                   <>
                     <span style={{ color: "#1976d2" }}>Situation:</span> {situationDisplayPart}
@@ -92,7 +92,7 @@ const PokerGameTab = ({
               </Paper>
             )}
 
-            <Typography variant="h6" align="center" sx={{ mb: 2, fontWeight: "bold" }}>
+            <Typography variant="h6" align="center" sx={{ mt: 2, mb: 1, fontWeight: "bold" }}>
               What's your decision?
             </Typography>
           </Box>
@@ -103,7 +103,7 @@ const PokerGameTab = ({
 
           <Box
             sx={{
-              mt: 3,
+              mt: 1,
               pt: 2,
               display: "flex",
               borderTop: "1px solid rgba(0, 0, 0, 0.12)",
