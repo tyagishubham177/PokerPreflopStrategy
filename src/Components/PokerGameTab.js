@@ -79,7 +79,7 @@ const PokerGameTab = ({
                 <Typography variant="body1" sx={{ color: 'text.disabled' }}>Situation Hidden</Typography>
               </Paper>
             ) : (
-              <Paper elevation={3} sx={{ p: 2, my: 3, backgroundColor: "rgba(255, 255, 255, 0.9)", height: '110px' }}>
+              <Paper elevation={3} sx={{ p: 2, backgroundColor: "rgba(255, 255, 255, 0.9)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <Typography variant="body1" sx={{ textAlign: "center", fontWeight: "bold" }}>
                   <>
                     <span style={{ color: "#1976d2" }}>Situation:</span> {situationDisplayPart}
