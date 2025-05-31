@@ -6,9 +6,15 @@ import GameDisplay from "./GameDisplay";
 import ErrorBoundary from "./ErrorBoundary";
 import usePokerGame from "../Hooks/UsePokerGame";
 import { playSound } from '../Utils/soundUtils';
-import wallpaperImage from "../Assets/wallpaper.png";
+// Import LQIP and WebP images
+import wallpaperBlur from "../Assets/wallpaper_blur.webp";
+import wallpaper640 from "../Assets/wallpaper_640_q80.webp";
+import wallpaper1280 from "../Assets/wallpaper_1280_q80.webp";
+import wallpaper2048 from "../Assets/wallpaper_2048_q80.webp";
+import wallpaperDefault from "../Assets/wallpaper_q80.webp";
 
 const PokerGame = () => {
+  const [currentWallpaper, setCurrentWallpaper] = useState(wallpaperBlur);
   const [showSettings, setShowSettings] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [hintedAction, setHintedAction] = useState(null);
@@ -41,6 +47,38 @@ const PokerGame = () => {
     isPaused,
     togglePausePlay,
   } = usePokerGame();
+
+  useEffect(() => {
+    // Logic for selecting and loading the appropriate wallpaper
+    const image = new Image();
+    let selectedWallpaper = wallpaperDefault; // Fallback
+
+    const screenWidth = window.innerWidth;
+    const dpr = window.devicePixelRatio || 1;
+
+    // Determine the best image based on screen width and DPR
+    // Consider DPR to load higher resolution images on high-density displays
+    if (screenWidth * dpr <= 640) {
+      selectedWallpaper = wallpaper640;
+    } else if (screenWidth * dpr <= 1280) {
+      selectedWallpaper = wallpaper1280;
+    } else if (screenWidth * dpr <= 2048) {
+      selectedWallpaper = wallpaper2048;
+    }
+    // For very large screens or if other conditions aren't met, wallpaperDefault is used.
+
+    image.onload = () => {
+      setCurrentWallpaper(selectedWallpaper);
+      // Add a class to the body or a specific element to trigger transition
+      // For now, just updating state which will re-render the Box with new image
+    };
+    image.src = selectedWallpaper;
+
+    // Cleanup function for the image loader if the component unmounts
+    return () => {
+      image.onload = null; // Prevent setting state on unmounted component
+    };
+  }, []); // Empty dependency array ensures this runs only once on mount
 
   useEffect(() => {
     let intervalId = null;
@@ -109,11 +147,27 @@ const PokerGame = () => {
   };
 
   return (
-    <Box
-      sx={{
-        backgroundImage: `url(${wallpaperImage})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
+    <>
+      <style>
+        {`
+          .hero {
+            background-image: url(${wallpaperBlur});
+            background-size: cover;
+            background-position: center;
+            transition: background-image 0.5s ease-in-out;
+          }
+          .hero-loaded {
+            /* This class is more of a marker, the background-image itself
+               will be updated via state, and transition is on the .hero class */
+          }
+        `}
+      </style>
+      <Box
+        className="hero" // Apply the hero class
+        sx={{
+          backgroundImage: `url(${currentWallpaper})`, // Use state for dynamic wallpaper
+          backgroundSize: "cover",
+          backgroundPosition: "center",
         minHeight: "100vh",
         display: "flex",
         alignItems: "center",
@@ -181,6 +235,7 @@ const PokerGame = () => {
         handleDifficultyChange={setDifficulty}
       />
     </Box>
+    </>
   );
 };
 
