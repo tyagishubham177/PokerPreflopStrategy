@@ -21,86 +21,6 @@ const PokerGame = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [hintedAction, setHintedAction] = useState(null);
 
-  // useEffect for keyboard shortcuts
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (gameOver && event.key === 'Enter') {
-        restartGame();
-        return;
-      }
-
-      // Prevent shortcuts if a modal or input field is active (e.g. settings panel)
-      // This is a basic check; more robust focusing/modal state management might be needed
-      if (showSettings || showRules) { // Assuming showRules means a modal is open
-        return;
-      }
-
-      switch (event.key.toLowerCase()) {
-        case 'h':
-          if (hints > 0 && !hintedAction && !gameOver) {
-            decrementHints();
-            setHintedAction(currentCorrectAction);
-            playSound('hint_used');
-          }
-          break;
-        case 'p':
-          togglePausePlay();
-          break;
-        case 'c':
-          if (availableActions.includes('Call')) {
-            makeDecision('Call');
-          } else if (availableActions.includes('Check')) {
-            makeDecision('Check');
-          }
-          break;
-        case 'r':
-          if (availableActions.includes('Raise')) {
-            makeDecision('Raise');
-          } else if (availableActions.includes('Bet')) {
-            makeDecision('Bet');
-          }
-          break;
-        case 'f':
-          if (availableActions.includes('Fold')) {
-            makeDecision('Fold');
-          }
-          break;
-        case 's':
-          setShowSettings(prev => !prev);
-          break;
-        case 'i':
-          setShowRules(prev => !prev);
-          break;
-        default:
-          // No action for other keys
-          break;
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, [
-    gameOver,
-    restartGame,
-    showSettings,
-    showRules,
-    hints,
-    hintedAction,
-    decrementHints,
-    currentCorrectAction,
-    playSound,
-    togglePausePlay,
-    availableActions,
-    makeDecision,
-    setShowSettings,
-    setShowRules,
-    // Explicitly include all dependencies that the event listener logic uses
-    // This ensures the listener always has the latest state and props
-  ]);
-
   const longPressTimeout = useRef(null);
   const longPressActionTakenRef = useRef(false);
 
@@ -131,6 +51,80 @@ const PokerGame = () => {
     isTimerVisible,
     toggleTimerVisibility,
   } = usePokerGame();
+
+  // useEffect for keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (gameOver && event.key === 'Enter') {
+        restartGame();
+        return;
+      }
+
+      // Prevent shortcuts if a modal or input field is active (e.g. settings panel)
+      if (showSettings || showRules) {
+        return;
+      }
+
+      switch (event.key.toLowerCase()) {
+        case 'h':
+          // Ensure hints are available, no hint is currently active, and game is not over
+          if (hints > 0 && !hintedAction && !gameOver) {
+            decrementHints(); // from usePokerGame
+            setHintedAction(currentCorrectAction); // local state
+            playSound('hint_used');
+          }
+          break;
+        case 'p':
+          togglePausePlay(); // from usePokerGame
+          break;
+        // Cases 'c', 'r', 'f' are removed
+        case 's':
+          setShowSettings(prev => !prev); // local state setter
+          break;
+        case 'i':
+          setShowRules(prev => !prev); // from usePokerGame
+          break;
+        case '1':
+        case '2':
+        case '3':
+        case '4': // Assuming max 4 available actions. Add more cases if needed.
+          if (!gameOver) { // Only allow decision making if game is not over
+            const actionIndex = parseInt(event.key) - 1;
+            if (availableActions && availableActions[actionIndex]) {
+              makeDecision(availableActions[actionIndex]);
+            }
+          }
+          break;
+        default:
+          // No action for other keys
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [
+    // Dependencies from usePokerGame hook
+    gameOver,
+    restartGame,
+    showRules,
+    setShowRules,
+    hints,
+    decrementHints,
+    currentCorrectAction,
+    togglePausePlay,
+    availableActions,
+    makeDecision,
+    // Dependencies from local state
+    showSettings,
+    setShowSettings,
+    hintedAction,
+    setHintedAction,
+    // playSound is a stable import, not needed in deps
+  ]);
 
   useEffect(() => {
     // Logic for selecting and loading the appropriate wallpaper
