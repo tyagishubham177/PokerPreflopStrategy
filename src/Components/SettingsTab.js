@@ -24,7 +24,9 @@ const SettingsTab = ({
   handleDifficultyChange,
   onPanelClose,
   shortcutConfig,
-  setShortcutConfig
+  setShortcutConfig,
+  isInputFocused,
+  setIsInputFocused
 }) => {
   const [soundEnabled, setSoundEnabled] = useState(() => {
     try {
@@ -150,6 +152,8 @@ const SettingsTab = ({
         label="Username"
         value={username}
         onChange={handleUsernameChange}
+        onFocus={() => setIsInputFocused(true)}
+        onBlur={() => setIsInputFocused(false)}
         margin="normal"
         variant="outlined"
         sx={{ mb: 2 }}

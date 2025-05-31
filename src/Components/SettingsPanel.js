@@ -11,7 +11,9 @@ const SettingsPanel = ({
   difficulty,
   handleDifficultyChange,
   shortcutConfig,
-  setShortcutConfig
+  setShortcutConfig,
+  isInputFocused,
+  setIsInputFocused
 }) => {
   return (
     <SwipeableDrawer anchor="right" open={open} onClose={onClose} onOpen={onOpen}>
@@ -30,6 +32,8 @@ const SettingsPanel = ({
             onPanelClose={onClose}
             shortcutConfig={shortcutConfig}
             setShortcutConfig={setShortcutConfig}
+            isInputFocused={isInputFocused}
+            setIsInputFocused={setIsInputFocused}
           />
         </ErrorBoundary>
       </Box>
