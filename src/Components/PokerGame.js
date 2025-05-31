@@ -21,6 +21,86 @@ const PokerGame = () => {
   const [collapsed, setCollapsed] = useState(false);
   const [hintedAction, setHintedAction] = useState(null);
 
+  // useEffect for keyboard shortcuts
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (gameOver && event.key === 'Enter') {
+        restartGame();
+        return;
+      }
+
+      // Prevent shortcuts if a modal or input field is active (e.g. settings panel)
+      // This is a basic check; more robust focusing/modal state management might be needed
+      if (showSettings || showRules) { // Assuming showRules means a modal is open
+        return;
+      }
+
+      switch (event.key.toLowerCase()) {
+        case 'h':
+          if (hints > 0 && !hintedAction && !gameOver) {
+            decrementHints();
+            setHintedAction(currentCorrectAction);
+            playSound('hint_used');
+          }
+          break;
+        case 'p':
+          togglePausePlay();
+          break;
+        case 'c':
+          if (availableActions.includes('Call')) {
+            makeDecision('Call');
+          } else if (availableActions.includes('Check')) {
+            makeDecision('Check');
+          }
+          break;
+        case 'r':
+          if (availableActions.includes('Raise')) {
+            makeDecision('Raise');
+          } else if (availableActions.includes('Bet')) {
+            makeDecision('Bet');
+          }
+          break;
+        case 'f':
+          if (availableActions.includes('Fold')) {
+            makeDecision('Fold');
+          }
+          break;
+        case 's':
+          setShowSettings(prev => !prev);
+          break;
+        case 'i':
+          setShowRules(prev => !prev);
+          break;
+        default:
+          // No action for other keys
+          break;
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [
+    gameOver,
+    restartGame,
+    showSettings,
+    showRules,
+    hints,
+    hintedAction,
+    decrementHints,
+    currentCorrectAction,
+    playSound,
+    togglePausePlay,
+    availableActions,
+    makeDecision,
+    setShowSettings,
+    setShowRules,
+    // Explicitly include all dependencies that the event listener logic uses
+    // This ensures the listener always has the latest state and props
+  ]);
+
   const longPressTimeout = useRef(null);
   const longPressActionTakenRef = useRef(false);
 
