@@ -18,7 +18,13 @@ import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
 const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
 const SOUND_SETTINGS_LS_KEY = 'soundSettings';
 
-const SettingsTab = ({ difficulty, handleDifficultyChange, onPanelClose }) => {
+const SettingsTab = ({
+  difficulty,
+  handleDifficultyChange,
+  onPanelClose,
+  shortcutConfig,
+  setShortcutConfig
+}) => {
   const [soundEnabled, setSoundEnabled] = useState(() => {
     try {
       const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
@@ -57,6 +63,24 @@ const SettingsTab = ({ difficulty, handleDifficultyChange, onPanelClose }) => {
     return initialPokerStrategy;
   });
 
+  const handleShortcutKeyChange = (actionName, newKey) => {
+    // Ensure newKey is a single character and lowercase, or handle empty string if necessary
+    const processedKey = newKey ? newKey.charAt(0).toLowerCase() : '';
+    // If allowing empty to clear or revert, add logic here. For now, always sets.
+    if (setShortcutConfig && processedKey) { // Only update if there's a key
+      setShortcutConfig(prevConfig => ({
+        ...prevConfig,
+        [actionName]: processedKey,
+      }));
+    } else if (setShortcutConfig && !processedKey) { // Handle empty input - perhaps revert or clear
+        // Option: Revert to default or do nothing. For now, let's clear it or set to a specific placeholder if desired.
+        // Or, to prevent clearing: if (!processedKey) return;
+        setShortcutConfig(prevConfig => ({
+            ...prevConfig,
+            [actionName]: '', // Allow clearing for now, user might be in process of changing
+        }));
+    }
+  };
 
   const handleSoundToggle = () => {
     const newSoundEnabled = !soundEnabled;
@@ -157,6 +181,51 @@ const SettingsTab = ({ difficulty, handleDifficultyChange, onPanelClose }) => {
         <MenuItem value="Medium">Medium</MenuItem>
         <MenuItem value="Hard">Hard</MenuItem>
       </Select>
+
+      {/* Keyboard Shortcuts Section */}
+      <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium', mt: 3, mb: 1, color: "text.secondary" }}>
+        Keyboard Shortcuts
+      </Typography>
+      <TextField
+        fullWidth
+        label="Hint Key"
+        value={shortcutConfig?.hint || ''}
+        onChange={(e) => handleShortcutKeyChange('hint', e.target.value)}
+        variant="outlined"
+        margin="dense"
+        sx={{ mb: 1 }}
+        inputProps={{ maxLength: 1 }}
+      />
+      <TextField
+        fullWidth
+        label="Pause/Play Key"
+        value={shortcutConfig?.pause || ''}
+        onChange={(e) => handleShortcutKeyChange('pause', e.target.value)}
+        variant="outlined"
+        margin="dense"
+        sx={{ mb: 1 }}
+        inputProps={{ maxLength: 1 }}
+      />
+      <TextField
+        fullWidth
+        label="Settings Key"
+        value={shortcutConfig?.settings || ''}
+        onChange={(e) => handleShortcutKeyChange('settings', e.target.value)}
+        variant="outlined"
+        margin="dense"
+        sx={{ mb: 1 }}
+        inputProps={{ maxLength: 1 }}
+      />
+      <TextField
+        fullWidth
+        label="Rules Key"
+        value={shortcutConfig?.rules || ''}
+        onChange={(e) => handleShortcutKeyChange('rules', e.target.value)}
+        variant="outlined"
+        margin="dense"
+        sx={{ mb: 2 }} // A bit more margin before the next section
+        inputProps={{ maxLength: 1 }}
+      />
 
       <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium', mt: 3, mb:1, color: "text.secondary" }}>
         Strategy Settings

@@ -20,6 +20,12 @@ const PokerGame = () => {
   const [showSettings, setShowSettings] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [hintedAction, setHintedAction] = useState(null);
+  const [shortcutConfig, setShortcutConfig] = useState({
+    hint: 'h',
+    pause: 'p',
+    settings: 's',
+    rules: 'i',
+  });
 
   const longPressTimeout = useRef(null);
   const longPressActionTakenRef = useRef(false);
@@ -55,50 +61,45 @@ const PokerGame = () => {
   // useEffect for keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (gameOver && event.key === 'Enter') {
+      const key = event.key.toLowerCase();
+
+      // Handle Enter for restarting game when gameOver is true
+      if (gameOver && key === 'enter') {
         restartGame();
         return;
       }
 
-      // Prevent shortcuts if a modal or input field is active (e.g. settings panel)
-      if (showSettings || showRules) {
-        return;
+      // Handle numeric keys for decisions (1-4)
+      // These should only work if no modals are open and game is not over
+      if (['1', '2', '3', '4'].includes(key) && !gameOver && !showSettings && !showRules) {
+        const actionIndex = parseInt(key) - 1;
+        if (availableActions && availableActions[actionIndex]) {
+          makeDecision(availableActions[actionIndex]);
+          return; // Action taken
+        }
       }
 
-      switch (event.key.toLowerCase()) {
-        case 'h':
-          // Ensure hints are available, no hint is currently active, and game is not over
-          if (hints > 0 && !hintedAction && !gameOver) {
-            decrementHints(); // from usePokerGame
-            setHintedAction(currentCorrectAction); // local state
+      // Handle other shortcuts
+      // Special handling for settings (s) and rules (i) keys to allow closing modals
+      if (key === shortcutConfig.settings.toLowerCase()) {
+        setShowSettings(prev => !prev);
+      } else if (key === shortcutConfig.rules.toLowerCase()) {
+        setShowRules(prev => !prev);
+      }
+      // General shortcuts that should not work if a modal is open
+      else if (!showSettings && !showRules) {
+        if (key === shortcutConfig.hint.toLowerCase()) {
+          if (hints > 0 && !hintedAction && !gameOver && !isPaused) {
+            decrementHints();
+            setHintedAction(currentCorrectAction);
             playSound('hint_used');
           }
-          break;
-        case 'p':
-          togglePausePlay(); // from usePokerGame
-          break;
-        // Cases 'c', 'r', 'f' are removed
-        case 's':
-          setShowSettings(prev => !prev); // local state setter
-          break;
-        case 'i':
-          setShowRules(prev => !prev); // from usePokerGame
-          break;
-        case '1':
-        case '2':
-        case '3':
-        case '4': // Assuming max 4 available actions. Add more cases if needed.
-          if (!gameOver) { // Only allow decision making if game is not over
-            const actionIndex = parseInt(event.key) - 1;
-            if (availableActions && availableActions[actionIndex]) {
-              makeDecision(availableActions[actionIndex]);
-            }
-          }
-          break;
-        default:
-          // No action for other keys
-          break;
+        } else if (key === shortcutConfig.pause.toLowerCase()) {
+          togglePausePlay();
+        }
+        // Add other general shortcuts here if any
       }
+      // If none of the above, event is not handled by these shortcuts
     };
 
     window.addEventListener('keydown', handleKeyDown);
@@ -123,6 +124,8 @@ const PokerGame = () => {
     setShowSettings,
     hintedAction,
     setHintedAction,
+    isPaused, // Added isPaused as a dependency
+    shortcutConfig, // Added shortcutConfig as a dependency
     // playSound is a stable import, not needed in deps
   ]);
 
@@ -184,14 +187,18 @@ const PokerGame = () => {
   }, [hand]);
 
   const handleHintClick = () => {
-    if (hints > 0 && !hintedAction && !gameOver) {
+    if (hints > 0 && !hintedAction && !gameOver && !isPaused) {
       decrementHints();
       setHintedAction(currentCorrectAction);
       playSound('hint_used');
     }
   };
 
-  const isHintButtonDisabled = hints <= 0 || !!hintedAction || gameOver;
+  const isHintButtonDisabled = hints <= 0 || !!hintedAction || gameOver || isPaused;
+  // The isHintButtonDisabled is also updated in GameDisplay directly, but for consistency,
+  // if it were used elsewhere in PokerGame.js, it would need !isPaused.
+  // For now, the direct modification of isHintButtonDisabled in GameDisplay props is sufficient for the UI.
+  // However, the handleHintClick and shortcut 'h' are the primary logic points in this component.
 
   useEffect(() => {
     let timer;
@@ -312,6 +319,8 @@ const PokerGame = () => {
         onOpen={toggleSettings}
         difficulty={difficulty}
         handleDifficultyChange={setDifficulty}
+        shortcutConfig={shortcutConfig}
+        setShortcutConfig={setShortcutConfig}
       />
     </Box>
     </>

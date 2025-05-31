@@ -4,7 +4,15 @@ import CloseIcon from "@mui/icons-material/Close";
 import SettingsTab from "./SettingsTab";
 import ErrorBoundary from "./ErrorBoundary";
 
-const SettingsPanel = ({ open, onClose, onOpen, difficulty, handleDifficultyChange }) => {
+const SettingsPanel = ({
+  open,
+  onClose,
+  onOpen,
+  difficulty,
+  handleDifficultyChange,
+  shortcutConfig,
+  setShortcutConfig
+}) => {
   return (
     <SwipeableDrawer anchor="right" open={open} onClose={onClose} onOpen={onOpen}>
       <Box sx={{ width: 250, p: 2 }}>
@@ -19,7 +27,9 @@ const SettingsPanel = ({ open, onClose, onOpen, difficulty, handleDifficultyChan
           <SettingsTab 
             difficulty={difficulty} 
             handleDifficultyChange={handleDifficultyChange} 
-            onPanelClose={onClose} 
+            onPanelClose={onClose}
+            shortcutConfig={shortcutConfig}
+            setShortcutConfig={setShortcutConfig}
           />
         </ErrorBoundary>
       </Box>
