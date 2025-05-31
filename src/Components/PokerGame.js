@@ -26,6 +26,7 @@ const PokerGame = () => {
   // This helps determine if wallpaper_blur.webp is the sole problem.
   const [currentWallpaper, setCurrentWallpaper] = useState(wallpaper640);
   const [showSettings, setShowSettings] = useState(false);
+  const [isInputFocused, setIsInputFocused] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [hintedAction, setHintedAction] = useState(null);
   const [shortcutConfig, setShortcutConfig] = useState(() => {
@@ -77,6 +78,7 @@ const PokerGame = () => {
   // useEffect for keyboard shortcuts
   useEffect(() => {
     const handleKeyDown = (event) => {
+      if (isInputFocused) return; // Do not process shortcuts if an input is focused
       const key = event.key.toLowerCase();
 
       // Handle Enter for restarting game when gameOver is true
@@ -142,6 +144,7 @@ const PokerGame = () => {
     setHintedAction,
     isPaused, // Added isPaused as a dependency
     shortcutConfig, // Added shortcutConfig as a dependency
+    isInputFocused, // Added isInputFocused as a dependency
     // playSound is a stable import, not needed in deps
   ]);
 
@@ -346,6 +349,8 @@ const PokerGame = () => {
         handleDifficultyChange={setDifficulty}
         shortcutConfig={shortcutConfig}
         setShortcutConfig={setShortcutConfig}
+        isInputFocused={isInputFocused}
+        setIsInputFocused={setIsInputFocused}
       />
     </Box>
     </>
