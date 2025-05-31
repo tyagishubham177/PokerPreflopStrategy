@@ -14,7 +14,9 @@ import wallpaper2048 from "../Assets/wallpaper_2048_q80.webp";
 import wallpaperDefault from "../Assets/wallpaper_q80.webp";
 
 const PokerGame = () => {
-  const [currentWallpaper, setCurrentWallpaper] = useState(wallpaperBlur);
+  // Temporarily use wallpaper640 as the initial wallpaper for testing the switching logic
+  // This helps determine if wallpaper_blur.webp is the sole problem.
+  const [currentWallpaper, setCurrentWallpaper] = useState(wallpaper640);
   const [showSettings, setShowSettings] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
   const [hintedAction, setHintedAction] = useState(null);
@@ -151,15 +153,14 @@ const PokerGame = () => {
       <style>
         {`
           .hero {
-            background-image: url(${wallpaperBlur});
+            /* The background-image is now solely controlled by the sx prop on the Box,
+               driven by the currentWallpaper state.
+               The .hero class is now only responsible for the transition. */
             background-size: cover;
             background-position: center;
             transition: background-image 0.5s ease-in-out;
           }
-          .hero-loaded {
-            /* This class is more of a marker, the background-image itself
-               will be updated via state, and transition is on the .hero class */
-          }
+          /* .hero-loaded class is not strictly necessary with current setup */
         `}
       </style>
       <Box
