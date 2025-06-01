@@ -38,7 +38,7 @@ const FlipCardBack = ({ flipped, choice = {}, onInfoClick }) => {
         sx={{
           position: 'absolute',
           top: 4,
-          right: 8,
+          right: 4,
           zIndex: 2,
           color: 'black',
           backgroundColor: 'transparent',
