@@ -49,7 +49,7 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
           </Box>
 
           {/* Right Column for Details, Legend, Button */}
-          <Box sx={{ flex: { xs: '1 1 auto', sm: 1 }, p: { xs: 1, sm: 2 }, display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'auto' }}>
+          <Box sx={{ flex: { xs: '1 1 auto', sm: 1 }, p: { xs: 1, sm: 2 }, display: 'flex', flexDirection: 'column', alignItems: 'center', overflowY: 'auto', overflowX: 'hidden' }}> {/* Added overflowX: 'hidden' */}
             <Typography id="chart-modal-title" variant="h6" component="h2" sx={{ mb: 2, textAlign: 'center' }}> {/* Increased margin */}
               {title || "Strategy Chart"}
             </Typography>
@@ -58,7 +58,7 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
               {handNotation && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 0.5 }}>
                   <StyleIcon sx={{ mr: 0.5, fontSize: '1.1rem' }} />
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
                     Your Hand: {handNotation}
                   </Typography>
                 </Box>
@@ -66,7 +66,7 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
               {yourChoice && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 0.5 }}>
                   <HighlightOffIcon sx={{ mr: 0.5, fontSize: '1.1rem', color: 'error.main' }} />
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
                     Your Decision: {yourChoice}
                   </Typography>
                 </Box>
@@ -74,7 +74,7 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
               {decisionKey && (
                 <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <CheckCircleOutlineIcon sx={{ mr: 0.5, fontSize: '1.1rem', color: 'success.main' }} />
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ wordBreak: 'break-word' }}>
                     Correct Decision: {decisionKey}
                   </Typography>
                 </Box>
