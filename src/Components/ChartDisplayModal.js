@@ -1,6 +1,9 @@
 import React from 'react';
-import { Modal, Box, Typography, Button } from '@mui/material';
+import { Modal, Box, Typography, Button, Chip } from '@mui/material'; // Added Chip
 import ReadOnlyStrategyChartViewer from './ReadOnlyStrategyChartViewer';
+import StyleIcon from '@mui/icons-material/Style'; // Added StyleIcon
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'; // Added CheckCircleOutlineIcon
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'; // Added HighlightOffIcon
 
 const style = {
   position: 'absolute',
@@ -13,7 +16,7 @@ const style = {
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  p: 2, // Reduced padding
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -27,25 +30,34 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
       aria-labelledby="chart-modal-title"
     >
       <Box sx={style}>
-        <Typography id="chart-modal-title" variant="h6" component="h2" sx={{ mb: 2, textAlign: 'center' }}>
+        <Typography id="chart-modal-title" variant="h6" component="h2" sx={{ mb: 1, textAlign: 'center' }}> {/* Reduced margin */}
           {title || "Strategy Chart"} 
         </Typography>
 
-        <Box sx={{ mb: 2, textAlign: 'center' }}>
+        <Box sx={{ mb: 1, textAlign: 'center' }}> {/* Reduced margin */}
           {handNotation && (
-            <Typography variant="body1">
-              Your Hand: {handNotation}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 0.5 }}>
+              <StyleIcon sx={{ mr: 0.5, fontSize: '1.1rem' }} />
+              <Typography variant="body2"> {/* Changed variant for smaller font */}
+                Your Hand: {handNotation}
+              </Typography>
+            </Box>
           )}
           {yourChoice && (
-            <Typography variant="body1">
-              Your Decision: {yourChoice}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', mb: 0.5 }}>
+              <HighlightOffIcon sx={{ mr: 0.5, fontSize: '1.1rem', color: 'error.main' }} />
+              <Typography variant="body2"> {/* Changed variant for smaller font */}
+                Your Decision: {yourChoice}
+              </Typography>
+            </Box>
           )}
           {decisionKey && (
-            <Typography variant="body1">
-              Correct Decision: {decisionKey}
-            </Typography>
+            <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <CheckCircleOutlineIcon sx={{ mr: 0.5, fontSize: '1.1rem', color: 'success.main' }} />
+              <Typography variant="body2"> {/* Changed variant for smaller font */}
+                Correct Decision: {decisionKey}
+              </Typography>
+            </Box>
           )}
         </Box>
         
@@ -63,22 +75,28 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
           </Typography>
         )}
 
-        <Box sx={{ mt: 2, mb: 2, p: 1, border: '1px solid grey', borderRadius: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0.5, width: 'fit-content', alignSelf: 'center' }}>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ width: 20, height: 20, mr: 1, border: '1px solid black', backgroundColor: 'lightblue' }} />
-            <Typography variant="body2">Optimal Play Range for this Action</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ width: 20, height: 20, mr: 1, border: '1px solid black', backgroundColor: 'rgba(255, 0, 0, 0.3)' }} />
-            <Typography variant="body2">Your Play Range (if different from optimal)</Typography>
-          </Box>
-          <Box sx={{ display: 'flex', alignItems: 'center' }}>
-            <Box sx={{ width: 20, height: 20, mr: 1, border: '2px solid #FFD700', backgroundColor: 'transparent' }} />
-            <Typography variant="body2">Specific Hand in Question</Typography>
-          </Box>
+        <Box sx={{ mt: 1.5, mb: 1.5, p: 1, border: '1px solid grey', borderRadius: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 1, width: 'fit-content', alignSelf: 'center' }}> {/* Increased padding slightly for chips, increased gap */}
+          <Chip
+            icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'lightblue', border: '1px solid grey' }} />}
+            label="Optimal Play Range for this Action"
+            size="small"
+            variant="outlined"
+          />
+          <Chip
+            icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'rgba(255, 0, 0, 0.3)', border: '1px solid grey' }} />}
+            label="Your Play Range (if different from optimal)"
+            size="small"
+            variant="outlined"
+          />
+          <Chip
+            icon={<Box sx={{ width: 12, height: 12, borderRadius: '2px', border: '2px solid #FFD700', backgroundColor: 'transparent' }} />}
+            label="Specific Hand in Question"
+            size="small"
+            variant="outlined"
+          />
         </Box>
         
-        <Button onClick={onClose} sx={{ mt: 3, display: 'block', marginLeft: 'auto', marginRight: 'auto' }}>
+        <Button onClick={onClose} sx={{ mt: 2, display: 'block', marginLeft: 'auto', marginRight: 'auto' }}> {/* Reduced margin */}
           Close
         </Button>
       </Box>

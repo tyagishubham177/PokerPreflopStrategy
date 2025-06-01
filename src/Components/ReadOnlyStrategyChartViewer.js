@@ -23,13 +23,11 @@ const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey, h
     }
   }
   
-  const title = `Chart for: ${situationLabel} - ${positionLabel} - Action: ${decisionKey}`;
+  // const title = `Chart for: ${situationLabel} - ${positionLabel} - Action: ${decisionKey}`; // Removed as it's redundant
 
   return (
     <Box sx={{ p: 2, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Typography variant="h6" gutterBottom sx={{ textAlign: 'center' }}>
-        {title}
-      </Typography>
+      {/* Typography component displaying the title has been removed */}
       <StrategyEditor
         initialHands={hands}
         isReadOnly={true}
