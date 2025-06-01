@@ -3,6 +3,22 @@ import { CARD_WEIGHTS } from "../Constants/CardWeights";
 import { suits } from "../Constants/GameConstants";
 import { SITUATION_LABELS, POSITION_LABELS, getLabel } from "../Constants/GameLabels";
 
+const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
+
+const loadStrategy = () => {
+  try {
+    const savedStrategy = localStorage.getItem(CUSTOM_STRATEGY_LS_KEY);
+    if (savedStrategy) {
+      return JSON.parse(savedStrategy);
+    }
+  } catch (error) {
+    console.error("Failed to load custom strategy from localStorage:", error);
+  }
+  return initialPokerStrategy;
+};
+
+const pokerStrategy = loadStrategy();
+
 const useGameLogic = () => {
   const generateNewHand = () => {
     if (Object.keys(CARD_WEIGHTS).length === 0) {
@@ -69,9 +85,9 @@ const useGameLogic = () => {
   };
 
   const selectSituationAndPosition = () => {
-    const situations = Object.keys(initialPokerStrategy);
+    const situations = Object.keys(pokerStrategy);
     if (situations.length === 0) {
-      console.error("initialPokerStrategy is empty. Cannot select situation and position.");
+      console.error("pokerStrategy is empty. Cannot select situation and position.");
       return {
         newSituationKey: "ERROR_NO_SITUATIONS",
         newPositionKey: "ERROR_NO_POSITIONS",
@@ -81,8 +97,8 @@ const useGameLogic = () => {
     }
     const newSituationKey = situations[Math.floor(Math.random() * situations.length)];
     
-    if (!initialPokerStrategy[newSituationKey]) {
-        console.error(`Selected situation key "${newSituationKey}" is invalid or not found in initialPokerStrategy.`);
+    if (!pokerStrategy[newSituationKey]) {
+        console.error(`Selected situation key "${newSituationKey}" is invalid or not found in pokerStrategy.`);
         return {
             newSituationKey: "ERROR_INVALID_SITUATION_KEY",
             newPositionKey: "ERROR_INVALID_SITUATION_KEY",
@@ -91,7 +107,7 @@ const useGameLogic = () => {
         };
     }
 
-    const positions = Object.keys(initialPokerStrategy[newSituationKey]);
+    const positions = Object.keys(pokerStrategy[newSituationKey]);
     if (positions.length === 0) {
       console.error(`No positions found for situation key "${newSituationKey}".`);
       return {
@@ -112,8 +128,8 @@ const useGameLogic = () => {
   };
 
   const getAvailableActions = (situationKey, positionKey) => {
-    if (initialPokerStrategy[situationKey] && initialPokerStrategy[situationKey][positionKey]) {
-      const actions = Object.keys(initialPokerStrategy[situationKey][positionKey]);
+    if (pokerStrategy[situationKey] && pokerStrategy[situationKey][positionKey]) {
+      const actions = Object.keys(pokerStrategy[situationKey][positionKey]);
       return [...actions, "Fold"];
     }
     console.error("Invalid situation or position key for getting available actions:", situationKey, positionKey);
@@ -126,7 +142,7 @@ const useGameLogic = () => {
       return "Fold";
     }
 
-    const situationData = initialPokerStrategy[situationKey]?.[positionKey];
+    const situationData = pokerStrategy[situationKey]?.[positionKey];
 
     if (!situationData) {
       console.error("Strategy data not found for the current situation and position keys:", situationKey, positionKey);
