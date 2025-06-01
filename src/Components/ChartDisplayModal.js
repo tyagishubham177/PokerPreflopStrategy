@@ -81,7 +81,7 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
               )}
             </Box>
 
-            <Box sx={{ mt: 2, mb: 2, p: 1, border: '1px solid grey', borderRadius: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1, width: '100%', alignSelf: 'stretch' }}> {/* Adjusted margins, alignment, width and self-alignment */}
+            <Box sx={{ mt: 2, mb: 2, p: 1, border: '1px solid grey', borderRadius: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1, width: 'fit-content' }}> {/* Changed width to fit-content, removed alignSelf */}
               <Chip
                 icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'lightblue', border: '1px solid grey' }} />}
                 label="Optimal Play Range for this Action"
