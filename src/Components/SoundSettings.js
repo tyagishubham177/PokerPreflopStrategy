@@ -5,10 +5,14 @@ import {
   FormControlLabel,
   Switch,
   Slider,
-  Stack, // Added Stack for layout
+  Stack,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
-import VolumeUp from '@mui/icons-material/VolumeUp'; // Added VolumeUp icon
-import VolumeMute from '@mui/icons-material/VolumeMute'; // Added VolumeMute icon
+import VolumeUp from '@mui/icons-material/VolumeUp';
+import VolumeMute from '@mui/icons-material/VolumeMute';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const SoundSettings = ({
   soundEnabled,
@@ -17,28 +21,41 @@ const SoundSettings = ({
   handleVolumeChange,
 }) => {
   return (
-    <Paper sx={{ p: 2, mb: 2 }}>
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-        Sound Settings
-      </Typography>
-      <FormControlLabel
-        control={<Switch checked={soundEnabled} onChange={handleSoundToggle} color="primary" />}
-        label="Sound Effects"
-        sx={{ mb: 2 }} // Adjusted margin for spacing with the Stack below
-      />
-      <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
-        {soundEnabled && soundVolume > 0 ? <VolumeUp /> : <VolumeMute />}
-        <Slider
-          value={soundEnabled ? soundVolume : 0} // Show 0 if sound is disabled
-          onChange={handleVolumeChange}
-          aria-labelledby="sound-volume-slider-label" // Retained for accessibility, can be linked to a hidden label or the icon itself if needed
-          min={0}
-          max={1}
-          step={0.01}
-          disabled={!soundEnabled}
-          sx={{ flexGrow: 1 }}
-        />
-      </Stack>
+    <Paper sx={{ mb: 2, overflow: 'hidden' }}> {/* Removed p: 2, added overflow: hidden for better Accordion fit if needed */}
+      <Accordion defaultExpanded={true} elevation={0} sx={{
+        '&.MuiAccordion-root:before': { display: 'none' }, // Remove top border line
+        width: '100%'
+      }}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="sound-settings-content"
+          id="sound-settings-header"
+        >
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}> {/* Kept h6 for now, can adjust if too large */}
+            Sound Settings
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails sx={{ p: 2 }}> {/* Added padding back here */}
+          <FormControlLabel
+            control={<Switch checked={soundEnabled} onChange={handleSoundToggle} color="primary" />}
+            label="Sound Effects"
+            sx={{ mb: 2 }}
+          />
+          <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>
+            {soundEnabled && soundVolume > 0 ? <VolumeUp /> : <VolumeMute />}
+            <Slider
+              value={soundEnabled ? soundVolume : 0}
+              onChange={handleVolumeChange}
+              aria-labelledby="sound-volume-slider-label"
+              min={0}
+              max={1}
+              step={0.01}
+              disabled={!soundEnabled}
+              sx={{ flexGrow: 1 }}
+            />
+          </Stack>
+        </AccordionDetails>
+      </Accordion>
     </Paper>
   );
 };
