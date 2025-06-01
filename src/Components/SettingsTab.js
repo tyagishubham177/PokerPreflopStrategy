@@ -1,17 +1,15 @@
-import React, { useState, useEffect } from "react"; 
+import React, { useState, useEffect } from "react";
 import {
   Box,
-  Typography,
-  TextField,
   Button,
-  Switch,
-  FormControlLabel,
-  Select,
-  MenuItem,
-  Slider,
+  Divider,
+  // Removed Paper, Typography, TextField, Switch, FormControlLabel, Select, MenuItem, Slider as they are now in child components
 } from "@mui/material";
 import StrategyCustomizationModal from './StrategyCustomizationModal.js';
 import ShortcutConfigModal from './ShortcutConfigModal'; // Import the new modal
+import SoundSettings from './SoundSettings.js'; // Import new component
+import GameSettings from './GameSettings.js'; // Import new component
+import AdvancedSettings from './AdvancedSettings.js'; // Import new component
 import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
 import { POSITION_LABELS } from '../Constants/GameLabels.js';
 import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
@@ -171,84 +169,30 @@ const SettingsTab = ({
 
   return (
     <Box sx={{ p: 2 }}>
-      <Typography variant="h6" gutterBottom sx={{ fontWeight: "bold", color: "primary.main" }}>
-        Game Settings
-      </Typography>
-
-      <FormControlLabel
-        control={<Switch checked={soundEnabled} onChange={handleSoundToggle} color="primary" />}
-        label="Sound Effects"
-        sx={{ my: 2 }}
+      <SoundSettings
+        soundEnabled={soundEnabled}
+        handleSoundToggle={handleSoundToggle}
+        soundVolume={soundVolume}
+        handleVolumeChange={handleVolumeChange}
       />
-      <Typography id="sound-volume-slider" gutterBottom sx={{ color: "text.secondary", mt: 1 }}>
-        Sound Volume
-      </Typography>
-      <Slider
-        value={soundVolume}
-        onChange={handleVolumeChange}
-        aria-labelledby="sound-volume-slider"
-        min={0}
-        max={1}
-        step={0.01}
-        disabled={!soundEnabled}
-        sx={{ mt: 0, mb: 2 }}
+
+      <GameSettings
+        username={username}
+        handleUsernameChange={handleUsernameChange}
+        difficulty={difficulty}
+        handleDifficultyChange={handleDifficultyChange}
+        setIsInputFocused={setIsInputFocused}
       />
-      <TextField
-        fullWidth
-        label="Username"
-        value={username}
-        onChange={handleUsernameChange}
-        onFocus={() => setIsInputFocused(true)}
-        onBlur={() => setIsInputFocused(false)}
-        margin="normal"
-        variant="outlined"
-        sx={{ mb: 2 }}
+
+      <Divider sx={{ my: 2 }} />
+
+      <AdvancedSettings
+        setShowShortcutModal={setShowShortcutModal}
+        handleOpenStrategyModal={handleOpenStrategyModal}
+        handleResetStrategy={handleResetStrategy}
       />
-      <Select
-        fullWidth
-        label="Difficulty"
-        value={difficulty}
-        onChange={(event) => handleDifficultyChange(event.target.value)}
-        margin="dense"
-        sx={{ mb: 2 }}
-      >
-        <MenuItem value="Easy">Easy</MenuItem>
-        <MenuItem value="Medium">Medium</MenuItem>
-        <MenuItem value="Hard">Hard</MenuItem>
-      </Select>
 
-      {/* Button to open ShortcutConfigModal */}
-      <Button
-        variant="outlined"
-        color="info" // Using 'info' color for distinction, can be 'primary' or 'secondary'
-        onClick={() => setShowShortcutModal(true)}
-        fullWidth
-        sx={{ mt: 2, mb: 1 }}
-      >
-        Configure Keyboard Shortcuts
-      </Button>
-
-      <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 'medium', mt: 3, mb:1, color: "text.secondary" }}>
-        Strategy Settings
-      </Typography>
-
-      <Button
-        variant="outlined"
-        color="secondary"
-        onClick={handleOpenStrategyModal}
-        sx={{ mb: 1, width: "100%" }}
-      >
-        Customize Preflop Strategy
-      </Button>
-
-      <Button
-        variant="outlined"
-        color="warning"
-        onClick={handleResetStrategy}
-        sx={{ mb: 2, width: "100%" }}
-      >
-        Reset to Default Strategy
-      </Button>
+      <Divider sx={{ my: 2 }} />
 
       <Button variant="contained" color="primary" onClick={handleSaveSettings} sx={{ width: "100%" }}>
         Save All Settings

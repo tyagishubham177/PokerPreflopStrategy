@@ -266,7 +266,7 @@ const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
       setShowRules(true);
     }
     // Reset the ref after click evaluation, for the next interaction cycle
-    longPressActionTakenRef.current = false; 
+    longPressActionTakenRef.current = false;
   };
 
   return (
