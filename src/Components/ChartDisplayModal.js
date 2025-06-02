@@ -22,7 +22,12 @@ const style = {
   // alignItems: 'center', // Removed
 };
 
-const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, decisionKey, handNotation = null, yourChoice, highlightFoldCell }) => {
+const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, decisionKey, handNotation = null, yourChoice, highlightFoldCell, positionString = '' }) => {
+  const positionParts = typeof positionString === 'string' ? positionString.split(" - ") : [];
+  const situation = positionParts[0] || 'N/A';
+  const heroPosition = positionParts[1] || 'N/A';
+  const villainPosition = positionParts[2] || 'N/A';
+
   return (
     <Modal
       open={open}
@@ -79,6 +84,12 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
                   </Typography>
                 </Box>
               )}
+            </Box>
+
+            <Box sx={{ mt: 2, mb: 2, textAlign: 'center' }}>
+              <Typography variant="body2"><strong>Situation:</strong> {situation}</Typography>
+              <Typography variant="body2"><strong>Hero:</strong> {heroPosition}</Typography>
+              <Typography variant="body2"><strong>Villain:</strong> {villainPosition}</Typography>
             </Box>
 
             <Box sx={{ mt: 2, mb: 2, p: 1, border: '1px solid grey', borderRadius: 1, display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 1, width: 'fit-content' }}> {/* Changed width to fit-content, removed alignSelf */}
