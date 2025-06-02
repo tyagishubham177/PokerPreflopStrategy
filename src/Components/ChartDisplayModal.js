@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, Button, Chip, Paper, ButtonBase, useTheme } from '@mui/material'; // Added Paper, ButtonBase, useTheme
+import { Modal, Box, Typography, Button, Chip, Paper, ButtonBase, useTheme, IconButton } from '@mui/material'; // Added Paper, ButtonBase, useTheme, IconButton
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
