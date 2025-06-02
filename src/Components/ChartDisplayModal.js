@@ -45,22 +45,22 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: Math.min(3, wrongChoices ? wrongChoices.length : 1), // Show 3 items or less if not enough choices
+    slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 3) : 1,
     slidesToScroll: 1,
-    adaptiveHeight: false, // Keep this false or true based on content
+    adaptiveHeight: false,
     // nextArrow: <SampleNextArrow />, // Add if custom arrows are imported and used
     // prevArrow: <SamplePrevArrow />, // Add if custom arrows are imported and used
     responsive: [
       {
         breakpoint: 600, // for sm screens
         settings: {
-          slidesToShow: Math.min(2, wrongChoices ? wrongChoices.length : 1),
+          slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 2) : 1,
         }
       },
       {
         breakpoint: 480, // for xs screens
         settings: {
-          slidesToShow: 1,
+          slidesToShow: 1, // Always show 1 on very small screens if items exist
         }
       }
     ]
@@ -95,71 +95,75 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
       aria-labelledby="chart-modal-title"
     >
       <Box sx={style}>
-        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', maxHeight: 'calc(90vh - 32px)', gap: 2 }}> {/* Increased gap */}
+        <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', maxHeight: 'calc(90vh - 32px)', gap: 2 }}>
           {/* Left Column for Chart & Carousel */}
-          <Box sx={{ flex: { xs: '1 1 auto', md: 1 }, display: 'flex', flexDirection: 'column', p: { xs: 1, sm: 1.5 }, overflowY: 'auto', gap: 2 }}>
-            {currentDetailedHand && situationKey && positionKey && decisionKey ? (
+          <Box sx={{ flex: { xs: '1 1 100%', md: 1.75 }, display: 'flex', flexDirection: 'column', p: { xs: 1, sm: 1.5 }, overflowY: 'auto', gap: 2 }}>
+            { (wrongChoices && wrongChoices.length > 0) ? (
               <>
-                <ReadOnlyStrategyChartViewer
-                  situationKey={situationKey}
-                  positionKey={positionKey}
-                  decisionKey={decisionKey} // Correct decision for chart highlight
-                  incorrectActionName={yourChoice} // User's incorrect action
-                  handToHighlight={handNotation}
-                />
-                {wrongChoices && wrongChoices.length > 1 && (
-                  <Box sx={{ width: '100%', px: {xs: 0, sm: 1 } }}> {/* Adjusted padding for arrow visibility */}
-                    <Typography variant="h6" gutterBottom sx={{ textAlign: 'center', mt: 2, fontWeight:'500', fontSize:'1.1rem' }}>
-                      Your Incorrect Plays
-                    </Typography>
-                    <Slider {...carouselSettings}>
-                      {wrongChoices.map((choice, index) => (
-                        <Box key={index} sx={{ p: 0.5 }}> {/* Adjust padding for Paper's margin */}
-                          <Paper
-                            elevation={isSelectedHand(choice) ? 6 : 2}
-                            sx={{
-                              p: 1.5,
-                              m: 0.5, // Margin around Paper
-                              textAlign: 'center',
-                              cursor: 'pointer',
-                              borderRadius: '8px', // Softer corners
-                              border: '2px solid',
-                              borderColor: isSelectedHand(choice) ? '#FFD700' : 'grey.300', // Gold border for selected
-                              backgroundColor: isSelectedHand(choice) ? theme.palette.action.selected : theme.palette.background.paper,
-                              minWidth: '110px', // Ensure items are not too small
-                              transition: 'transform 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                              '&:hover': {
-                                transform: 'scale(1.03)',
-                                borderColor: isSelectedHand(choice) ? '#FFD700' : theme.palette.primary.light,
-                                boxShadow: theme.shadows[4],
-                              },
-                            }}
-                            onClick={() => handleHandSelect(choice)}
-                          >
-                            <Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{choice.handNotation}</Typography>
-                            <Typography variant="body2" sx={{ color: theme.palette.error.main, fontSize: '0.8rem' }}>Play: {choice.yourChoice}</Typography>
-                            <Typography variant="body2" display="block" sx={{ color: theme.palette.success.main, fontSize: '0.8rem' }}>Correct: {choice.decisionKey}</Typography>
-                          </Paper>
-                        </Box>
-                      ))}
-                    </Slider>
-                  </Box>
+                {/* Render chart viewer only if there's a hand selected, otherwise it might show its own placeholder or nothing */}
+                {currentDetailedHand && situationKey && positionKey && decisionKey && (
+                  <ReadOnlyStrategyChartViewer
+                    situationKey={situationKey}
+                    positionKey={positionKey}
+                    decisionKey={decisionKey} // Correct decision for chart highlight
+                    incorrectActionName={yourChoice} // User's incorrect action
+                    handToHighlight={handNotation}
+                  />
                 )}
+                {/* Carousel of incorrect plays */}
+                <Box sx={{ width: '100%', px: {xs: 0, sm: 1 } }}>
+                  <Typography variant="h6" gutterBottom sx={{ textAlign: 'center', mt: currentDetailedHand ? 2 : 0, fontWeight:'500', fontSize:'1.1rem' }}>
+                    Your Incorrect Plays
+                  </Typography>
+                  <Slider {...carouselSettings}>
+                    {wrongChoices.map((choice, index) => (
+                      <Box key={index} sx={{ p: 0.5 }}>
+                        <Paper
+                          elevation={isSelectedHand(choice) ? 6 : 2}
+                          sx={{
+                            p: 1.5,
+                            m: 0.5,
+                            textAlign: 'center',
+                            cursor: 'pointer',
+                            borderRadius: '8px',
+                            border: '2px solid',
+                            borderColor: isSelectedHand(choice) ? '#FFD700' : 'grey.300',
+                            backgroundColor: isSelectedHand(choice) ? theme.palette.action.selected : theme.palette.background.paper,
+                            minWidth: '110px',
+                            transition: 'transform 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                            '&:hover': {
+                              transform: 'scale(1.03)',
+                              borderColor: isSelectedHand(choice) ? '#FFD700' : theme.palette.primary.light,
+                              boxShadow: theme.shadows[4],
+                            },
+                          }}
+                          onClick={() => handleHandSelect(choice)}
+                        >
+                          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{choice.handNotation}</Typography>
+                          <Typography variant="body2" sx={{ color: theme.palette.error.main, fontSize: '0.8rem' }}>Play: {choice.yourChoice}</Typography>
+                          <Typography variant="body2" display="block" sx={{ color: theme.palette.success.main, fontSize: '0.8rem' }}>Correct: {choice.decisionKey}</Typography>
+                        </Paper>
+                      </Box>
+                    ))}
+                  </Slider>
+                </Box>
               </>
             ) : (
+              // This message shows only if wrongChoices is empty or null.
               <Typography sx={{ mt: 2, textAlign: 'center', color: 'text.secondary' }}>
-                { (wrongChoices && wrongChoices.length > 0) ? "Select an incorrect play from the carousel below to see details." : "No incorrect plays to display."}
+                No incorrect plays to display.
               </Typography>
             )}
           </Box>
 
           {/* Right Column for Details, Legend, Button */}
-          <Box sx={{ flex: { xs: '1 1 auto', md: 1 }, p: { xs: 1, sm: 2 }, display: 'flex', flexDirection: 'column', overflowY: 'auto', gap: 2 }}> {/* Increased gap and padding */}
+          <Box sx={{ flex: { xs: '1 1 100%', md: 1 }, p: { xs: 1, sm: 2 }, display: 'flex', flexDirection: 'column', overflowY: 'auto', gap: 2 }}>
             <Typography id="chart-modal-title" variant="h5" component="h2" sx={{ textAlign: 'center', mb:1, fontWeight:'bold' }}>
               {title || "Review Your Play"}
             </Typography>
 
             {/* Game Context Section */}
+            {currentDetailedHand && ( // Only show context if a hand is selected
             <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
               <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Game Context</Typography>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
@@ -175,37 +179,37 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                 <Typography variant="body1"><strong>Villain:</strong> <Box component="span" sx={{ color: theme.palette.error.dark }}>{villainPositionDisplay.replace('Villain: ', '')}</Box></Typography>
               </Box>
             </Paper>
+            )}
 
             {/* Play Analysis Section */}
+            {currentDetailedHand && ( // Only show analysis if a hand is selected
             <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
               <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Play Analysis</Typography>
-              {currentDetailedHand ? (
-                <>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
-                    <StyleIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.info.main }} />
-                    <Typography variant="body1" sx={{ wordBreak: 'break-word', fontWeight: 'bold' }}>
-                      Your Hand: {handNotation}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
-                    <HighlightOffIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.error.main }} />
-                    <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.error.main }}>
-                      Your Decision: {yourChoice}
-                    </Typography>
-                  </Box>
-                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                    <CheckCircleOutlineIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.success.main }} />
-                    <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.success.main }}>
-                      Correct Decision: {decisionKey}
-                    </Typography>
-                  </Box>
-                </>
-              ) : (
-                <Typography variant="body1" sx={{color:theme.palette.text.secondary}}>Select a hand to see analysis.</Typography>
-              )}
+              <>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
+                  <StyleIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.info.main }} />
+                  <Typography variant="body1" sx={{ wordBreak: 'break-word', fontWeight: 'bold' }}>
+                    Your Hand: {handNotation}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
+                  <HighlightOffIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.error.main }} />
+                  <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.error.main }}>
+                    Your Decision: {yourChoice}
+                  </Typography>
+                </Box>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <CheckCircleOutlineIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.success.main }} />
+                  <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.success.main }}>
+                    Correct Decision: {decisionKey}
+                  </Typography>
+                </Box>
+              </>
             </Paper>
+            )}
 
             {/* Chart Legend Section */}
+            {currentDetailedHand && ( // Only show legend if a hand is selected (relevant to chart)
             <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
               <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Chart Legend</Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.75 }}>
