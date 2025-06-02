@@ -16,7 +16,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: { xs: '95vw', sm: '90vw', md: '80vw', lg: '70vw', xl: '60vw' }, // More responsive width
+  width: { xs: '93vw', sm: '88vw', md: '78vw', lg: '68vw', xl: '58vw' }, // More responsive width
   maxWidth: 1000, // Max width
   maxHeight: '90vh',
   bgcolor: 'background.paper',
@@ -47,7 +47,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 3) : 1,
+    slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 4) : 1,
     slidesToScroll: 1,
     adaptiveHeight: false,
     // nextArrow: <SampleNextArrow />, // Add if custom arrows are imported and used
@@ -56,7 +56,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
       {
         breakpoint: 600, // for sm screens
         settings: {
-          slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 2) : 1,
+          slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 3) : 1,
         }
       },
       {
@@ -114,16 +114,6 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
           <Box sx={{ flex: { xs: '1 1 100%', md: 1.75 }, display: 'flex', flexDirection: 'column', p: { xs: 1, sm: 1.5 }, overflowY: 'auto', gap: 2 }}>
             { (wrongChoices && wrongChoices.length > 0) ? (
               <>
-                {/* Render chart viewer only if there's a hand selected, otherwise it might show its own placeholder or nothing */}
-                {currentDetailedHand && situationKey && positionKey && decisionKey && (
-                  <ReadOnlyStrategyChartViewer
-                    situationKey={situationKey}
-                    positionKey={positionKey}
-                    decisionKey={decisionKey} // Correct decision for chart highlight
-                    incorrectActionName={yourChoice} // User's incorrect action
-                    handToHighlight={handNotation}
-                  />
-                )}
                 {/* Carousel of incorrect plays */}
                 <Box sx={{ width: '100%', px: {xs: 0, sm: 1 } }}>
                   <Typography variant="h6" gutterBottom sx={{ textAlign: 'center', mt: currentDetailedHand ? 2 : 0, fontWeight:'500', fontSize:'1.1rem' }}>
@@ -135,15 +125,15 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                         <Paper
                           elevation={isSelectedHand(choice) ? 6 : 2}
                           sx={{
-                            p: theme.spacing(1), // Adjusted padding
-                            m: theme.spacing(0.5), // Adjusted margin
+                            p: theme.spacing(0.5), // Adjusted padding
+                            m: theme.spacing(0.25), // Adjusted margin
                             textAlign: 'center',
                             cursor: 'pointer',
                             borderRadius: '8px',
                             border: '2px solid',
                             borderColor: isSelectedHand(choice) ? '#FFD700' : 'grey.300',
                             backgroundColor: isSelectedHand(choice) ? theme.palette.action.selected : theme.palette.background.paper,
-                            minWidth: '70px', // Adjusted minWidth
+                            minWidth: '60px', // Adjusted minWidth
                             transition: 'transform 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
                             '&:hover': {
                               transform: 'scale(1.03)',
@@ -153,12 +143,22 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                           }}
                           onClick={() => handleHandSelect(choice)}
                         >
-                          <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium' }}>{choice.handNotation}</Typography>
+                          <Typography sx={{ fontSize: '0.8rem', fontWeight: 'medium' }}>{choice.handNotation}</Typography>
                         </Paper>
                       </Box>
                     ))}
                   </Slider>
                 </Box>
+                {/* Render chart viewer only if there's a hand selected, otherwise it might show its own placeholder or nothing */}
+                {currentDetailedHand && situationKey && positionKey && decisionKey && (
+                  <ReadOnlyStrategyChartViewer
+                    situationKey={situationKey}
+                    positionKey={positionKey}
+                    decisionKey={decisionKey} // Correct decision for chart highlight
+                    incorrectActionName={yourChoice} // User's incorrect action
+                    handToHighlight={handNotation}
+                  />
+                )}
               </>
             ) : (
               // This message shows only if wrongChoices is empty or null.
@@ -224,27 +224,24 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
               {/* Chart Legend Section */}
               {currentDetailedHand && ( // Only show legend if a hand is selected (relevant to chart)
               <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
-                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Chart Legend</Typography>
+                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Legend</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.75 }}>
                   <Chip
                     icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'lightblue', border: '1px solid grey' }} />} // Adjusted size
                     label="Optimal play for this action"
                     size="small"
-                    variant="outlined"
                     sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
                   />
                   <Chip
                     icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'rgba(255, 0, 0, 0.3)', border: '1px solid grey' }} />} // Adjusted size
                     label="Your incorrect play's range"
                     size="small"
-                    variant="outlined"
                     sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
                   />
                   <Chip
                     icon={<Box sx={{ width: 12, height: 12, borderRadius: '2px', border: '2px solid #FFD700', backgroundColor: 'transparent' }} />} // Adjusted size
                     label="Specific hand in question on chart"
                     size="small"
-                    variant="outlined"
                     sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
                   />
                 </Box>
