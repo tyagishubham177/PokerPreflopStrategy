@@ -73,6 +73,7 @@ const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
     togglePausePlay,
     isTimerVisible,
     toggleTimerVisibility,
+    readyToShowGameOver, // Added this line
   } = usePokerGame();
 
   // 2. Add useEffect for initialAction
@@ -333,6 +334,7 @@ const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
           togglePausePlay={togglePausePlay}
           isTimerVisible={isTimerVisible}
           toggleTimerVisibility={toggleTimerVisibility}
+      readyToShowGameOver={readyToShowGameOver} // Added this line
         />
       </ErrorBoundary>
 

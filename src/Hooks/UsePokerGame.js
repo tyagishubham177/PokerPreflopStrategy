@@ -37,6 +37,7 @@ const usePokerGame = () => {
     decrementHints,
     isPaused,
     setIsPaused,
+    logGameState: baseLogGameState, // Renaming to avoid conflict if we want specific logs here
   } = useGameState();
 
   const {
@@ -57,13 +58,16 @@ const usePokerGame = () => {
   const isInitialMount = useRef(true);
   const dealCount = useRef(0);
   const [isTimerVisible, setIsTimerVisible] = useState(true);
+  const [readyToShowGameOver, setReadyToShowGameOver] = useState(false); // Added state
 
   useEffect(() => {
     gameOverRef.current = gameOver;
   }, [gameOver]);
 
   const logGameState = useCallback((action, details = {}) => {
-    console.log(`[PokerGame - ${action}]`, { ...details, dealCount: dealCount.current });
+    // Prefer using the one from useGameState if it's already passed down and includes global context
+    // For now, assuming this local one is fine or baseLogGameState can be used if needed.
+    console.log(`[PokerGame Hook - ${action}]`, { ...details, dealCount: dealCount.current });
   }, []);
 
   const togglePausePlay = useCallback(() => {
@@ -201,8 +205,14 @@ const usePokerGame = () => {
 
     if (!isCorrect && lives - 1 <= 0) {
         setGameOver(true);
-        logGameState("Game Over");
-        setCurrentCorrectAction(null);
+        setReadyToShowGameOver(false); 
+        logGameState("Game Over Triggered; Timeout scheduled for readyToShowGameOver", { delay: 1600 });
+        setCurrentCorrectAction(null); // Existing line
+        setTimeout(() => {
+            logGameState("Timeout fired: Attempting to set readyToShowGameOver true - from makeDecision");
+            setReadyToShowGameOver(true);
+            logGameState("setReadyToShowGameOver(true) CALLED - from makeDecision");
+        }, 1600); // Delay for GameOver UI
     } else {
         setCurrentCorrectAction(null);
     }
@@ -218,7 +228,7 @@ const usePokerGame = () => {
     getLogicHandNotation, getLogicCorrectDecision,
     handleCorrectDecision, handleIncorrectDecision,
     dealNewHand, setGameOver, logGameState,
-    situationKey, positionKey
+    // setReadyToShowGameOver is not directly in deps as it's in a timeout
   ]);
 
   const restartGame = useCallback(() => {
@@ -227,17 +237,26 @@ const usePokerGame = () => {
     resetLives();
     resetGameScoreAndStats();
     setGameOver(false);
+    logGameState("Restarting game: Setting readyToShowGameOver to false"); // Added log
+    setReadyToShowGameOver(false); 
     dealCount.current = 0;
     dealNewHand();
   }, [resetLives, resetGameScoreAndStats, setGameOver, dealNewHand, logGameState]);
 
   useEffect(() => {
-    if (lives <= 0 && !gameOver) {
-      setGameOver(true);
-      setIsTimerActive(false);
-      logGameState("Game Over - Lives Depleted");
+    // Check !gameOver to prevent re-triggering timeout if lives somehow change after gameOver is already true
+    if (lives <= 0 && !gameOver) { 
+        setGameOver(true);
+        setReadyToShowGameOver(false);
+        setIsTimerActive(false); // Existing line
+        logGameState("Game Over - Lives Depleted; Timeout scheduled for readyToShowGameOver", { delay: 1600 });
+        setTimeout(() => {
+            logGameState("Timeout fired: Attempting to set readyToShowGameOver true - from useEffect lives");
+            setReadyToShowGameOver(true);
+            logGameState("setReadyToShowGameOver(true) CALLED - from useEffect lives");
+        }, 1600);
     }
-  }, [lives, gameOver, setGameOver, logGameState]);
+  }, [lives, gameOver, setGameOver, logGameState, setIsTimerActive]); // Added setIsTimerActive to deps
 
   useEffect(() => {
     if (gameOver) {
@@ -262,9 +281,15 @@ const usePokerGame = () => {
       
       if (lives - 1 <= 0) {
         setGameOver(true);
-        logGameState("Game Over - Timer expired on last life");
+        setReadyToShowGameOver(false); 
+        logGameState("Game Over - Timer expired on last life; Timeout scheduled for readyToShowGameOver", { delay: 1600 });
+        setTimeout(() => {
+            logGameState("Timeout fired: Attempting to set readyToShowGameOver true - from timer expiry");
+            setReadyToShowGameOver(true);
+            logGameState("setReadyToShowGameOver(true) CALLED - from timer expiry");
+        }, 1600);
       } else {
-        setTimeout(() => dealNewHand(), 500);
+        // setTimeout(() => dealNewHand(), 500); // Existing line - this will be handled by the main decision timeout
       }
     }
     return () => {
@@ -273,6 +298,7 @@ const usePokerGame = () => {
       }
     };
   }, [isTimerActive, timeLeft, isPaused, lives, hand, handleIncorrectDecision, dealNewHand, getLogicHandNotation, setGameOver, logGameState, currentCorrectAction, setIsTimerActive]);
+  // Removed dealNewHand from the timer expiry else branch as the main makeDecision timeout should handle it.
 
 
   return {
@@ -302,6 +328,7 @@ const usePokerGame = () => {
     togglePausePlay,
     isTimerVisible,
     toggleTimerVisibility,
+    readyToShowGameOver, // Added new state
   };
 };
 
