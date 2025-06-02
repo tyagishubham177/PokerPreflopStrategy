@@ -40,6 +40,7 @@ const GameDisplay = (props) => {
     playSound,
     isTimerVisible,
     toggleTimerVisibility,
+    readyToShowGameOver, // Added this line
   } = props;
 
   const [feedbackTrigger, setFeedbackTrigger] = useState(null);
@@ -163,6 +164,7 @@ const GameDisplay = (props) => {
           togglePausePlay={togglePausePlay}
           isTimerVisible={isTimerVisible}
           toggleTimerVisibility={toggleTimerVisibility}
+      readyToShowGameOver={readyToShowGameOver} // Added this line
         />
       </CardContent>
       <RulesDialog showRules={showRules} setShowRules={setShowRules} />
