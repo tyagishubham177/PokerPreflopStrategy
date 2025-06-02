@@ -40,15 +40,17 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
       <Box sx={style}>
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'row' }, width: '100%', height: '100%', gap: { xs: 2, sm: 2 } }}> {/* Added gap */}
           {/* Left Column for Chart */}
-          <Box sx={{ flex: { xs: '1 1 auto', sm: '0 0 auto' }, p: 1, display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+          <Box sx={{ flex: { xs: '1 1 auto', sm: '0 0 auto' }, p: { xs: 1, sm: 2 }, display: 'flex', justifyContent: 'center', alignItems: 'flex-start' }}>
             {situationKey && positionKey && decisionKey ? (
-              <ReadOnlyStrategyChartViewer
-                situationKey={situationKey}
+              <Box sx={{ mt: { sm: 4 } }}> {/* Apply margin-top only on sm screens and up */}
+                <ReadOnlyStrategyChartViewer
+                  situationKey={situationKey}
                 positionKey={positionKey}
                 decisionKey={decisionKey}
                 incorrectActionName={yourChoice}
                 handToHighlight={handNotation}
-              />
+                />
+              </Box>
             ) : (
               <Typography sx={{ mt: 2, textAlign: 'center' }}>
                 Chart information is unavailable for this selection.
