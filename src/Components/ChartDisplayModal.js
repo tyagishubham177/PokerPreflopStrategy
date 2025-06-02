@@ -3,6 +3,8 @@ import { Modal, Box, Typography, Button, Chip, Paper, ButtonBase, useTheme } fro
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ReadOnlyStrategyChartViewer from './ReadOnlyStrategyChartViewer';
 import StyleIcon from '@mui/icons-material/Style';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -103,24 +105,51 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
   }
 
 function SampleNextArrow(props) {
-  const { className, style, onClick } = props;
+  const { className, style, onClick } = props; // className might still be useful for slick's default CSS if not fully overridden
   return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "grey", borderRadius: "50%" }} // Basic styling
+    <IconButton
       onClick={onClick}
-    />
+      sx={{
+        ...style, // Important for positioning from react-slick
+        display: 'block', // Ensure visibility
+        position: 'absolute', // react-slick usually sets this
+        zIndex: 2, // Above items
+        color: 'text.primary', // Use theme color
+        backgroundColor: 'rgba(255, 255, 255, 0.5)', // Semi-transparent background
+        '&:hover': {
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        }
+        // className might be passed here if needed: className={className}
+      }}
+      size="small" // Use small icon buttons
+    >
+      <ArrowForwardIosIcon fontSize="inherit" />
+    </IconButton>
   );
 }
 
+// Replace existing SamplePrevArrow function with this:
 function SamplePrevArrow(props) {
   const { className, style, onClick } = props;
   return (
-    <div
-      className={className}
-      style={{ ...style, display: "block", background: "grey", borderRadius: "50%" }} // Basic styling
+    <IconButton
       onClick={onClick}
-    />
+      sx={{
+        ...style,
+        display: 'block',
+        position: 'absolute',
+        zIndex: 2,
+        color: 'text.primary',
+        backgroundColor: 'rgba(255, 255, 255, 0.5)',
+        '&:hover': {
+          backgroundColor: 'rgba(255, 255, 255, 0.8)',
+        }
+        // className={className}
+      }}
+      size="small"
+    >
+      <ArrowBackIosNewIcon fontSize="inherit" />
+    </IconButton>
   );
 }
 
@@ -137,7 +166,7 @@ function SamplePrevArrow(props) {
             { (wrongChoices && wrongChoices.length > 0) ? (
               <>
                 {/* Carousel of incorrect plays */}
-                <Box sx={{ width: 'fit-content', mx: 'auto', px: 0, py: 2 }}>
+                <Box sx={{ width: 'fit-content', mx: 'auto', px: 2, py: 2 }}>
                   <Typography variant="h6" sx={{ textAlign: 'center', mt: 1, mb: 0.5, fontWeight:'500', fontSize:'1.1rem' }}>
                     Your Incorrect Plays
                   </Typography>
@@ -156,7 +185,7 @@ function SamplePrevArrow(props) {
                             borderColor: isSelectedHand(choice) ? '#FFD700' : 'grey.300',
                             backgroundColor: isSelectedHand(choice) ? theme.palette.action.selected : theme.palette.background.paper,
                             minWidth: '45px', // Adjusted minWidth
-                            minHeight: '60px', // Ensure items are taller
+                            minHeight: '45px', // Ensure items are taller
                             display: 'flex', // Added for vertical centering
                             flexDirection: 'column', // Added for vertical centering
                             justifyContent: 'center', // Added for vertical centering
