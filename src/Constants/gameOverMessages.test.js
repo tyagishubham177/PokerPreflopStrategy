@@ -52,7 +52,7 @@ describe('getGameOverMessage', () => {
       const message = getGameOverMessage(score, highScore, false);
       expect(messageConfig.closeToHighScore.messages).toContain(message);
     });
-
+    
     it('should not return closeToHighScore if score is equal to highScore', () => {
       const score = 1000, highScore = 1000;
       expect(messageConfig.closeToHighScore.condition(score, highScore)).toBe(false);

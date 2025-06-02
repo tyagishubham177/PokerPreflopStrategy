@@ -14,6 +14,7 @@ import ChartDisplayModal from './ChartDisplayModal';
 
 const PokerGameTab = ({
   gameOver,
+  readyToShowGameOver, // Added prop
   score,
   highScore,
   hand,
@@ -194,44 +195,57 @@ const PokerGameTab = ({
             </Typography>
           </Box>
         </>
-      ) : (
-        (() => {
-          const isNewHighScore = score > highScore || (score === highScore && score > 0);
-          return (
-            <>
-              <GameOver
-                score={score}
-                highScore={highScore}
-                restartGame={restartGame}
-                isNewHighScore={isNewHighScore}
-              />
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={handleOpenModal}
-                startIcon={<ErrorOutlineIcon />}
-                sx={{
-                  mt: 2,
-                  fontWeight: 'bold',
-                  py: 1.5, // Original py
-                  px: 3,
-                  color: 'white',
-                  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-                  boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
-                  borderRadius: '16px',
-                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
-                  '&:hover': {
-                    transform: 'scale(1.03)',
-                    boxShadow: '0 5px 7px 2px rgba(255, 105, 135, .4)', // Enhanced shadow on hover
-                    background: 'linear-gradient(45deg, #FE6B8B 20%, #FF8E53 80%)', // Slightly adjust gradient on hover
-                  },
-                }}
-              >
-                See Your Mistakes & Learn
-              </Button>
-            </>
-          );
-        })()
+      ) : ( // This is the "else" part for !gameOver, meaning gameOver is true
+        gameOver && readyToShowGameOver ? ( // New condition here
+          (() => {
+            const isNewHighScore = score > highScore || (score === highScore && score > 0);
+            return (
+              <>
+                <GameOver
+                  score={score}
+                  highScore={highScore}
+                  restartGame={restartGame}
+                  isNewHighScore={isNewHighScore}
+                />
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={handleOpenModal}
+                  startIcon={<ErrorOutlineIcon />}
+                  sx={{
+                    mt: 2,
+                    fontWeight: 'bold',
+                    py: 1.5,
+                    px: 3,
+                    color: 'white',
+                    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+                    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                    borderRadius: '16px',
+                    transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                    '&:hover': {
+                      transform: 'scale(1.03)',
+                      boxShadow: '0 5px 7px 2px rgba(255, 105, 135, .4)',
+                      background: 'linear-gradient(45deg, #FE6B8B 20%, #FF8E53 80%)',
+                    },
+                  }}
+                >
+                  See Your Mistakes & Learn
+                </Button>
+              </>
+            );
+          })()
+        ) : (
+          // Placeholder shown when gameOver is true but readyToShowGameOver is false
+          <Box sx={{ 
+            display: 'flex', 
+            flex: 1, 
+            alignItems: 'center', 
+            justifyContent: 'center', 
+            minHeight: '400px' // Ensures layout stability
+          }}>
+            {/* Optional: <Typography variant="h6">Loading Game Over...</Typography> */}
+          </Box>
+        )
       )}
       {selectedHandData && (
         <ChartDisplayModal
