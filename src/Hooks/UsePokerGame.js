@@ -205,12 +205,13 @@ const usePokerGame = () => {
 
     if (!isCorrect && lives - 1 <= 0) {
         setGameOver(true);
-        setReadyToShowGameOver(false); // Reset
-        logGameState("Game Over Triggered");
+        setReadyToShowGameOver(false); 
+        logGameState("Game Over Triggered; Timeout scheduled for readyToShowGameOver", { delay: 1600 });
         setCurrentCorrectAction(null); // Existing line
         setTimeout(() => {
+            logGameState("Timeout fired: Attempting to set readyToShowGameOver true - from makeDecision");
             setReadyToShowGameOver(true);
-            logGameState("Ready to show Game Over UI");
+            logGameState("setReadyToShowGameOver(true) CALLED - from makeDecision");
         }, 1600); // Delay for GameOver UI
     } else {
         setCurrentCorrectAction(null);
@@ -236,7 +237,8 @@ const usePokerGame = () => {
     resetLives();
     resetGameScoreAndStats();
     setGameOver(false);
-    setReadyToShowGameOver(false); // Added reset
+    logGameState("Restarting game: Setting readyToShowGameOver to false"); // Added log
+    setReadyToShowGameOver(false); 
     dealCount.current = 0;
     dealNewHand();
   }, [resetLives, resetGameScoreAndStats, setGameOver, dealNewHand, logGameState]);
@@ -247,10 +249,11 @@ const usePokerGame = () => {
         setGameOver(true);
         setReadyToShowGameOver(false);
         setIsTimerActive(false); // Existing line
-        logGameState("Game Over - Lives Depleted");
+        logGameState("Game Over - Lives Depleted; Timeout scheduled for readyToShowGameOver", { delay: 1600 });
         setTimeout(() => {
+            logGameState("Timeout fired: Attempting to set readyToShowGameOver true - from useEffect lives");
             setReadyToShowGameOver(true);
-            logGameState("Ready to show Game Over UI - (from useEffect lives)");
+            logGameState("setReadyToShowGameOver(true) CALLED - from useEffect lives");
         }, 1600);
     }
   }, [lives, gameOver, setGameOver, logGameState, setIsTimerActive]); // Added setIsTimerActive to deps
@@ -278,11 +281,12 @@ const usePokerGame = () => {
       
       if (lives - 1 <= 0) {
         setGameOver(true);
-        setReadyToShowGameOver(false); // Reset
-        logGameState("Game Over - Timer expired on last life");
+        setReadyToShowGameOver(false); 
+        logGameState("Game Over - Timer expired on last life; Timeout scheduled for readyToShowGameOver", { delay: 1600 });
         setTimeout(() => {
+            logGameState("Timeout fired: Attempting to set readyToShowGameOver true - from timer expiry");
             setReadyToShowGameOver(true);
-            logGameState("Ready to show Game Over UI - (from timer expiry)");
+            logGameState("setReadyToShowGameOver(true) CALLED - from timer expiry");
         }, 1600);
       } else {
         // setTimeout(() => dealNewHand(), 500); // Existing line - this will be handled by the main decision timeout

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react"; // Added useEffect
 import { Box, Grid, Typography, Paper, Button, useTheme, IconButton } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -39,6 +39,15 @@ const PokerGameTab = ({
   const theme = useTheme();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedHandData, setSelectedHandData] = useState(null);
+
+  useEffect(() => {
+    console.log('[PokerGameTab] props changed: gameOver:', gameOver, 'readyToShowGameOver:', readyToShowGameOver);
+    if (gameOver && readyToShowGameOver) {
+      console.log('[PokerGameTab] Condition met: Rendering GameOver component.');
+    } else if (gameOver && !readyToShowGameOver) {
+      console.log('[PokerGameTab] Condition met: Rendering Placeholder for GameOver.');
+    }
+  }, [gameOver, readyToShowGameOver]);
 
   const handleOpenModal = () => {
     setSelectedHandData(wrongChoices);
