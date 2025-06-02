@@ -162,11 +162,12 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
               {title || "Review Your Play"}
             </Typography>
 
-            {/* Game Context Section */}
-            {currentDetailedHand && ( // Only show context if a hand is selected
-            <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
-              <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Game Context</Typography>
-              <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
+            <> {/* Add this fragment */}
+              {/* Game Context Section */}
+              {currentDetailedHand && ( // Only show context if a hand is selected
+              <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
+                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Game Context</Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
                 <InfoOutlinedIcon sx={{ mr: 1, color: theme.palette.action.active, fontSize:'1.2rem' }} />
                 <Typography variant="body1"><strong>Situation:</strong> {situationDisplay}</Typography>
               </Box>
@@ -178,64 +179,66 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                 <SportsKabaddiIcon sx={{ mr: 1, color: theme.palette.error.dark, fontSize:'1.2rem' }} />
                 <Typography variant="body1"><strong>Villain:</strong> <Box component="span" sx={{ color: theme.palette.error.dark }}>{villainPositionDisplay.replace('Villain: ', '')}</Box></Typography>
               </Box>
-            </Paper>
-            )}
+              </Paper>
+              )}
 
-            {/* Play Analysis Section */}
-            {currentDetailedHand && ( // Only show analysis if a hand is selected
-            <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
-              <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Play Analysis</Typography>
-              <>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
-                  <StyleIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.info.main }} />
-                  <Typography variant="body1" sx={{ wordBreak: 'break-word', fontWeight: 'bold' }}>
-                    Your Hand: {handNotation}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
-                  <HighlightOffIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.error.main }} />
-                  <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.error.main }}>
-                    Your Decision: {yourChoice}
-                  </Typography>
-                </Box>
-                <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                  <CheckCircleOutlineIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.success.main }} />
-                  <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.success.main }}>
-                    Correct Decision: {decisionKey}
-                  </Typography>
-                </Box>
-              </>
-            </Paper>
-            )}
+              {/* Play Analysis Section */}
+              {currentDetailedHand && ( // Only show analysis if a hand is selected
+              <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
+                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Play Analysis</Typography>
+                <>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
+                    <StyleIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.info.main }} />
+                    <Typography variant="body1" sx={{ wordBreak: 'break-word', fontWeight: 'bold' }}>
+                      Your Hand: {handNotation}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
+                    <HighlightOffIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.error.main }} />
+                    <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.error.main }}>
+                      Your Decision: {yourChoice}
+                    </Typography>
+                  </Box>
+                  <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <CheckCircleOutlineIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.success.main }} />
+                    <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.success.main }}>
+                      Correct Decision: {decisionKey}
+                    </Typography>
+                  </Box>
+                </>
+              </Paper>
+              )}
 
-            {/* Chart Legend Section */}
-            {currentDetailedHand && ( // Only show legend if a hand is selected (relevant to chart)
-            <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
-              <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Chart Legend</Typography>
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.75 }}>
-                <Chip
-                  icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'lightblue', border: '1px solid grey' }} />} // Adjusted size
-                  label="Optimal play for this action"
-                  size="small"
-                  variant="outlined"
-                  sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
-                />
-                <Chip
-                  icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'rgba(255, 0, 0, 0.3)', border: '1px solid grey' }} />} // Adjusted size
-                  label="Your incorrect play's range"
-                  size="small"
-                  variant="outlined"
-                  sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
-                />
-                <Chip
-                  icon={<Box sx={{ width: 12, height: 12, borderRadius: '2px', border: '2px solid #FFD700', backgroundColor: 'transparent' }} />} // Adjusted size
-                  label="Specific hand in question on chart"
-                  size="small"
-                  variant="outlined"
-                  sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
-                />
-              </Box>
-            </Paper>
+              {/* Chart Legend Section */}
+              {currentDetailedHand && ( // Only show legend if a hand is selected (relevant to chart)
+              <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
+                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Chart Legend</Typography>
+                <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.75 }}>
+                  <Chip
+                    icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'lightblue', border: '1px solid grey' }} />} // Adjusted size
+                    label="Optimal play for this action"
+                    size="small"
+                    variant="outlined"
+                    sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
+                  />
+                  <Chip
+                    icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'rgba(255, 0, 0, 0.3)', border: '1px solid grey' }} />} // Adjusted size
+                    label="Your incorrect play's range"
+                    size="small"
+                    variant="outlined"
+                    sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
+                  />
+                  <Chip
+                    icon={<Box sx={{ width: 12, height: 12, borderRadius: '2px', border: '2px solid #FFD700', backgroundColor: 'transparent' }} />} // Adjusted size
+                    label="Specific hand in question on chart"
+                    size="small"
+                    variant="outlined"
+                    sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
+                  />
+                </Box>
+              </Paper>
+              )}
+            </> {/* Close this fragment */}
             <Box sx={{flexGrow: 1}} /> {/* Pushes button to bottom */}
             <Button onClick={onClose} variant="contained" color="primary" sx={{ width: '100%', mt:1, py: 1.25, fontWeight:'bold' }}>
               Close
