@@ -115,7 +115,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
             { (wrongChoices && wrongChoices.length > 0) ? (
               <>
                 {/* Carousel of incorrect plays */}
-                <Box sx={{ width: '100%', px: 0 }}>
+                <Box sx={{ width: 'fit-content', mx: 'auto', px: 0 }}>
                   <Typography variant="h6" sx={{ textAlign: 'center', mt: 1, mb: 0.5, fontWeight:'500', fontSize:'1.1rem' }}>
                     Your Incorrect Plays
                   </Typography>
