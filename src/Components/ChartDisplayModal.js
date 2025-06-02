@@ -44,14 +44,14 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
   };
 
   const carouselSettings = {
-    dots: false,
+    dots: true,
     infinite: false,
     speed: 500,
     slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 6) : 1,
     slidesToScroll: 1,
     adaptiveHeight: false,
-    // nextArrow: <SampleNextArrow />, // Add if custom arrows are imported and used
-    // prevArrow: <SamplePrevArrow />, // Add if custom arrows are imported and used
+    nextArrow: <SampleNextArrow />,
+    prevArrow: <SamplePrevArrow />,
     responsive: [
       {
         breakpoint: 600, // for sm screens
@@ -102,6 +102,28 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
     console.log('  Condition for chart render (currentDetailedHand && situationKey && positionKey && decisionKey):', Boolean(currentDetailedHand && situationKey && positionKey && decisionKey));
   }
 
+function SampleNextArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "grey", borderRadius: "50%" }} // Basic styling
+      onClick={onClick}
+    />
+  );
+}
+
+function SamplePrevArrow(props) {
+  const { className, style, onClick } = props;
+  return (
+    <div
+      className={className}
+      style={{ ...style, display: "block", background: "grey", borderRadius: "50%" }} // Basic styling
+      onClick={onClick}
+    />
+  );
+}
+
   return (
     <Modal
       open={open}
@@ -115,7 +137,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
             { (wrongChoices && wrongChoices.length > 0) ? (
               <>
                 {/* Carousel of incorrect plays */}
-                <Box sx={{ width: 'fit-content', mx: 'auto', px: 0 }}>
+                <Box sx={{ width: 'fit-content', mx: 'auto', px: 0, py: 2 }}>
                   <Typography variant="h6" sx={{ textAlign: 'center', mt: 1, mb: 0.5, fontWeight:'500', fontSize:'1.1rem' }}>
                     Your Incorrect Plays
                   </Typography>
@@ -125,7 +147,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                         <Paper
                           elevation={isSelectedHand(choice) ? 6 : 2}
                           sx={{
-                            padding: `1px ${theme.spacing(0.5)}`, // Adjusted padding
+                            padding: `${theme.spacing(1)} ${theme.spacing(1)}`, // Adjusted padding
                             m: theme.spacing(0.1), // Adjusted margin
                             textAlign: 'center',
                             cursor: 'pointer',
@@ -134,6 +156,10 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                             borderColor: isSelectedHand(choice) ? '#FFD700' : 'grey.300',
                             backgroundColor: isSelectedHand(choice) ? theme.palette.action.selected : theme.palette.background.paper,
                             minWidth: '45px', // Adjusted minWidth
+                            minHeight: '60px', // Ensure items are taller
+                            display: 'flex', // Added for vertical centering
+                            flexDirection: 'column', // Added for vertical centering
+                            justifyContent: 'center', // Added for vertical centering
                             transition: 'transform 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
                             '&:hover': {
                               transform: 'scale(1.03)',
