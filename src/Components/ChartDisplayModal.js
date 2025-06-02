@@ -131,8 +131,7 @@ const ChartDisplayModal = ({ open, onClose, title, situationKey, positionKey, de
                 variant="outlined"
               />
             </Box>
-
-              </Box>
+            {/* The extra </Box> tag that was here has been removed */}
             </Paper>
 
             <Button onClick={onClose} sx={{ mt: 'auto', pt:1, width: '100%' }}> {/* Adjusted pt and ensured mt:auto */}
