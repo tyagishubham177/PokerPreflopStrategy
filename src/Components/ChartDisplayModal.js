@@ -71,7 +71,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
   // Derive details from currentDetailedHand
   const situationKey = currentDetailedHand ? currentDetailedHand.situationKey : '';
   const positionKey = currentDetailedHand ? currentDetailedHand.positionKey : '';
-  const decisionKey = currentDetailedHand ? currentDetailedHand.decisionKey : ''; // This is the correct decision
+  const decisionKey = currentDetailedHand ? currentDetailedHand.correctDecision : ''; // Corrected: use correctDecision
   const handNotation = currentDetailedHand ? currentDetailedHand.handNotation : '';
   const yourChoice = currentDetailedHand ? currentDetailedHand.yourChoice : ''; // This is the user's incorrect choice
   const positionString = currentDetailedHand ? currentDetailedHand.position : '';
@@ -135,15 +135,15 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                         <Paper
                           elevation={isSelectedHand(choice) ? 6 : 2}
                           sx={{
-                            p: 1.5,
-                            m: 0.5,
+                            p: theme.spacing(1), // Adjusted padding
+                            m: theme.spacing(0.5), // Adjusted margin
                             textAlign: 'center',
                             cursor: 'pointer',
                             borderRadius: '8px',
                             border: '2px solid',
                             borderColor: isSelectedHand(choice) ? '#FFD700' : 'grey.300',
                             backgroundColor: isSelectedHand(choice) ? theme.palette.action.selected : theme.palette.background.paper,
-                            minWidth: '110px',
+                            minWidth: '70px', // Adjusted minWidth
                             transition: 'transform 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
                             '&:hover': {
                               transform: 'scale(1.03)',
@@ -153,9 +153,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                           }}
                           onClick={() => handleHandSelect(choice)}
                         >
-                          <Typography variant="subtitle1" sx={{ fontWeight: 'bold', fontSize: '1rem' }}>{choice.handNotation}</Typography>
-                          <Typography variant="body2" sx={{ color: theme.palette.error.main, fontSize: '0.8rem' }}>Play: {choice.yourChoice}</Typography>
-                          <Typography variant="body2" display="block" sx={{ color: theme.palette.success.main, fontSize: '0.8rem' }}>Correct: {choice.decisionKey}</Typography>
+                          <Typography sx={{ fontSize: '0.9rem', fontWeight: 'medium' }}>{choice.handNotation}</Typography>
                         </Paper>
                       </Box>
                     ))}
