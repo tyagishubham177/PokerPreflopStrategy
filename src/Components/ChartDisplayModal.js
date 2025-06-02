@@ -116,7 +116,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
               <>
                 {/* Carousel of incorrect plays */}
                 <Box sx={{ width: '100%', px: 0 }}>
-                  <Typography variant="h6" gutterBottom sx={{ textAlign: 'center', mt: currentDetailedHand ? 2 : 0, fontWeight:'500', fontSize:'1.1rem' }}>
+                  <Typography variant="h6" sx={{ textAlign: 'center', mt: 1, mb: 0.5, fontWeight:'500', fontSize:'1.1rem' }}>
                     Your Incorrect Plays
                   </Typography>
                   <Slider {...carouselSettings}>
@@ -125,7 +125,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                         <Paper
                           elevation={isSelectedHand(choice) ? 6 : 2}
                           sx={{
-                            p: theme.spacing(0.25), // Adjusted padding
+                            padding: `1px ${theme.spacing(0.5)}`, // Adjusted padding
                             m: theme.spacing(0.1), // Adjusted margin
                             textAlign: 'center',
                             cursor: 'pointer',
@@ -143,7 +143,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                           }}
                           onClick={() => handleHandSelect(choice)}
                         >
-                          <Typography sx={{ fontSize: '0.8rem', fontWeight: 'medium' }}>{choice.handNotation}</Typography>
+                          <Typography sx={{ fontSize: '0.75rem', fontWeight: 'medium', lineHeight: '1.2' }}>{choice.handNotation}</Typography>
                         </Paper>
                       </Box>
                     ))}
