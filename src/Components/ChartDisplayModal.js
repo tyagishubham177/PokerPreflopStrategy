@@ -16,7 +16,7 @@ const style = {
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: { xs: '93vw', sm: '88vw', md: '78vw', lg: '68vw', xl: '58vw' }, // More responsive width
+  width: { xs: '90vw', sm: '85vw', md: '75vw', lg: '65vw', xl: '55vw' }, // More responsive width
   maxWidth: 1000, // Max width
   maxHeight: '90vh',
   bgcolor: 'background.paper',
@@ -47,7 +47,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
     dots: false,
     infinite: false,
     speed: 500,
-    slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 4) : 1,
+    slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 6) : 1,
     slidesToScroll: 1,
     adaptiveHeight: false,
     // nextArrow: <SampleNextArrow />, // Add if custom arrows are imported and used
@@ -56,13 +56,13 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
       {
         breakpoint: 600, // for sm screens
         settings: {
-          slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 3) : 1,
+          slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 4) : 1,
         }
       },
       {
         breakpoint: 480, // for xs screens
         settings: {
-          slidesToShow: 1, // Always show 1 on very small screens if items exist
+          slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 2) : 1, // Always show 1 on very small screens if items exist
         }
       }
     ]
@@ -115,7 +115,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
             { (wrongChoices && wrongChoices.length > 0) ? (
               <>
                 {/* Carousel of incorrect plays */}
-                <Box sx={{ width: '100%', px: {xs: 0, sm: 1 } }}>
+                <Box sx={{ width: '100%', px: 0 }}>
                   <Typography variant="h6" gutterBottom sx={{ textAlign: 'center', mt: currentDetailedHand ? 2 : 0, fontWeight:'500', fontSize:'1.1rem' }}>
                     Your Incorrect Plays
                   </Typography>
@@ -125,15 +125,15 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
                         <Paper
                           elevation={isSelectedHand(choice) ? 6 : 2}
                           sx={{
-                            p: theme.spacing(0.5), // Adjusted padding
-                            m: theme.spacing(0.25), // Adjusted margin
+                            p: theme.spacing(0.25), // Adjusted padding
+                            m: theme.spacing(0.1), // Adjusted margin
                             textAlign: 'center',
                             cursor: 'pointer',
                             borderRadius: '8px',
                             border: '2px solid',
                             borderColor: isSelectedHand(choice) ? '#FFD700' : 'grey.300',
                             backgroundColor: isSelectedHand(choice) ? theme.palette.action.selected : theme.palette.background.paper,
-                            minWidth: '60px', // Adjusted minWidth
+                            minWidth: '45px', // Adjusted minWidth
                             transition: 'transform 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
                             '&:hover': {
                               transform: 'scale(1.03)',
@@ -224,25 +224,25 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
               {/* Chart Legend Section */}
               {currentDetailedHand && ( // Only show legend if a hand is selected (relevant to chart)
               <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
-                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Legend</Typography>
+                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Understanding the Chart</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.75 }}>
                   <Chip
                     icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'lightblue', border: '1px solid grey' }} />} // Adjusted size
                     label="Optimal play for this action"
                     size="small"
-                    sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
+                    sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }, backgroundColor: 'white'}}
                   />
                   <Chip
                     icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'rgba(255, 0, 0, 0.3)', border: '1px solid grey' }} />} // Adjusted size
                     label="Your incorrect play's range"
                     size="small"
-                    sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
+                    sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }, backgroundColor: 'white'}}
                   />
                   <Chip
                     icon={<Box sx={{ width: 12, height: 12, borderRadius: '2px', border: '2px solid #FFD700', backgroundColor: 'transparent' }} />} // Adjusted size
                     label="Specific hand in question on chart"
                     size="small"
-                    sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }}}
+                    sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }, backgroundColor: 'white'}}
                   />
                 </Box>
               </Paper>
