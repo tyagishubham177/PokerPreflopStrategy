@@ -1,15 +1,16 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Grid, Typography, Paper, Button, useTheme, IconButton } from "@mui/material";
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'; // Or FactCheckIcon / VisibilityIcon
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
 import HandDealer from "./HandDealer";
 import DecisionButtons from "./DecisionButtons";
 import GameOver from "./GameOver";
-import IncorrectAnswers from "./IncorrectAnswers";
+import ChartDisplayModal from './ChartDisplayModal';
 
 const PokerGameTab = ({
   gameOver,
@@ -35,6 +36,18 @@ const PokerGameTab = ({
   toggleTimerVisibility,
 }) => {
   const theme = useTheme();
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selectedHandData, setSelectedHandData] = useState(null);
+
+  const handleOpenModal = () => {
+    setSelectedHandData(wrongChoices);
+    setModalOpen(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+    setSelectedHandData(null); // Optional: Clear data on close
+  };
 
   // Pre-calculate position parts for clarity and robustness
   const positionString = typeof position === 'string' ? position : "N/A - N/A - N/A";
@@ -192,10 +205,46 @@ const PokerGameTab = ({
                 restartGame={restartGame}
                 isNewHighScore={isNewHighScore}
               />
-              <IncorrectAnswers wrongChoices={wrongChoices} />
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={handleOpenModal}
+                startIcon={<ErrorOutlineIcon />}
+                sx={{
+                  mt: 2,
+                  fontWeight: 'bold',
+                  py: 1.5, // Original py
+                  px: 3,
+                  color: 'white',
+                  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+                  boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                  borderRadius: '16px',
+                  transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
+                  '&:hover': {
+                    transform: 'scale(1.03)',
+                    boxShadow: '0 5px 7px 2px rgba(255, 105, 135, .4)', // Enhanced shadow on hover
+                    background: 'linear-gradient(45deg, #FE6B8B 20%, #FF8E53 80%)', // Slightly adjust gradient on hover
+                  },
+                }}
+              >
+                See Your Mistakes & Learn
+              </Button>
             </>
           );
         })()
+      )}
+      {selectedHandData && (
+        <ChartDisplayModal
+          open={modalOpen}
+          onClose={handleCloseModal}
+          wrongChoices={selectedHandData}
+          title="Review Your Plays"
+          situationKey={selectedHandData && selectedHandData.length > 0 ? selectedHandData[0].situationKey : ''}
+          positionKey={selectedHandData && selectedHandData.length > 0 ? selectedHandData[0].positionKey : ''}
+          decisionKey={selectedHandData && selectedHandData.length > 0 ? selectedHandData[0].decisionKey : ''}
+          handNotation={selectedHandData && selectedHandData.length > 0 ? selectedHandData[0].handNotation : ''}
+          yourChoice={selectedHandData && selectedHandData.length > 0 ? selectedHandData[0].yourChoice : ''}
+        />
       )}
     </Box>
   );
