@@ -46,6 +46,7 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
   const carouselSettings = {
     dots: true,
     infinite: false,
+    arrows: false, // Add this line
     speed: 500,
     slidesToShow: wrongChoices && wrongChoices.length > 0 ? Math.min(wrongChoices.length, 6) : 1,
     slidesToScroll: 1,
