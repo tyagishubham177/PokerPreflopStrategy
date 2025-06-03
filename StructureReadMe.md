@@ -10,13 +10,8 @@ Below is a table describing each file within the `src` directory:
 | `src/Assets/pokerlogo512.png`                | Logo image for the poker game.                                                                             |
 | `src/Assets/wallpaper.png`                   | Background wallpaper image for the game.                                                                   |
 | `src/Components/CardDisplay.js`                | React component for rendering individual playing cards and a player's hand.                                |
-| `src/Components/CarouselButtons.js`            | Components for custom next/previous arrow buttons in the carousel.                                         |
-| `src/Components/CarouselComponent.js`          | React component that displays incorrect answers in a swipeable carousel.                                   |
 | `src/Components/DecisionButtons.js`            | React component for displaying and handling player action buttons (e.g., Fold, Call, Raise).               |
 | `src/Components/ErrorBoundary.js`              | A generic React component to catch JavaScript errors in its children and display a fallback UI.            |
-| `src/Components/FlipCard.js`                   | Component for a card that can be flipped, used in the incorrect answers review.                            |
-| `src/Components/FlipCardBack.js`               | Component representing the back face of a flip card, showing correct/incorrect choices.                    |
-| `src/Components/FlipCardFront.js`              | Component representing the front face of a flip card, showing the hand and situation.                      |
 | `src/Components/GameDisplay.js`                | Component that encapsulates the main game interface (header, game tab, rules dialog).                      |
 | `src/Components/GameHeader.js`                 | Component for the header section of the game UI, showing logo and title.                                   |
 | `src/Components/GameOver.js`                   | React component displayed when the game ends, showing score and restart button.                            |
@@ -40,7 +35,6 @@ Below is a table describing each file within the `src` directory:
 | `src/Hooks/UsePokerGame.js`                    | Custom React hook that orchestrates game logic (`useGameLogic`) and state (`useGameState`).                |
 | `src/Hooks/useGameLogic.js`                    | Custom React hook encapsulating core game logic (hand generation, decision validation, etc.).              |
 | `src/Hooks/useGameState.js`                    | Custom React hook for managing the game's state (score, lives, hand, etc.) and localStorage.             |
-| `src/Styles/carouselStyles.css`                | CSS styles specifically for the carousel component.                                                        |
 | `src/Styles/styles.css`                        | Global CSS styles for the application.                                                                     |
 | `src/Utils/handUtils.js`                       | Utility functions related to poker hands, such as generating hand string representations (e.g., "AKs").  |
 | `src/index.css`                                | Global CSS file, often used for base styling or CSS resets, applied at the application entry point.      |

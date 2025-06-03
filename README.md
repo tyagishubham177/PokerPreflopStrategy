@@ -17,7 +17,7 @@ Welcome to the **Poker Preflop Strategy Game**! This is a fun and interactive ga
 - **Customizable Strategies**: Edit and save your own poker strategies via the settings panel.
 - **Error Handling**: Robust error management with fallback UIs.
 - **Game Over and Restart**: Keep playing and improving!
-- **Review Incorrect Answers**: Carousel to review mistakes after game over.
+- **Review Incorrect Answers**: Detailed modal viewer to revisit mistakes after game over.
 
 ## 🚀 Getting Started
 
