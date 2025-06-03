@@ -22,11 +22,9 @@ Below is a table describing each file within the `src` directory:
 | `src/Components/GameOver.js`                   | React component displayed when the game ends, showing score and restart button.                            |
 | `src/Components/HandCell.js`                   | Component for rendering a single cell in the `StrategyEditor` grid.                                        |
 | `src/Components/HandDealer.js`                 | React component responsible for animating and displaying the dealt hand using `CardDisplay`.                 |
-| `src/Components/IncorrectAnswers.js`           | Component that displays a summary of incorrect answers, often using the `CarouselComponent`.               |
 | `src/Components/PokerGame.js`                  | The main container component for the poker game, managing overall game flow and UI structure.              |
 | `src/Components/PokerGameTab.js`               | Component that displays the core game information: score, hand, situation, player actions, lives, streak.  |
 | `src/Components/RulesDialog.js`                | A dialog component that displays the rules and information about the game.                                 |
-| `src/Components/SettingsDialog.js`             | (Potentially deprecated or refactored) A dialog for game settings, now likely part of `SettingsPanel`.     |
 | `src/Components/SettingsPanel.js`              | A swipeable drawer component that hosts the `SettingsTab` for game settings.                               |
 | `src/Components/SettingsTab.js`                | Component containing various game settings, including sound, username, difficulty, and strategy customization. |
 | `src/Components/SettingsTab.test.js`           | Unit tests for the `SettingsTab` component, focusing on localStorage and strategy interactions.            |
@@ -34,7 +32,6 @@ Below is a table describing each file within the `src` directory:
 | `src/Components/StrategyCustomizationModal.test.js` | Unit tests for the `StrategyCustomizationModal` component.                                               |
 | `src/Components/StrategyEditor.js`             | A component that provides a grid interface for selecting poker hands to define a strategy.                 |
 | `src/Components/StrategyEditor.test.js`        | Unit tests for the `StrategyEditor` component.                                                             |
-| `src/Components/StyledLink.js`                 | A styled link component, possibly for external links or specific UI needs.                                 |
 | `src/Constants/CardWeights.js`                 | Defines weights for card ranks, used for weighted random hand generation.                                  |
 | `src/Constants/GameConstants.js`               | Contains general game constants like suits.                                                                |
 | `src/Constants/GameLabels.js`                  | Defines labels for game situations and positions (e.g., UTG, MP, RFI).                                     |
