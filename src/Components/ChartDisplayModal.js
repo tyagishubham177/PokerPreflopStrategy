@@ -142,7 +142,7 @@ function SamplePrevArrow(props) {
                   <Typography variant="h6" sx={{ textAlign: 'center', mt: 1, mb: 0.5, fontWeight:'500', fontSize:'1.1rem' }}>
                     Your Incorrect Plays
                   </Typography>
-                  <Slider {...carouselSettings}>
+                  <Slider {...carouselSettings} className="incorrect-carousel">
                     {wrongChoices.map((choice, index) => (
                       <Box key={index} sx={{ p: 0.5 }}>
                         <Paper

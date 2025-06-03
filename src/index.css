@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* Prevent rightmost slide from being clipped in ChartDisplayModal carousel */
+.incorrect-carousel .slick-list {
+  padding-right: 8px;
+  padding-left: 8px;
+}
