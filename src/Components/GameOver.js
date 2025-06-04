@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Typography, Button, Card, CardContent, Box, Chip, useTheme } from '@mui/material';
 import { useTranslation } from 'react-i18next';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
@@ -9,7 +9,10 @@ import { getGameOverMessage } from '../Constants/gameOverMessages';
 const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const message = getGameOverMessage(score, highScore, isNewHighScore);
+  const message = useMemo(
+    () => getGameOverMessage(score, highScore, isNewHighScore),
+    [score, highScore, isNewHighScore]
+  );
 
   let MessageIcon = SentimentVeryDissatisfiedIcon; // Default icon
   const isSpecialSuccess = isNewHighScore || (score === highScore && score > 0);
