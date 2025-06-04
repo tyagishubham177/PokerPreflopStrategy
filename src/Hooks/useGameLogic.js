@@ -2,8 +2,7 @@ import { initialPokerStrategy } from "../Constants/InitialStrategy";
 import { CARD_WEIGHTS } from "../Constants/CardWeights";
 import { suits } from "../Constants/GameConstants";
 import { SITUATION_LABELS, POSITION_LABELS, getLabel } from "../Constants/GameLabels";
-
-const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
+import { CUSTOM_STRATEGY_LS_KEY } from '../Constants/StorageKeys';
 
 const loadStrategy = () => {
   try {

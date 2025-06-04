@@ -13,10 +13,7 @@ import AdvancedSettings from './AdvancedSettings.js'; // Import new component
 import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
 import { POSITION_LABELS } from '../Constants/GameLabels.js';
 import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
-
-
-const CUSTOM_STRATEGY_LS_KEY = 'customPokerStrategy';
-const SOUND_SETTINGS_LS_KEY = 'soundSettings';
+import { CUSTOM_STRATEGY_LS_KEY, SOUND_SETTINGS_LS_KEY } from '../Constants/StorageKeys';
 
 const SettingsTab = ({
   difficulty,

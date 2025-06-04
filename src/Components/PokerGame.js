@@ -6,6 +6,8 @@ import GameDisplay from "./GameDisplay";
 import ErrorBoundary from "./ErrorBoundary";
 import usePokerGame from "../Hooks/UsePokerGame";
 import { playSound } from '../Utils/soundUtils';
+import { SHORTCUT_CONFIG_LS_KEY } from '../Constants/StorageKeys';
+import { DEFAULT_SHORTCUT_CONFIG } from '../Constants/DefaultShortcutConfig';
 // Import LQIP and WebP images
 import wallpaperBlur from "../Assets/wallpaper_blur.webp";
 import wallpaper640 from "../Assets/wallpaper_640_q80.webp";
@@ -13,13 +15,6 @@ import wallpaper1280 from "../Assets/wallpaper_1280_q80.webp";
 import wallpaper2048 from "../Assets/wallpaper_2048_q80.webp";
 import wallpaperDefault from "../Assets/wallpaper_q80.webp";
 
-const SHORTCUT_CONFIG_LS_KEY = 'pokerGameShortcutConfig';
-const defaultShortcutConfig = {
-  hint: 'h',
-  pause: 'p',
-  settings: 's',
-  rules: 'i',
-};
 
 const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
   // Temporarily use wallpaper640 as the initial wallpaper for testing the switching logic
@@ -36,12 +31,12 @@ const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
         // Add validation here if necessary to ensure savedConfig matches expected structure
         const parsedConfig = JSON.parse(savedConfig);
         // Ensure all keys are present, merge with defaults if some are missing
-        return { ...defaultShortcutConfig, ...parsedConfig };
+        return { ...DEFAULT_SHORTCUT_CONFIG, ...parsedConfig };
       }
     } catch (error) {
       console.error("Failed to load shortcut config from localStorage:", error);
     }
-    return defaultShortcutConfig;
+    return DEFAULT_SHORTCUT_CONFIG;
   });
 
   const longPressTimeout = useRef(null);

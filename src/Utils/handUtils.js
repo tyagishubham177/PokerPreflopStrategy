@@ -1,4 +1,4 @@
-const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+import { ranks } from '../Constants/GameConstants';
 
 export const getHandRepresentation = (rank1, rank2) => {
   const index1 = ranks.indexOf(rank1);
