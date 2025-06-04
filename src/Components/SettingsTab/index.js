@@ -5,11 +5,11 @@ import {
   Divider,
   // Removed Paper, Typography, TextField, Switch, FormControlLabel, Select, MenuItem, Slider as they are now in child components
 } from "@mui/material";
-import StrategyCustomizationModal from './StrategyCustomizationModal.js';
+import StrategyCustomizationModal from './StrategyCustomizationModal';
 import ShortcutConfigModal from './ShortcutConfigModal'; // Import the new modal
-import SoundSettings from './SoundSettings.js'; // Import new component
-import GameSettings from './GameSettings.js'; // Import new component
-import AdvancedSettings from './AdvancedSettings.js'; // Import new component
+import SoundSettings from './SoundSettings'; // Import new component
+import GameSettings from './GameSettings'; // Import new component
+import AdvancedSettings from './AdvancedSettings'; // Import new component
 import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
 import { POSITION_LABELS } from '../Constants/GameLabels.js';
 import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';

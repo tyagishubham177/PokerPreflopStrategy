@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
-import StrategyEditor from './StrategyEditor.js';
+import StrategyEditor from './StrategyEditor';
 import ErrorBoundary from './ErrorBoundary'; 
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
