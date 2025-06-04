@@ -82,9 +82,10 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
 
 
   const positionParts = typeof positionString === 'string' ? positionString.split(" - ") : [];
-  const situationDisplay = positionParts[0] || 'N/A';
-  const heroPositionDisplay = positionParts[1] || 'N/A';
-  const villainPositionDisplay = positionParts[2] || 'N/A';
+  const na = t('naLabel');
+  const situationDisplay = positionParts[0] || na;
+  const heroPositionDisplay = positionParts[1] || na;
+  const villainPositionDisplay = positionParts[2] || na;
 
   const isSelectedHand = (hand) => {
     return currentDetailedHand &&
@@ -144,7 +145,7 @@ function SamplePrevArrow(props) {
                 {/* Carousel of incorrect plays */}
                 <Box sx={{ width: '100%', mx: 'auto', px: 0, py: 2 }}>
                   <Typography variant="h6" sx={{ textAlign: 'center', mt: 1, mb: 0.5, fontWeight:'500', fontSize:'1.1rem' }}>
-                    Your Incorrect Plays
+                    {t('yourIncorrectPlays')}
                   </Typography>
                   <Slider {...carouselSettings} className="incorrect-carousel">
                     {wrongChoices.map((choice, index) => (

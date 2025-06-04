@@ -62,11 +62,12 @@ const PokerGameTab = ({
   };
 
   // Pre-calculate position parts for clarity and robustness
-  const positionString = typeof position === 'string' ? position : "N/A - N/A - N/A";
+  const na = t('naLabel');
+  const positionString = typeof position === 'string' ? position : `${na} - ${na} - ${na}`;
   const parts = positionString.split(" - ");
-  const situationDisplayPart = parts[0] || "N/A";
-  const heroDisplayPart = parts[1] || "N/A";
-  const villainDisplayPart = parts[2] || "N/A";
+  const situationDisplayPart = parts[0] || na;
+  const heroDisplayPart = parts[1] || na;
+  const villainDisplayPart = parts[2] || na;
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);

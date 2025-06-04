@@ -51,6 +51,8 @@
   "pausePlayKey": "Pause/Play Key",
   "settingsKey": "Settings Key",
   "rulesKey": "Rules Key",
+  "yourIncorrectPlays": "Your Incorrect Plays",
+  "naLabel": "N/A",
   "shortcutAutoSaveInfo": "Changes are saved automatically. Press Esc or click away to close.",
   "gameOverMessages": {
     "newHighScore": [
