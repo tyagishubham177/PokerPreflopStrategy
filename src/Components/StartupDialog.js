@@ -1,5 +1,6 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 
 // Placeholder for RulesDialog and SettingsPanel if needed later for direct display
 // For now, we assume App.js will handle showing them after this dialog completes.
@@ -7,6 +8,7 @@ import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, 
 // import SettingsPanel from './SettingsPanel'; // If direct rendering is chosen
 
 const StartupDialog = ({ onPlay, onSettings, onRules, hasExistingSettings }) => {
+  const { t } = useTranslation();
   // These states would be used if we were to show Rules/Settings directly from this component
   // const [showRules, setShowRules] = React.useState(false);
   // const [showSettings, setShowSettings] = React.useState(false);
@@ -27,18 +29,18 @@ const StartupDialog = ({ onPlay, onSettings, onRules, hasExistingSettings }) => 
     // Dialog for users with existing settings
     return (
       <Dialog open={true} PaperProps={{ style: { margin: '20px', padding: '20px' } }}>
-        <DialogTitle>Welcome Back, Poker Ace!</DialogTitle>
+        <DialogTitle>{t('welcomeBackTitle')}</DialogTitle>
         <DialogContent>
           <Typography>
-            Ready to hit the tables? You can tweak the challenge or jump right in with your saved settings.
+            {t('welcomeBackBody')}
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center', paddingBottom: '20px', paddingTop: '20px' }}>
           <Button onClick={handleSettingsInternal} variant="contained" color="primary" sx={{ marginRight: '10px' }}>
-            Adjust Challenge
+            {t('adjustChallenge')}
           </Button>
           <Button onClick={handlePlayInternal} variant="contained" color="secondary">
-            Deal Me In!
+            {t('dealMeIn')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -47,21 +49,21 @@ const StartupDialog = ({ onPlay, onSettings, onRules, hasExistingSettings }) => 
     // Dialog for new users
     return (
       <Dialog open={true} PaperProps={{ style: { margin: '20px', padding: '20px' } }}>
-        <DialogTitle>Ready to Master the Felt?</DialogTitle>
+        <DialogTitle>{t('welcomeTitle')}</DialogTitle>
         <DialogContent>
           <Typography>
-            Your poker adventure starts now! Choose your path:
+            {t('welcomeBody')}
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center', flexDirection: 'column', gap: '15px', paddingBottom: '20px', paddingTop: '20px' }}>
           <Button onClick={handleSettingsInternal} variant="contained" color="primary" fullWidth>
-            Tailor Your Game
+            {t('tailorYourGame')}
           </Button>
           <Button onClick={handleRulesInternal} variant="outlined" color="primary" fullWidth>
-            Learn the Ropes
+            {t('learnTheRopes')}
           </Button>
           <Button onClick={handlePlayInternal} variant="contained" color="secondary" fullWidth>
-            Hit the Tables!
+            {t('hitTheTables')}
           </Button>
         </DialogActions>
       </Dialog>

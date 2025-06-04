@@ -1,74 +1,54 @@
 // src/Constants/gameOverMessages.js
 
+import i18n from '../i18n';
+
 export const messageConfig = {
-  newHighScore: [
-    "Wow! New High Score! You're a legend!",
-    "Incredible! You've set a new benchmark!",
-    "New High Score! Absolutely crushed it!",
-    "That's how it's done! New High Score!",
-  ],
-  matchedHighScore: [
-    "So close! You matched the high score! Amazing effort!",
-    "Matched the high score! You're right at the top!",
-    "Excellent work! You've equaled the high score!",
-  ],
-  closeToHighScore: { // e.g., score > 80% of highScore
-    messages: [
-      "Almost there! Just a bit more to the top!",
-      "Great run! You're knocking on the door of a new high score!",
-      "So close to the high score! Keep pushing!",
-    ],
+  newHighScore: () => i18n.t('gameOverMessages.newHighScore', { returnObjects: true }),
+  matchedHighScore: () => i18n.t('gameOverMessages.matchedHighScore', { returnObjects: true }),
+  closeToHighScore: {
+    messages: () => i18n.t('gameOverMessages.closeToHighScore', { returnObjects: true }),
     condition: (score, highScore) => highScore > 0 && score > highScore * 0.8 && score < highScore,
   },
-  decentScore: { // e.g., score > 50% of highScore
-    messages: [
-      "Nice job! That's a solid score!",
-      "Good game! You're getting the hang of it!",
-      "Well played! Keep practicing to climb higher!",
-    ],
+  decentScore: {
+    messages: () => i18n.t('gameOverMessages.decentScore', { returnObjects: true }),
     condition: (score, highScore) => highScore > 0 && score > highScore * 0.5 && score <= highScore * 0.8,
   },
-  lowScore: { // e.g., score < 20% of highScore or absolute low score (e.g. < 500 points if highScore is very low or 0)
-    messages: [
-      "Better luck next time! Every game is a lesson.",
-      "Don't worry, keep practicing and you'll improve!",
-      "A tough round, but persistence is key!",
-      "Shake it off and go for it again!",
-    ],
+  lowScore: {
+    messages: () => i18n.t('gameOverMessages.lowScore', { returnObjects: true }),
     condition: (score, highScore) => score < 500 || (highScore > 0 && score < highScore * 0.2),
   },
-  defaultMessages: [ // Fallback messages
-    "Good effort! Ready for another round?",
-    "Thanks for playing! Try to beat your score next time!",
-  ],
+  defaultMessages: () => i18n.t('gameOverMessages.defaultMessages', { returnObjects: true }),
 };
 
 export const getGameOverMessage = (score, highScore, isNewHighScoreFlag) => {
   if (isNewHighScoreFlag) {
-    return messageConfig.newHighScore[Math.floor(Math.random() * messageConfig.newHighScore.length)];
+    const messages = messageConfig.newHighScore();
+    return messages[Math.floor(Math.random() * messages.length)];
   }
   // Ensure score > 0 for matchedHighScore to avoid matching when score is 0 and highScore is 0.
   if (score === highScore && score > 0) {
-    return messageConfig.matchedHighScore[Math.floor(Math.random() * messageConfig.matchedHighScore.length)];
+    const messages = messageConfig.matchedHighScore();
+    return messages[Math.floor(Math.random() * messages.length)];
   }
 
   // Check conditional categories
   // Order matters: check from most specific/highest score band to lowest
   if (messageConfig.closeToHighScore.condition(score, highScore)) {
-    const messages = messageConfig.closeToHighScore.messages;
+    const messages = messageConfig.closeToHighScore.messages();
     return messages[Math.floor(Math.random() * messages.length)];
   }
   if (messageConfig.decentScore.condition(score, highScore)) {
-    const messages = messageConfig.decentScore.messages;
+    const messages = messageConfig.decentScore.messages();
     return messages[Math.floor(Math.random() * messages.length)];
   }
   if (messageConfig.lowScore.condition(score, highScore)) {
-    const messages = messageConfig.lowScore.messages;
+    const messages = messageConfig.lowScore.messages();
     return messages[Math.floor(Math.random() * messages.length)];
   }
 
   // Fallback to default messages
-  return messageConfig.defaultMessages[Math.floor(Math.random() * messageConfig.defaultMessages.length)];
+  const defaultMessages = messageConfig.defaultMessages();
+  return defaultMessages[Math.floor(Math.random() * defaultMessages.length)];
 };
 
 // Example usage (for testing in a Node environment or browser console):

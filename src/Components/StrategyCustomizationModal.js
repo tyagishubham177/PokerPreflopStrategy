@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -21,6 +22,7 @@ const StrategyCustomizationModal = ({
   initialStrategy: initialStrategyFromProp,
   onSave,
 }) => {
+  const { t } = useTranslation();
   const [modifiedStrategies, setModifiedStrategies] = useState({});
   const [originalStrategiesOnOpen, setOriginalStrategiesOnOpen] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
@@ -149,7 +151,7 @@ const StrategyCustomizationModal = ({
 
   const handleCloseAttempt = (closeReason) => {
     if (hasChanges) {
-      if (window.confirm("You have unsaved changes. Are you sure you want to discard them?")) {
+      if (window.confirm(t('unsavedChangesConfirm'))) {
         executeClose();
       }
     } else {
@@ -181,18 +183,18 @@ const StrategyCustomizationModal = ({
       maxWidth="lg"
       fullWidth
     >
-      <DialogTitle>Customize Initial Strategy</DialogTitle>
+      <DialogTitle>{t('customizeInitialStrategy')}</DialogTitle>
       <DialogContent dividers sx={{ pt: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <FormControl fullWidth>
-                <InputLabel id="situation-select-label">Situation</InputLabel>
+                <InputLabel id="situation-select-label">{t('situationLabel')}</InputLabel>
                 <Select
                   labelId="situation-select-label"
                   id="situation-select"
                   value={selectedSituation}
-                  label="Situation"
+                  label={t('situationLabel')}
                   onChange={(e) => setSelectedSituation(e.target.value)}
                 >
                   {Object.keys(modifiedStrategies).map((sitKey) => (
@@ -205,12 +207,12 @@ const StrategyCustomizationModal = ({
 
               {selectedSituation && modifiedStrategies[selectedSituation] && (
                 <FormControl fullWidth>
-                  <InputLabel id="position-select-label">Position</InputLabel>
+                  <InputLabel id="position-select-label">{t('positionLabel')}</InputLabel>
                   <Select
                     labelId="position-select-label"
                     id="position-select"
                     value={selectedPosition}
-                    label="Position"
+                    label={t('positionLabel')}
                     onChange={(e) => setSelectedPosition(e.target.value)}
                   >
                     {Object.keys(modifiedStrategies[selectedSituation]).map((posKey) => (
@@ -224,12 +226,12 @@ const StrategyCustomizationModal = ({
 
               {selectedSituation && selectedPosition && modifiedStrategies[selectedSituation]?.[selectedPosition] && (
                 <FormControl fullWidth>
-                  <InputLabel id="decision-select-label">Decision</InputLabel>
+                  <InputLabel id="decision-select-label">{t('decisionLabel')}</InputLabel>
                   <Select
                     labelId="decision-select-label"
                     id="decision-select"
                     value={selectedDecision}
-                    label="Decision"
+                    label={t('decisionLabel')}
                     onChange={(e) => setSelectedDecision(e.target.value)}
                   >
                     {Object.keys(modifiedStrategies[selectedSituation][selectedPosition]).map((decKey) => (
@@ -256,8 +258,8 @@ const StrategyCustomizationModal = ({
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleCloseAttempt('cancelButton')}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained" disabled={!hasChanges}>Save</Button>
+        <Button onClick={() => handleCloseAttempt('cancelButton')}>{t('cancel')}</Button>
+        <Button onClick={handleSave} variant="contained" disabled={!hasChanges}>{t('save')}</Button>
       </DialogActions>
     </Dialog>
   );

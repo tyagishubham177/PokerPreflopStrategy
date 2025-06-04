@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, Chip, Paper, ButtonBase, useTheme, IconButton } from '@mui/material'; // Added IconButton
+import { useTranslation } from 'react-i18next';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -28,6 +29,7 @@ const style = {
 
 const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
   const theme = useTheme(); // Added useTheme
+  const { t } = useTranslation();
   const [currentDetailedHand, setCurrentDetailedHand] = useState(null);
 
   useEffect(() => {
@@ -142,7 +144,7 @@ function SamplePrevArrow(props) {
                 {/* Carousel of incorrect plays */}
                 <Box sx={{ width: '100%', mx: 'auto', px: 0, py: 2 }}>
                   <Typography variant="h6" sx={{ textAlign: 'center', mt: 1, mb: 0.5, fontWeight:'500', fontSize:'1.1rem' }}>
-                    Your Incorrect Plays
+                    {t('yourIncorrectPlays')}
                   </Typography>
                   <Slider {...carouselSettings} className="incorrect-carousel">
                     {wrongChoices.map((choice, index) => (
@@ -192,7 +194,7 @@ function SamplePrevArrow(props) {
             ) : (
               // This message shows only if wrongChoices is empty or null.
               <Typography sx={{ mt: 2, textAlign: 'center', color: 'text.secondary' }}>
-                No incorrect plays to display.
+                {t('noIncorrectPlays')}
               </Typography>
             )}
           </Box>
@@ -200,25 +202,25 @@ function SamplePrevArrow(props) {
           {/* Right Column for Details, Legend, Button */}
           <Box sx={{ flex: { xs: '1 1 100%', md: 1 }, p: { xs: 1, sm: 2 }, display: 'flex', flexDirection: 'column', overflowY: 'auto', gap: 2 }}>
             <Typography id="chart-modal-title" variant="h5" component="h2" sx={{ textAlign: 'center', mb:1, fontWeight:'bold' }}>
-              {title || "Review Your Play"}
+              {title || t('reviewYourPlay')}
             </Typography>
 
             <> {/* Add this fragment */}
               {/* Game Context Section */}
               {currentDetailedHand && ( // Only show context if a hand is selected
               <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
-                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Game Context</Typography>
+                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>{t('gameContext')}</Typography>
                 <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
                 <InfoOutlinedIcon sx={{ mr: 1, color: theme.palette.action.active, fontSize:'1.2rem' }} />
-                <Typography variant="body1"><strong>Situation:</strong> {situationDisplay}</Typography>
+                <Typography variant="body1"><strong>{t('situation')}:</strong> {situationDisplay}</Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
                 <PersonIcon sx={{ mr: 1, color: theme.palette.success.dark, fontSize:'1.2rem' }} />
-                <Typography variant="body1"><strong>Hero:</strong> <Box component="span" sx={{ color: theme.palette.success.dark }}>{heroPositionDisplay.replace('Hero: ', '')}</Box></Typography>
+                <Typography variant="body1"><strong>{t('hero')}:</strong> <Box component="span" sx={{ color: theme.palette.success.dark }}>{heroPositionDisplay.replace('Hero: ', '')}</Box></Typography>
               </Box>
               <Box sx={{ display: 'flex', alignItems: 'center' }}>
                 <SportsKabaddiIcon sx={{ mr: 1, color: theme.palette.error.dark, fontSize:'1.2rem' }} />
-                <Typography variant="body1"><strong>Villain:</strong> <Box component="span" sx={{ color: theme.palette.error.dark }}>{villainPositionDisplay.replace('Villain: ', '')}</Box></Typography>
+                <Typography variant="body1"><strong>{t('villain')}:</strong> <Box component="span" sx={{ color: theme.palette.error.dark }}>{villainPositionDisplay.replace('Villain: ', '')}</Box></Typography>
               </Box>
               </Paper>
               )}
@@ -226,24 +228,24 @@ function SamplePrevArrow(props) {
               {/* Play Analysis Section */}
               {currentDetailedHand && ( // Only show analysis if a hand is selected
               <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
-                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Play Analysis</Typography>
+                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>{t('playAnalysis')}</Typography>
                 <>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
                     <StyleIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.info.main }} />
                     <Typography variant="body1" sx={{ wordBreak: 'break-word', fontWeight: 'bold' }}>
-                      Your Hand: {handNotation}
+                      {t('yourHandLabel')}: {handNotation}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 0.75 }}>
                     <HighlightOffIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.error.main }} />
                     <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.error.main }}>
-                      Your Decision: {yourChoice}
+                      {t('yourDecisionLabel')}: {yourChoice}
                     </Typography>
                   </Box>
                   <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <CheckCircleOutlineIcon sx={{ mr: 1, fontSize: '1.2rem', color: theme.palette.success.main }} />
                     <Typography variant="body1" sx={{ wordBreak: 'break-word', color: theme.palette.success.main }}>
-                      Correct Decision: {decisionKey}
+                      {t('correctDecisionLabel')}: {decisionKey}
                     </Typography>
                   </Box>
                 </>
@@ -253,23 +255,23 @@ function SamplePrevArrow(props) {
               {/* Chart Legend Section */}
               {currentDetailedHand && ( // Only show legend if a hand is selected (relevant to chart)
               <Paper elevation={2} sx={{ p: 2, borderRadius: '8px' }}>
-                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>Understanding the Chart</Typography>
+                <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>{t('understandingChart')}</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.75 }}>
                   <Chip
                     icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'lightblue', border: '1px solid grey' }} />} // Adjusted size
-                    label="Optimal play for this action"
+                    label={t('optimalPlay')}
                     size="small"
                     sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }, backgroundColor: 'white'}}
                   />
                   <Chip
                     icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'rgba(255, 0, 0, 0.3)', border: '1px solid grey' }} />} // Adjusted size
-                    label="Your incorrect play's range"
+                    label={t('incorrectRange')}
                     size="small"
                     sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }, backgroundColor: 'white'}}
                   />
                   <Chip
                     icon={<Box sx={{ width: 12, height: 12, borderRadius: '2px', border: '2px solid #FFD700', backgroundColor: 'transparent' }} />} // Adjusted size
-                    label="Specific hand in question on chart"
+                    label={t('specificHand')}
                     size="small"
                     sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }, backgroundColor: 'white'}}
                   />
