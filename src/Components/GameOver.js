@@ -19,10 +19,12 @@ const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
   return (
     <Card sx={{
       maxWidth: 550,
-      margin: 'auto',
+      width: { xs: `calc(100% - ${theme.spacing(4)})`, sm: 'auto' },
+      mx: 'auto',
       mt: 4, // Increased margin top for better spacing
       textAlign: 'center',
-      p: theme.spacing(2, 3), // Consistent padding
+      px: { xs: 2, sm: 3 },
+      py: 2,
       boxShadow: theme.shadows[4], // More elevation
       borderRadius: theme.shape.borderRadius * 2, // Softer corners
       backgroundColor: theme.palette.background.default, // Theme aware background
