@@ -60,9 +60,9 @@ const GameSettings = ({
             // margin="normal" // Removed margin
             sx={{ mt: 0.5 }} // Adjusted to mt: 0.5 as per refined thought, mb from FormLabel is 0.5
           >
-            <MenuItem value="Easy">Easy</MenuItem>
-            <MenuItem value="Medium">Medium</MenuItem>
-            <MenuItem value="Hard">Hard</MenuItem>
+            <MenuItem value="Easy">{t('easy')}</MenuItem>
+            <MenuItem value="Medium">{t('medium')}</MenuItem>
+            <MenuItem value="Hard">{t('hard')}</MenuItem>
           </Select>
           <FormLabel sx={{ mb: 0.5, display: 'block', color: 'text.secondary', fontWeight: 'normal', mt: 2 }}>
             {t('language')}

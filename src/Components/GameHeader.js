@@ -1,9 +1,11 @@
 import React from 'react';
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { useTranslation } from 'react-i18next';
 import InfoIcon from "@mui/icons-material/Info";
 import pokerImage from "../Assets/pokerlogo512.png";
 
 const GameHeader = ({ onInfoClick, onLongPressStart, onLongPressEnd }) => {
+  const { t } = useTranslation();
   return (
     <Box
       sx={{
@@ -16,7 +18,7 @@ const GameHeader = ({ onInfoClick, onLongPressStart, onLongPressEnd }) => {
     >
       <Avatar src={pokerImage} sx={{ width: 40, height: 40 }} />
       <Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
-        Learn Preflop Strategy
+        {t('learnPreflopStrategy')}
       </Typography>
       <IconButton
         aria-label="info"

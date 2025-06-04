@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Box, Typography, Button, Fade, useTheme } from "@mui/material";
+import { useTranslation } from 'react-i18next';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';
@@ -9,6 +10,7 @@ import RulesDialog from "./RulesDialog";
 
 const GameDisplay = (props) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const {
     collapsed,
     onInfoClick,
@@ -115,13 +117,13 @@ const GameDisplay = (props) => {
           {feedbackTrigger === 'CORRECT' && (
             <>
               <CheckCircleOutlineIcon sx={{ color: theme.palette.common.white, fontSize: 60, mb: 1 }} />
-              <Typography variant="h5" sx={{ color: theme.palette.common.white, fontWeight: 'bold' }}>Correct!</Typography>
+              <Typography variant="h5" sx={{ color: theme.palette.common.white, fontWeight: 'bold' }}>{t('correct')}</Typography>
             </>
           )}
           {feedbackTrigger === 'INCORRECT' && (
             <>
               <HighlightOffIcon sx={{ color: theme.palette.common.white, fontSize: 60, mb: 1 }} />
-              <Typography variant="h5" sx={{ color: theme.palette.common.white, fontWeight: 'bold' }}>Incorrect!</Typography>
+              <Typography variant="h5" sx={{ color: theme.palette.common.white, fontWeight: 'bold' }}>{t('incorrect')}</Typography>
             </>
           )}
         </Box>

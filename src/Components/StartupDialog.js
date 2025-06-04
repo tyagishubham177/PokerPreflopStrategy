@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box } from '@mui/material';
 
 // Placeholder for RulesDialog and SettingsPanel if needed later for direct display
@@ -23,22 +24,24 @@ const StartupDialog = ({ onPlay, onSettings, onRules, hasExistingSettings }) => 
     onRules(); // Signal App.js to show rules
   };
 
+  const { t } = useTranslation();
+
   if (hasExistingSettings) {
     // Dialog for users with existing settings
     return (
       <Dialog open={true} PaperProps={{ style: { margin: '20px', padding: '20px' } }}>
-        <DialogTitle>Welcome Back, Poker Ace!</DialogTitle>
+        <DialogTitle>{t('welcomeBack')}</DialogTitle>
         <DialogContent>
           <Typography>
-            Ready to hit the tables? You can tweak the challenge or jump right in with your saved settings.
+            {t('readyToPlay')}
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center', paddingBottom: '20px', paddingTop: '20px' }}>
           <Button onClick={handleSettingsInternal} variant="contained" color="primary" sx={{ marginRight: '10px' }}>
-            Adjust Challenge
+            {t('adjustChallenge')}
           </Button>
           <Button onClick={handlePlayInternal} variant="contained" color="secondary">
-            Deal Me In!
+            {t('dealMeIn')}
           </Button>
         </DialogActions>
       </Dialog>
@@ -47,21 +50,21 @@ const StartupDialog = ({ onPlay, onSettings, onRules, hasExistingSettings }) => 
     // Dialog for new users
     return (
       <Dialog open={true} PaperProps={{ style: { margin: '20px', padding: '20px' } }}>
-        <DialogTitle>Ready to Master the Felt?</DialogTitle>
+        <DialogTitle>{t('readyToMaster')}</DialogTitle>
         <DialogContent>
           <Typography>
-            Your poker adventure starts now! Choose your path:
+            {t('choosePath')}
           </Typography>
         </DialogContent>
         <DialogActions sx={{ justifyContent: 'center', flexDirection: 'column', gap: '15px', paddingBottom: '20px', paddingTop: '20px' }}>
           <Button onClick={handleSettingsInternal} variant="contained" color="primary" fullWidth>
-            Tailor Your Game
+            {t('tailorYourGame')}
           </Button>
           <Button onClick={handleRulesInternal} variant="outlined" color="primary" fullWidth>
-            Learn the Ropes
+            {t('learnTheRopes')}
           </Button>
           <Button onClick={handlePlayInternal} variant="contained" color="secondary" fullWidth>
-            Hit the Tables!
+            {t('hitTheTables')}
           </Button>
         </DialogActions>
       </Dialog>

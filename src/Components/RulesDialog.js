@@ -1,4 +1,5 @@
 import React from "react";
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogTitle,
@@ -19,6 +20,7 @@ import VisibilityIcon from "@mui/icons-material/Visibility";
 import SettingsIcon from "@mui/icons-material/Settings";
 
 const RulesDialog = ({ showRules, setShowRules }) => {
+  const { t } = useTranslation();
   return (
     <Dialog
       open={showRules}
@@ -30,56 +32,56 @@ const RulesDialog = ({ showRules, setShowRules }) => {
         exit: "transition-transform duration-300",
       }}
     >
-      <DialogTitle sx={{ bgcolor: "primary.main", color: "white" }}>Game Rules & Info</DialogTitle>
+      <DialogTitle sx={{ bgcolor: "primary.main", color: "white" }}>{t('gameRulesInfo')}</DialogTitle>
       <DialogContent sx={{ paddingTop: "16px" }}>
         <List>
           <ListItem>
             <ListItemIcon>
               <StyleIcon />
             </ListItemIcon>
-            <ListItemText primary="You'll be presented with a poker hand with a specific situation." />
+            <ListItemText primary={t('rules1')} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <CheckCircleOutlineIcon />
             </ListItemIcon>
-            <ListItemText primary="Based on the hand and situation, choose the best preflop action." />
+            <ListItemText primary={t('rules2')} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <FavoriteBorderIcon />
             </ListItemIcon>
-            <ListItemText primary="You have three lives. Incorrect decisions cost one life." />
+            <ListItemText primary={t('rules3')} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <TrendingUpIcon />
             </ListItemIcon>
-            <ListItemText primary="Your streak increases with correct answers, giving score bonuses." />
+            <ListItemText primary={t('rules4')} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <FlagIcon />
             </ListItemIcon>
-            <ListItemText primary="The game ends when you run out of lives or reach the maximum score." />
+            <ListItemText primary={t('rules5')} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <VisibilityIcon />
             </ListItemIcon>
-            <ListItemText primary="After the game ends you'll be shown the incorrect decisions made by you. So you can review and improve. Flip those cards to see more details." />
+            <ListItemText primary={t('rules6')} />
           </ListItem>
           <ListItem>
             <ListItemIcon>
               <SettingsIcon />
             </ListItemIcon>
-            <ListItemText primary="You can set customizable ranges and game difficulty in settings." />
+            <ListItemText primary={t('rules7')} />
           </ListItem>
         </List>
       </DialogContent>
       <DialogActions>
         <Button onClick={() => setShowRules(false)} color="primary">
-          Close
+          {t('close')}
         </Button>
       </DialogActions>
     </Dialog>

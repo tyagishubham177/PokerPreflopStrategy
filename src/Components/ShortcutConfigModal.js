@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogTitle,
@@ -11,6 +12,7 @@ import {
 } from '@mui/material';
 
 const ShortcutConfigModal = ({ open, onClose, shortcutConfig, setShortcutConfig }) => {
+  const { t } = useTranslation();
   const handleShortcutKeyChange = (actionName, newKey) => {
     const processedKey = newKey.charAt(0).toLowerCase();
     // Prevent assigning an empty key if desired, or handle upstream.
@@ -52,7 +54,7 @@ const ShortcutConfigModal = ({ open, onClose, shortcutConfig, setShortcutConfig 
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Done
+          {t('done')}
         </Button>
       </DialogActions>
     </Dialog>
