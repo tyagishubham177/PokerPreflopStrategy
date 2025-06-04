@@ -21,4 +21,6 @@ export const getHandRepresentation = (rank1, rank2) => {
   }
 };
 
-export const handMatrixRanks = [...ranks];
+// Use a reversed copy of ranks for the hand matrix so that the
+// chart displays high cards (Aces) first and lows last.
+export const handMatrixRanks = [...ranks].reverse();
