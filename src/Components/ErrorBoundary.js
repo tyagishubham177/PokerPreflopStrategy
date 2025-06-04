@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTranslation } from 'react-i18next';
+import i18n from '../i18n';
 
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -18,11 +18,10 @@ class ErrorBoundary extends React.Component {
 
   render() {
     if (this.state.hasError) {
-      const { t } = useTranslation();
       return (
         <div style={{ padding: '20px', textAlign: 'center', border: '1px solid red', margin: '10px' }}>
-          <h2>{t('somethingWentWrong')}</h2>
-          <p>{this.props.fallbackMessage || t('pleaseRefresh')}</p>
+          <h2>{i18n.t('somethingWentWrong')}</h2>
+          <p>{this.props.fallbackMessage || i18n.t('pleaseRefresh')}</p>
           {process.env.NODE_ENV === 'development' && this.state.error && (
             <details style={{ whiteSpace: 'pre-wrap', textAlign: 'left', marginTop: '10px' }}>
               <summary>Error Details (Development Mode)</summary>
