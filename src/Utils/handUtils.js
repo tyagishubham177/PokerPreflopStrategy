@@ -9,15 +9,15 @@ export const getHandRepresentation = (rank1, rank2) => {
     return "";
   }
 
-  const r1 = ranks[Math.min(index1, index2)];
-  const r2 = ranks[Math.max(index1, index2)];
+  const highRank = ranks[Math.max(index1, index2)];
+  const lowRank = ranks[Math.min(index1, index2)];
 
   if (index1 === index2) {
-    return r1 + r2;
-  } else if (index1 < index2) {
-    return r1 + r2 + 's';
+    return highRank + highRank;
+  } else if (index1 > index2) {
+    return highRank + lowRank + 'o';
   } else {
-    return r1 + r2 + 'o';
+    return highRank + lowRank + 's';
   }
 };
 
