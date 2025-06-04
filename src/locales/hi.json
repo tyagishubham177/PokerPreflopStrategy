@@ -89,7 +89,7 @@
       "Good effort! Ready for another round?",
       "Thanks for playing! Try to beat your score next time!"
     ]
-  }
+  },
   "gameOver": "खेल समाप्त!",
   "playAgain": "फिर से खेलें",
   "newHighScoreLabel": "नया उच्चतम स्कोर: {{score}}",
