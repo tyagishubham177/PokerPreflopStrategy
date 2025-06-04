@@ -79,6 +79,9 @@
   "yourIncorrectPlays": "Your Incorrect Plays",
   "naLabel": "N/A",
   "shortcutAutoSaveInfo": "Changes are saved automatically. Press Esc or click away to close.",
+  "settingsPanelError": "There was an error in the settings panel. Please try closing and reopening it.",
+  "somethingWentWrong": "Something went wrong.",
+  "pleaseRefreshOrContact": "Please try refreshing the page or contact support.",
   "gameOverMessages": {
     "newHighScore": [
       "Wow! New High Score! You're a legend!",

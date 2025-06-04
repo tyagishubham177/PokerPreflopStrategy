@@ -1,10 +1,12 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import StrategyEditor from './StrategyEditor';
 import { initialPokerStrategy } from '../Constants/InitialStrategy';
 import { SITUATION_LABELS, POSITION_LABELS } from '../Constants/GameLabels';
 
 const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey, handToHighlight = null, incorrectActionName }) => {
+  const { t } = useTranslation();
   const hands = initialPokerStrategy[situationKey]?.[positionKey]?.[decisionKey] || [];
 
   let incorrectActionHands = [];
@@ -16,10 +18,10 @@ const ReadOnlyStrategyChartViewer = ({ situationKey, positionKey, decisionKey, h
   const positionData = POSITION_LABELS[positionKey];
   let positionLabel = positionKey;
   if (positionData) {
-    if (positionData.villain === "N/A" || !positionData.villain) {
-      positionLabel = `Hero: ${positionData.hero}`;
+    if (positionData.villain === 'N/A' || !positionData.villain) {
+      positionLabel = `${t('hero')}: ${positionData.hero}`;
     } else {
-      positionLabel = `Hero: ${positionData.hero} vs Villain: ${positionData.villain}`;
+      positionLabel = `${t('hero')}: ${positionData.hero} vs ${t('villain')}: ${positionData.villain}`;
     }
   }
   
