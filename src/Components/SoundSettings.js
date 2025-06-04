@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Paper,
   Typography,
@@ -20,6 +21,7 @@ const SoundSettings = ({
   soundVolume,
   handleVolumeChange,
 }) => {
+  const { t } = useTranslation();
   return (
     <Paper sx={{ mb: 2, overflow: 'hidden' }}> {/* Removed p: 2, added overflow: hidden for better Accordion fit if needed */}
       <Accordion defaultExpanded={true} elevation={0} sx={{
@@ -32,13 +34,13 @@ const SoundSettings = ({
           id="sound-settings-header"
         >
           <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}> {/* Kept h6 for now, can adjust if too large */}
-            Sound Settings
+            {t('soundSettings')}
           </Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ p: 2 }}> {/* Added padding back here */}
           <FormControlLabel
             control={<Switch checked={soundEnabled} onChange={handleSoundToggle} color="primary" />}
-            label="Sound Effects"
+            label={t('soundEffects')}
             sx={{ mb: 2 }}
           />
           <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 1 }}>

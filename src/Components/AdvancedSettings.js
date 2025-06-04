@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Paper,
   Typography,
@@ -14,6 +15,7 @@ const AdvancedSettings = ({
   handleOpenStrategyModal,
   handleResetStrategy,
 }) => {
+  const { t } = useTranslation();
   return (
     <Paper sx={{ mb: 2, overflow: 'hidden' }}> {/* Removed p: 2 */}
       <Accordion defaultExpanded={true} elevation={0} sx={{
@@ -26,7 +28,7 @@ const AdvancedSettings = ({
           id="advanced-settings-header"
         >
           <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}> {/* Kept h6 */}
-            Advanced Settings
+            {t('advancedSettings')}
           </Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ p: 2, display: 'flex', flexDirection: 'column' }}> {/* Added padding back & flex column */}
@@ -37,7 +39,7 @@ const AdvancedSettings = ({
             fullWidth
             sx={{ mb: 1 }}
           >
-            Configure Keyboard Shortcuts
+            {t('configureShortcuts')}
           </Button>
           <Button
             variant="outlined"
@@ -46,7 +48,7 @@ const AdvancedSettings = ({
             fullWidth
             sx={{ mb: 1 }}
           >
-            Customize Preflop Strategy
+            {t('customizeStrategy')}
           </Button>
           <Button
             variant="outlined"
@@ -55,7 +57,7 @@ const AdvancedSettings = ({
             fullWidth
             // sx={{}} // mb:1 from previous button will space this out, or last item doesn't need mb
           >
-            Reset to Default Strategy
+            {t('resetStrategy')}
           </Button>
         </AccordionDetails>
       </Accordion>
