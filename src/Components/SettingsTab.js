@@ -20,8 +20,6 @@ import { CUSTOM_STRATEGY_LS_KEY, SOUND_SETTINGS_LS_KEY, LANGUAGE_LS_KEY } from '
 const SettingsTab = ({
   difficulty,
   handleDifficultyChange,
-  language,
-  handleLanguageChange,
   onPanelClose,
   shortcutConfig,
   setShortcutConfig,
@@ -55,10 +53,12 @@ const SettingsTab = ({
   });
   const [language, setLanguage] = useState(() => {
     try {
-      const savedSettings = localStorage.getItem(LANGUAGE_LS_KEY) || localStorage.getItem(SOUND_SETTINGS_LS_KEY);
-      if (savedSettings) {
-        const settings = JSON.parse(savedSettings);
-        return settings.language || 'en';
+      const saved = localStorage.getItem(LANGUAGE_LS_KEY);
+      if (saved) {
+        const { language } = JSON.parse(saved);
+        if (typeof language === 'string') {
+          return language;
+        }
       }
     } catch (error) {
       console.error('Failed to load language from localStorage:', error);
@@ -136,9 +136,6 @@ const SettingsTab = ({
   const handleLanguageChangeInternal = (newLang) => {
     setLanguage(newLang);
     i18n.changeLanguage(newLang);
-    if (handleLanguageChange) {
-      handleLanguageChange(newLang);
-    }
   };
 
   const handleSaveSettings = () => {
@@ -147,7 +144,6 @@ const SettingsTab = ({
       soundVolume,
       username,
       difficulty,
-      language,
     };
     try {
       localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settingsToSave));
