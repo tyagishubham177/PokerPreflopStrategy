@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { getHandRepresentation, handMatrixRanks as ranks } from '../Utils/handUtils'; 
-import HandCell from './HandCell'; 
+import HandCell from '../HandCell';
 
 const StrategyEditor = ({ initialHands = [], onSelectionChange, isReadOnly = false, highlightedHand = null, correctActionHandsList, incorrectActionHandsList }) => {
   const [selectedHands, setSelectedHands] = useState(new Set(initialHands));

@@ -7,10 +7,10 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'; // Or FactCheckIcon / VisibilityIcon
 import PauseCircleOutlineIcon from '@mui/icons-material/PauseCircleOutline';
-import HandDealer from "./HandDealer";
-import DecisionButtons from "./DecisionButtons";
-import GameOver from "./GameOver";
-import ChartDisplayModal from './ChartDisplayModal';
+import HandDealer from "../HandDealer";
+import DecisionButtons from "../DecisionButtons";
+import GameOver from "../GameOver";
+import ChartDisplayModal from '../ChartDisplayModal';
 
 const PokerGameTab = ({
   gameOver,

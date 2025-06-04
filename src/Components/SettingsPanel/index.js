@@ -2,8 +2,8 @@ import React from 'react';
 import { SwipeableDrawer, Box, Typography, IconButton, Stack } from "@mui/material"; // Added Stack
 import CloseIcon from "@mui/icons-material/Close";
 import SettingsIcon from '@mui/icons-material/Settings'; // Added SettingsIcon
-import SettingsTab from "./SettingsTab";
-import ErrorBoundary from "./ErrorBoundary";
+import SettingsTab from "../SettingsTab";
+import ErrorBoundary from "../ErrorBoundary";
 
 const SettingsPanel = ({
   open,

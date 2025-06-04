@@ -3,7 +3,7 @@ import { Modal, Box, Typography, Button, Chip, Paper, ButtonBase, useTheme, Icon
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import ReadOnlyStrategyChartViewer from './ReadOnlyStrategyChartViewer';
+import ReadOnlyStrategyChartViewer from '../ReadOnlyStrategyChartViewer';
 import StyleIcon from '@mui/icons-material/Style';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import HighlightOffIcon from '@mui/icons-material/HighlightOff';

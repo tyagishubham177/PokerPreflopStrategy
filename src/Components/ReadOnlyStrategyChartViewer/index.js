@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography, Box } from '@mui/material';
-import StrategyEditor from './StrategyEditor';
+import StrategyEditor from '../StrategyEditor';
 import { initialPokerStrategy } from '../Constants/InitialStrategy';
 import { SITUATION_LABELS, POSITION_LABELS } from '../Constants/GameLabels';
 

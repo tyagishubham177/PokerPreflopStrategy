@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Box, Fab } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
-import SettingsPanel from "./SettingsPanel";
-import GameDisplay from "./GameDisplay";
-import ErrorBoundary from "./ErrorBoundary";
+import SettingsPanel from "../SettingsPanel";
+import GameDisplay from "../GameDisplay";
+import ErrorBoundary from "../ErrorBoundary";
 import usePokerGame from "../Hooks/UsePokerGame";
 import { playSound } from '../Utils/soundUtils';
 import { SHORTCUT_CONFIG_LS_KEY } from '../Constants/StorageKeys';
