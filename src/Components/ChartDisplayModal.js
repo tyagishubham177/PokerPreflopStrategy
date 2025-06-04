@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Modal, Box, Typography, Button, Chip, Paper, ButtonBase, useTheme } from '@mui/material'; // Added Paper, ButtonBase, useTheme
+import { Modal, Box, Typography, Button, Chip, Paper, ButtonBase, useTheme, IconButton } from '@mui/material'; // Added IconButton
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
@@ -10,6 +10,7 @@ import HighlightOffIcon from '@mui/icons-material/HighlightOff';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import PersonIcon from '@mui/icons-material/Person';
 import SportsKabaddiIcon from '@mui/icons-material/SportsKabaddi';
+import CloseIcon from '@mui/icons-material/Close';
 
 const style = {
   position: 'absolute',
@@ -132,6 +133,7 @@ function SamplePrevArrow(props) {
       aria-labelledby="chart-modal-title"
     >
       <Box sx={style}>
+        <IconButton aria-label="close" onClick={onClose} sx={{ position: "absolute", top: 8, right: 8, color: "error.main" }}><CloseIcon /></IconButton>
         <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, width: '100%', maxHeight: 'calc(90vh - 32px)', gap: 2 }}>
           {/* Left Column for Chart & Carousel */}
           <Box sx={{ flex: { xs: '1 1 100%', md: 1.75 }, display: 'flex', flexDirection: 'column', p: { xs: 1, sm: 1.5 }, overflowY: 'auto', gap: 2 }}>
@@ -275,10 +277,6 @@ function SamplePrevArrow(props) {
               </Paper>
               )}
             </> {/* Close this fragment */}
-            <Box sx={{flexGrow: 1}} /> {/* Pushes button to bottom */}
-            <Button onClick={onClose} variant="contained" color="primary" sx={{ width: '100%', mt:1, py: 1.25, fontWeight:'bold' }}>
-              Close
-            </Button>
           </Box>
         </Box>
       </Box>
