@@ -1,4 +1,4 @@
-const ranks = ['A', 'K', 'Q', 'J', 'T', '9', '8', '7', '6', '5', '4', '3', '2'];
+import { ranks } from '../Constants/GameConstants';
 
 export const getHandRepresentation = (rank1, rank2) => {
   const index1 = ranks.indexOf(rank1);
@@ -9,16 +9,18 @@ export const getHandRepresentation = (rank1, rank2) => {
     return "";
   }
 
-  const r1 = ranks[Math.min(index1, index2)];
-  const r2 = ranks[Math.max(index1, index2)];
+  const highRank = ranks[Math.max(index1, index2)];
+  const lowRank = ranks[Math.min(index1, index2)];
 
   if (index1 === index2) {
-    return r1 + r2;
-  } else if (index1 < index2) {
-    return r1 + r2 + 's';
+    return highRank + highRank;
+  } else if (index1 > index2) {
+    return highRank + lowRank + 'o';
   } else {
-    return r1 + r2 + 'o';
+    return highRank + lowRank + 's';
   }
 };
 
-export const handMatrixRanks = [...ranks];
+// Use a reversed copy of ranks for the hand matrix so that the
+// chart displays high cards (Aces) first and lows last.
+export const handMatrixRanks = [...ranks].reverse();

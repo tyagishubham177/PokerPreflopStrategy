@@ -2,11 +2,12 @@ import React, { useState } from "react";
 import PokerGame from "./Components/PokerGame";
 import StartupDialog from "./Components/StartupDialog";
 import "./Styles/styles.css";
+import { SOUND_SETTINGS_LS_KEY } from './Constants/StorageKeys';
 
 function App() {
   const [showStartupDialog, setShowStartupDialog] = useState(true);
   const [hasExistingSettings, setHasExistingSettings] = useState(
-    localStorage.getItem("soundSettings") !== null
+    localStorage.getItem(SOUND_SETTINGS_LS_KEY) !== null
   );
   const [initialAction, setInitialAction] = useState(null); // 1. Add initialAction state
 

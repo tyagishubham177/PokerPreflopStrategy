@@ -1,11 +1,5 @@
-const SOUND_SETTINGS_LS_KEY = 'soundSettings'; // Added constant
-
-const soundFiles = {
-  'correct_decision': require('../Assets/sounds/correct_decision.mp3'),
-  'wrong_decision': require('../Assets/sounds/wrong_decision.mp3'),
-  'hint_used': require('../Assets/sounds/hint_used.mp3'),
-  'timer_tick': require('../Assets/sounds/timer_tick.mp3'),
-};
+import { SOUND_SETTINGS_LS_KEY } from '../Constants/StorageKeys';
+import { SOUND_FILES } from '../Constants/SoundFiles';
 
 export const playSound = (soundName, volume = 1) => {
   try {
@@ -39,10 +33,10 @@ export const playSound = (soundName, volume = 1) => {
       return;
     }
 
-    const actualSoundPath = soundFiles[soundName];
+    const actualSoundPath = SOUND_FILES[soundName];
 
     if (!actualSoundPath) {
-      console.error(`Sound resource for '${soundName}' not found in soundFiles map.`);
+      console.error(`Sound resource for '${soundName}' not found in SOUND_FILES map.`);
       return;
     }
     

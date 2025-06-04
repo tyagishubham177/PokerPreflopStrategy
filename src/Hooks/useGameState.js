@@ -1,7 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import { DIFFICULTY_LEVELS } from "../Constants/GameConstants";
-
-const SOUND_SETTINGS_LS_KEY = 'soundSettings';
+import { SOUND_SETTINGS_LS_KEY, HIGH_SCORE_LS_KEY } from '../Constants/StorageKeys';
 
 const useGameState = () => {
   const [hand, setHand] = useState([]);
@@ -28,7 +27,7 @@ const useGameState = () => {
   const [score, setScore] = useState(0);
   const [highScore, setHighScore] = useState(() => {
     try {
-      const savedHighScore = localStorage.getItem("highScore");
+      const savedHighScore = localStorage.getItem(HIGH_SCORE_LS_KEY);
       const parsedHighScore = parseInt(savedHighScore, 10);
       return savedHighScore && !isNaN(parsedHighScore) ? parsedHighScore : 0;
     } catch (error) {
@@ -51,7 +50,7 @@ const useGameState = () => {
     setHighScore((prevHighScore) => {
       const updatedHighScore = Math.max(prevHighScore, newScore);
       try {
-        localStorage.setItem("highScore", updatedHighScore.toString());
+        localStorage.setItem(HIGH_SCORE_LS_KEY, updatedHighScore.toString());
       } catch (error) {
         console.error("Error writing highScore to localStorage:", error);
       }
