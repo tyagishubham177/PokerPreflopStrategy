@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useTranslation } from 'react-i18next';
 import {
   Box,
   Button,
@@ -14,6 +15,7 @@ import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
 import { POSITION_LABELS } from '../Constants/GameLabels.js';
 import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
 import { CUSTOM_STRATEGY_LS_KEY, SOUND_SETTINGS_LS_KEY } from '../Constants/StorageKeys';
+import i18n from '../i18n';
 
 const SettingsTab = ({
   difficulty,
@@ -24,6 +26,7 @@ const SettingsTab = ({
   isInputFocused,
   setIsInputFocused
 }) => {
+  const { t } = useTranslation();
   const [soundEnabled, setSoundEnabled] = useState(() => {
     try {
       const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
@@ -60,6 +63,18 @@ const SettingsTab = ({
     }
     return "";
   });
+  const [language, setLanguage] = useState(() => {
+    try {
+      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+      if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        return settings.language || 'en';
+      }
+    } catch (error) {
+      console.error('Failed to load language from localStorage:', error);
+    }
+    return 'en';
+  });
   const [showStrategyModal, setShowStrategyModal] = useState(false);
   const [showShortcutModal, setShowShortcutModal] = useState(false); // State for the new modal
 
@@ -74,6 +89,10 @@ const SettingsTab = ({
     }
     return initialPokerStrategy;
   });
+
+  useEffect(() => {
+    i18n.changeLanguage(language);
+  }, [language]);
 
   // handleShortcutKeyChange is removed from here, as it's in ShortcutConfigModal
 
@@ -116,12 +135,28 @@ const SettingsTab = ({
     setUsername(event.target.value);
   };
 
+  const handleLanguageChange = (lang) => {
+    setLanguage(lang);
+    try {
+      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+      let settings = {};
+      if (savedSettings) {
+        settings = JSON.parse(savedSettings);
+      }
+      settings.language = lang;
+      localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settings));
+    } catch (error) {
+      console.error('Failed to save language to localStorage:', error);
+    }
+  };
+
   const handleSaveSettings = () => {
     const settingsToSave = {
       soundEnabled,
       soundVolume,
       username,
       difficulty,
+      language,
     };
     try {
       localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settingsToSave));
@@ -178,6 +213,8 @@ const SettingsTab = ({
         handleUsernameChange={handleUsernameChange}
         difficulty={difficulty}
         handleDifficultyChange={handleDifficultyChange}
+        language={language}
+        handleLanguageChange={handleLanguageChange}
         setIsInputFocused={setIsInputFocused}
       />
 
@@ -192,7 +229,7 @@ const SettingsTab = ({
       <Divider sx={{ my: 2 }} />
 
       <Button variant="contained" color="primary" onClick={handleSaveSettings} sx={{ width: "100%" }}>
-        Save All Settings
+        {t('saveAllSettings')}
       </Button>
 
       <StrategyCustomizationModal

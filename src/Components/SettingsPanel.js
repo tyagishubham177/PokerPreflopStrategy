@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { SwipeableDrawer, Box, Typography, IconButton, Stack } from "@mui/material"; // Added Stack
 import CloseIcon from "@mui/icons-material/Close";
 import SettingsIcon from '@mui/icons-material/Settings'; // Added SettingsIcon
@@ -16,6 +17,7 @@ const SettingsPanel = ({
   isInputFocused,
   setIsInputFocused
 }) => {
+  const { t } = useTranslation();
   return (
     <SwipeableDrawer anchor="right" open={open} onClose={onClose} onOpen={onOpen}>
       <Box sx={{ width: 250, p: 2 }}>
@@ -23,7 +25,7 @@ const SettingsPanel = ({
           <Stack direction="row" alignItems="center">
             <SettingsIcon sx={{ mr: 1 }} />
             <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-              Settings
+              {t('settings')}
             </Typography>
           </Stack>
           <IconButton onClick={onClose}>

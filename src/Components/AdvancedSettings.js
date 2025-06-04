@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Paper,
   Typography,
@@ -14,6 +15,7 @@ const AdvancedSettings = ({
   handleOpenStrategyModal,
   handleResetStrategy,
 }) => {
+  const { t } = useTranslation();
   return (
     <Paper sx={{ mb: 2, overflow: 'hidden' }}> {/* Removed p: 2 */}
       <Accordion defaultExpanded={true} elevation={0} sx={{
@@ -25,8 +27,8 @@ const AdvancedSettings = ({
           aria-controls="advanced-settings-content"
           id="advanced-settings-header"
         >
-          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}> {/* Kept h6 */}
-            Advanced Settings
+          <Typography variant="h6" sx={{ fontWeight: 'bold', color: 'primary.main' }}>
+            {t('advancedSettings')}
           </Typography>
         </AccordionSummary>
         <AccordionDetails sx={{ p: 2, display: 'flex', flexDirection: 'column' }}> {/* Added padding back & flex column */}
@@ -37,7 +39,7 @@ const AdvancedSettings = ({
             fullWidth
             sx={{ mb: 1 }}
           >
-            Configure Keyboard Shortcuts
+            {t('configureKeyboardShortcuts')}
           </Button>
           <Button
             variant="outlined"
@@ -46,16 +48,15 @@ const AdvancedSettings = ({
             fullWidth
             sx={{ mb: 1 }}
           >
-            Customize Preflop Strategy
+            {t('customizePreflopStrategy')}
           </Button>
           <Button
             variant="outlined"
             color="warning"
             onClick={handleResetStrategy}
             fullWidth
-            // sx={{}} // mb:1 from previous button will space this out, or last item doesn't need mb
           >
-            Reset to Default Strategy
+            {t('resetToDefaultStrategy')}
           </Button>
         </AccordionDetails>
       </Accordion>

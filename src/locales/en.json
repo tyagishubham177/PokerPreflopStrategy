@@ -1,0 +1,16 @@
+{
+  "settings": "Settings",
+  "saveAllSettings": "Save All Settings",
+  "soundSettings": "Sound Settings",
+  "soundEffects": "Sound Effects",
+  "gameSettings": "Game Settings",
+  "gameDifficulty": "Game Difficulty",
+  "username": "Username",
+  "advancedSettings": "Advanced Settings",
+  "configureKeyboardShortcuts": "Configure Keyboard Shortcuts",
+  "customizePreflopStrategy": "Customize Preflop Strategy",
+  "resetToDefaultStrategy": "Reset to Default Strategy",
+  "language": "Language",
+  "english": "English",
+  "hindi": "Hindi"
+}
