@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"; // Added useEffect
 import { Box, Grid, Typography, Paper, Button, useTheme, IconButton } from "@mui/material";
+import { useTranslation } from 'react-i18next';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -37,6 +38,7 @@ const PokerGameTab = ({
   toggleTimerVisibility,
 }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const [modalOpen, setModalOpen] = useState(false);
   const [selectedHandData, setSelectedHandData] = useState(null);
 
@@ -85,14 +87,14 @@ const PokerGameTab = ({
         <>
           <Box>
             <Grid container justifyContent="space-between" sx={{ mb: 2, textAlign: "left" }}>
-              <Typography variant="body1">Score: {score}</Typography>
-              <Typography variant="body1">High Score: {highScore}</Typography>
+              <Typography variant="body1">{t('score')}: {score}</Typography>
+              <Typography variant="body1">{t('highScore')}: {highScore}</Typography>
             </Grid>
 
             {isPaused ? (
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100px', my: 3, p: 2, border: '1px dashed grey', borderRadius: 1, backgroundColor: 'rgba(0,0,0,0.02)' }}>
                 <PauseCircleOutlineIcon sx={{ fontSize: 40, color: 'text.disabled', mb: 1 }} />
-                <Typography variant="h6" sx={{ color: 'text.disabled' }}>Game Paused</Typography>
+                <Typography variant="h6" sx={{ color: 'text.disabled' }}>{t('gamePaused')}</Typography>
               </Box>
             ) : (
               <Box sx={{ my: 3 }}>
@@ -103,24 +105,24 @@ const PokerGameTab = ({
             {isPaused ? (
               <Paper elevation={0} sx={{ p: 2, textAlign: 'center', border: '1px dashed grey', backgroundColor: 'rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <PauseCircleOutlineIcon sx={{ fontSize: 30, color: 'text.disabled', mb: 0.5 }} />
-                <Typography variant="body1" sx={{ color: 'text.disabled' }}>Situation Hidden</Typography>
+                <Typography variant="body1" sx={{ color: 'text.disabled' }}>{t('situationHidden')}</Typography>
               </Paper>
             ) : (
               <Paper elevation={3} sx={{ p: 2, backgroundColor: "rgba(255, 255, 255, 0.9)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <Typography variant="body1" sx={{ textAlign: "center", fontWeight: "bold" }}>
                   <>
-                    <span style={{ color: "#1976d2" }}>Situation:</span> {situationDisplayPart}
+                    <span style={{ color: "#1976d2" }}>{t('situation')}:</span> {situationDisplayPart}
                     <br />
-                    <span style={{ color: "#d32f2f" }}>Villain:</span> {villainDisplayPart}
+                    <span style={{ color: "#d32f2f" }}>{t('villain')}:</span> {villainDisplayPart}
                     <br />
-                    <span style={{ color: "#388e3c" }}>Hero:</span> {heroDisplayPart}
+                    <span style={{ color: "#388e3c" }}>{t('hero')}:</span> {heroDisplayPart}
                   </>
                 </Typography>
               </Paper>
             )}
 
             <Typography variant="h6" align="center" sx={{ mt: 2, mb: 1, fontWeight: "bold" }}>
-              What's your decision?
+              {t('whatsYourDecision')}
             </Typography>
           </Box>
 
@@ -184,7 +186,7 @@ const PokerGameTab = ({
               disabled={isHintButtonDisabled || gameOver}
               sx={{ px: 1, flexShrink: 0 }}
             >
-              Hint ({hints})
+              {t('hint')} ({hints})
             </Button>
 
             <Typography
@@ -199,7 +201,7 @@ const PokerGameTab = ({
                 },
               }}
             >
-              Streak: {streak}{" "}
+              {t('streak')}: {streak}{" "}
               {streak > 0 && <span style={{ color: theme.palette.success.main }}>(+{streak * 10}% bonus)</span>}
             </Typography>
           </Box>
@@ -238,7 +240,7 @@ const PokerGameTab = ({
                     },
                   }}
                 >
-                  See Your Mistakes & Learn
+                  {t('reviewMistakes')}
                 </Button>
               </>
             );
@@ -261,7 +263,7 @@ const PokerGameTab = ({
           open={modalOpen}
           onClose={handleCloseModal}
           wrongChoices={selectedHandData}
-          title="Review Your Plays"
+          title={t('reviewYourPlays')}
           situationKey={selectedHandData && selectedHandData.length > 0 ? selectedHandData[0].situationKey : ''}
           positionKey={selectedHandData && selectedHandData.length > 0 ? selectedHandData[0].positionKey : ''}
           decisionKey={selectedHandData && selectedHandData.length > 0 ? selectedHandData[0].decisionKey : ''}

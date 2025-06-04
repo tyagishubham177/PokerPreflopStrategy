@@ -33,7 +33,7 @@ const SettingsPanel = ({
           </IconButton>
         </Box>
 
-        <ErrorBoundary fallbackMessage="There was an error in the settings panel. Please try closing and reopening it.">
+        <ErrorBoundary fallbackMessage={t('errorSettingsPanel')}>
           <SettingsTab 
             difficulty={difficulty} 
             handleDifficultyChange={handleDifficultyChange} 

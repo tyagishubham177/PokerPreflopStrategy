@@ -1,5 +1,6 @@
 import React from 'react';
 import { Typography, Button, Card, CardContent, Box, Chip, useTheme } from '@mui/material';
+import { useTranslation } from 'react-i18next';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
 import ReplayIcon from '@mui/icons-material/Replay';
@@ -7,6 +8,7 @@ import { getGameOverMessage } from '../Constants/gameOverMessages';
 
 const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
   const theme = useTheme();
+  const { t } = useTranslation();
   const message = getGameOverMessage(score, highScore, isNewHighScore);
 
   let MessageIcon = SentimentVeryDissatisfiedIcon; // Default icon
@@ -35,7 +37,7 @@ const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
           fontWeight: 'bold',
           color: 'primary.main',
         }}>
-          Game Over!
+          {t('gameOver')}
         </Typography>
 
         <Box sx={{
@@ -65,7 +67,7 @@ const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
         <Box sx={{ mb: 3 }}>
           {isNewHighScore ? (
             <Chip
-              label={`New High Score: ${score}`}
+              label={`${t('newHighScoreLabel')}: ${score}`}
               sx={{
                 fontSize: '1.1rem',
                 padding: '10px 16px',
@@ -78,7 +80,7 @@ const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
           ) : (
             <Box sx={{ display: 'flex', justifyContent: 'center', gap: 1.5 }}>
               <Chip
-                label={`Your Score: ${score}`}
+                label={`${t('yourScoreLabel')}: ${score}`}
                 sx={{
                   fontSize: '1rem',
                   padding: '8px 12px',
@@ -89,7 +91,7 @@ const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
                 }}
               />
               <Chip
-                label={`High Score: ${highScore}`}
+                label={`${t('highScore')}: ${highScore}`}
                 variant="outlined"
                 sx={{
                   fontSize: '1rem',
@@ -122,7 +124,7 @@ const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
             }
           }}
         >
-          Play Again
+          {t('playAgain')}
         </Button>
       </CardContent>
     </Card>

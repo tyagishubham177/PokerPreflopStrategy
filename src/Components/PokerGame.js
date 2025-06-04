@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Box, Fab } from "@mui/material";
 import SettingsIcon from "@mui/icons-material/Settings";
 import SettingsPanel from "./SettingsPanel";
+import { useTranslation } from 'react-i18next';
 import GameDisplay from "./GameDisplay";
 import ErrorBoundary from "./ErrorBoundary";
 import usePokerGame from "../Hooks/UsePokerGame";
@@ -17,6 +18,7 @@ import wallpaperDefault from "../Assets/wallpaper_q80.webp";
 
 
 const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
+  const { t } = useTranslation();
   // Temporarily use wallpaper640 as the initial wallpaper for testing the switching logic
   // This helps determine if wallpaper_blur.webp is the sole problem.
   const [currentWallpaper, setCurrentWallpaper] = useState(wallpaper640);
@@ -295,7 +297,7 @@ const PokerGame = ({ initialAction }) => { // 1. Define initialAction as a prop
         m: 0,
       }}
     >
-      <ErrorBoundary fallbackMessage="There was an error displaying the game. Please refresh.">
+      <ErrorBoundary fallbackMessage={t('errorDisplayGame')}>
         <GameDisplay
           collapsed={collapsed}
           onInfoClick={handleClick}

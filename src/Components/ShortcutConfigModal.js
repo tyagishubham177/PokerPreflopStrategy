@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Dialog,
   DialogTitle,
@@ -11,6 +12,7 @@ import {
 } from '@mui/material';
 
 const ShortcutConfigModal = ({ open, onClose, shortcutConfig, setShortcutConfig }) => {
+  const { t } = useTranslation();
   const handleShortcutKeyChange = (actionName, newKey) => {
     const processedKey = newKey.charAt(0).toLowerCase();
     // Prevent assigning an empty key if desired, or handle upstream.
@@ -41,18 +43,18 @@ const ShortcutConfigModal = ({ open, onClose, shortcutConfig, setShortcutConfig 
       <DialogTitle>Configure Keyboard Shortcuts</DialogTitle>
       <DialogContent>
         <Box sx={{ pt: 1 }}> {/* Add some padding top for content */}
-          {renderTextField("Hint Key", "hint")}
-          {renderTextField("Pause/Play Key", "pause")}
-          {renderTextField("Settings Key", "settings")}
-          {renderTextField("Rules Key", "rules")}
+          {renderTextField(t('hintKey'), 'hint')}
+          {renderTextField(t('pausePlayKey'), 'pause')}
+          {renderTextField(t('settingsKey'), 'settings')}
+          {renderTextField(t('rulesKey'), 'rules')}
           <Typography variant="caption" color="textSecondary">
-            Changes are saved automatically. Press Esc or click away to close.
+            {t('changesSavedAutomatically')}
           </Typography>
         </Box>
       </DialogContent>
       <DialogActions>
         <Button onClick={onClose} color="primary">
-          Done
+          {t('done')}
         </Button>
       </DialogActions>
     </Dialog>
