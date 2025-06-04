@@ -7,7 +7,8 @@ import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import StrategyEditor from './StrategyEditor.js';
-import ErrorBoundary from './ErrorBoundary'; 
+import ErrorBoundary from './ErrorBoundary';
+import { useTranslation } from 'react-i18next';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
@@ -21,6 +22,7 @@ const StrategyCustomizationModal = ({
   initialStrategy: initialStrategyFromProp,
   onSave,
 }) => {
+  const { t } = useTranslation();
   const [modifiedStrategies, setModifiedStrategies] = useState({});
   const [originalStrategiesOnOpen, setOriginalStrategiesOnOpen] = useState(null);
   const [hasChanges, setHasChanges] = useState(false);
@@ -181,13 +183,13 @@ const StrategyCustomizationModal = ({
       maxWidth="lg"
       fullWidth
     >
-      <DialogTitle>Customize Initial Strategy</DialogTitle>
+      <DialogTitle>{t('customizeInitialStrategy')}</DialogTitle>
       <DialogContent dividers sx={{ pt: 2 }}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={4}>
             <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
               <FormControl fullWidth>
-                <InputLabel id="situation-select-label">Situation</InputLabel>
+                <InputLabel id="situation-select-label">{t('situationSelect')}</InputLabel>
                 <Select
                   labelId="situation-select-label"
                   id="situation-select"
@@ -205,7 +207,7 @@ const StrategyCustomizationModal = ({
 
               {selectedSituation && modifiedStrategies[selectedSituation] && (
                 <FormControl fullWidth>
-                  <InputLabel id="position-select-label">Position</InputLabel>
+                  <InputLabel id="position-select-label">{t('positionSelect')}</InputLabel>
                   <Select
                     labelId="position-select-label"
                     id="position-select"
@@ -224,7 +226,7 @@ const StrategyCustomizationModal = ({
 
               {selectedSituation && selectedPosition && modifiedStrategies[selectedSituation]?.[selectedPosition] && (
                 <FormControl fullWidth>
-                  <InputLabel id="decision-select-label">Decision</InputLabel>
+                    <InputLabel id="decision-select-label">{t('decisionSelect')}</InputLabel>
                   <Select
                     labelId="decision-select-label"
                     id="decision-select"
@@ -256,8 +258,8 @@ const StrategyCustomizationModal = ({
         </Grid>
       </DialogContent>
       <DialogActions>
-        <Button onClick={() => handleCloseAttempt('cancelButton')}>Cancel</Button>
-        <Button onClick={handleSave} variant="contained" disabled={!hasChanges}>Save</Button>
+        <Button onClick={() => handleCloseAttempt('cancelButton')}>{t('cancel')}</Button>
+        <Button onClick={handleSave} variant="contained" disabled={!hasChanges}>{t('save')}</Button>
       </DialogActions>
     </Dialog>
   );

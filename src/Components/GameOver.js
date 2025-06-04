@@ -9,7 +9,7 @@ import { getGameOverMessage } from '../Constants/gameOverMessages';
 const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
   const theme = useTheme();
   const { t } = useTranslation();
-  const message = getGameOverMessage(score, highScore, isNewHighScore);
+  const message = getGameOverMessage(t, score, highScore, isNewHighScore);
 
   let MessageIcon = SentimentVeryDissatisfiedIcon; // Default icon
   const isSpecialSuccess = isNewHighScore || (score === highScore && score > 0);

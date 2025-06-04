@@ -71,5 +71,43 @@
   "rules7": "You can set customizable ranges and game difficulty in settings.",
   "easy": "Easy",
   "medium": "Medium",
-  "hard": "Hard"
+  "hard": "Hard",
+  "hintKey": "Hint Key",
+  "pausePlayKey": "Pause/Play Key",
+  "settingsKey": "Settings Key",
+  "rulesKey": "Rules Key",
+  "shortcutAutoSaveInfo": "Changes are saved automatically. Press Esc or click away to close.",
+  "gameOverMessages": {
+    "newHighScore": [
+      "Wow! New High Score! You're a legend!",
+      "Incredible! You've set a new benchmark!",
+      "New High Score! Absolutely crushed it!",
+      "That's how it's done! New High Score!"
+    ],
+    "matchedHighScore": [
+      "So close! You matched the high score! Amazing effort!",
+      "Matched the high score! You're right at the top!",
+      "Excellent work! You've equaled the high score!"
+    ],
+    "closeToHighScore": [
+      "Almost there! Just a bit more to the top!",
+      "Great run! You're knocking on the door of a new high score!",
+      "So close to the high score! Keep pushing!"
+    ],
+    "decentScore": [
+      "Nice job! That's a solid score!",
+      "Good game! You're getting the hang of it!",
+      "Well played! Keep practicing to climb higher!"
+    ],
+    "lowScore": [
+      "Better luck next time! Every game is a lesson.",
+      "Don't worry, keep practicing and you'll improve!",
+      "A tough round, but persistence is key!",
+      "Shake it off and go for it again!"
+    ],
+    "defaultMessages": [
+      "Good effort! Ready for another round?",
+      "Thanks for playing! Try to beat your score next time!"
+    ]
+  }
 }

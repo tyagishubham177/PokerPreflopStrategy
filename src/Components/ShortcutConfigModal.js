@@ -40,15 +40,15 @@ const ShortcutConfigModal = ({ open, onClose, shortcutConfig, setShortcutConfig 
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="xs">
-      <DialogTitle>Configure Keyboard Shortcuts</DialogTitle>
+      <DialogTitle>{t('configureKeyboardShortcuts')}</DialogTitle>
       <DialogContent>
         <Box sx={{ pt: 1 }}> {/* Add some padding top for content */}
-          {renderTextField("Hint Key", "hint")}
-          {renderTextField("Pause/Play Key", "pause")}
-          {renderTextField("Settings Key", "settings")}
-          {renderTextField("Rules Key", "rules")}
+          {renderTextField(t('hintKey'), 'hint')}
+          {renderTextField(t('pausePlayKey'), 'pause')}
+          {renderTextField(t('settingsKey'), 'settings')}
+          {renderTextField(t('rulesKey'), 'rules')}
           <Typography variant="caption" color="textSecondary">
-            Changes are saved automatically. Press Esc or click away to close.
+            {t('shortcutAutoSaveInfo')}
           </Typography>
         </Box>
       </DialogContent>
