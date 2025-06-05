@@ -1,6 +1,7 @@
 import React from 'react';
 import { Dialog, DialogTitle, DialogContent, DialogActions, Button, Typography, Box } from '@mui/material';
 import { useTranslation } from 'react-i18next';
+import { SOUND_SETTINGS_LS_KEY } from '../Constants/StorageKeys';
 
 // Placeholder for RulesDialog and SettingsPanel if needed later for direct display
 // For now, we assume App.js will handle showing them after this dialog completes.
@@ -9,6 +10,20 @@ import { useTranslation } from 'react-i18next';
 
 const StartupDialog = ({ onPlay, onSettings, onRules, hasExistingSettings }) => {
   const { t } = useTranslation();
+
+  let username = '';
+  try {
+    const saved = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+    if (saved) {
+      const parsed = JSON.parse(saved);
+      if (parsed.username) {
+        username = parsed.username;
+      }
+    }
+  } catch (e) {
+    console.error('Failed to read username from localStorage', e);
+  }
+  const hasUsername = username && username.trim() !== '';
   // These states would be used if we were to show Rules/Settings directly from this component
   // const [showRules, setShowRules] = React.useState(false);
   // const [showSettings, setShowSettings] = React.useState(false);
@@ -29,7 +44,7 @@ const StartupDialog = ({ onPlay, onSettings, onRules, hasExistingSettings }) => 
     // Dialog for users with existing settings
     return (
       <Dialog open={true} PaperProps={{ style: { margin: '20px', padding: '20px' } }}>
-        <DialogTitle>{t('welcomeBackTitle')}</DialogTitle>
+        <DialogTitle>{hasUsername ? t('welcomeBackTitleWithName', { username }) : t('welcomeBackTitle')}</DialogTitle>
         <DialogContent>
           <Typography>
             {t('welcomeBackBody')}
