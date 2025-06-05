@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { COLORS } from '../Constants/Colors';
 import { getHandRepresentation, handMatrixRanks as ranks } from '../Utils/handUtils'; 
 import HandCell from './HandCell'; 
 
@@ -31,7 +32,7 @@ const StrategyEditor = ({ initialHands = [], onSelectionChange, isReadOnly = fal
     height: 'auto',
     aspectRatio: '1 / 1',
     maxWidth: '400px',
-    border: '1px solid #ccc',
+    border: `1px solid ${COLORS.borderGrey}`,
   };
 
 

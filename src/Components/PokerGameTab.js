@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react"; // Added useEffect
 import { Box, Grid, Typography, Paper, Button, useTheme, IconButton } from "@mui/material";
+import { COLORS } from '../Constants/Colors';
 import { useTranslation } from 'react-i18next';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import PauseIcon from '@mui/icons-material/Pause';
@@ -92,7 +93,7 @@ const PokerGameTab = ({
             </Grid>
 
             {isPaused ? (
-              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100px', my: 3, p: 2, border: '1px dashed grey', borderRadius: 1, backgroundColor: 'rgba(0,0,0,0.02)' }}>
+              <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100px', my: 3, p: 2, border: '1px dashed grey', borderRadius: 1, backgroundColor: COLORS.pausedBackground }}>
                 <PauseCircleOutlineIcon sx={{ fontSize: 40, color: 'text.disabled', mb: 1 }} />
                 <Typography variant="h6" sx={{ color: 'text.disabled' }}>{t('gamePaused')}</Typography>
               </Box>
@@ -103,19 +104,19 @@ const PokerGameTab = ({
             )}
 
             {isPaused ? (
-              <Paper elevation={0} sx={{ p: 2, textAlign: 'center', border: '1px dashed grey', backgroundColor: 'rgba(0,0,0,0.02)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+              <Paper elevation={0} sx={{ p: 2, textAlign: 'center', border: '1px dashed grey', backgroundColor: COLORS.pausedBackground, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                 <PauseCircleOutlineIcon sx={{ fontSize: 30, color: 'text.disabled', mb: 0.5 }} />
                 <Typography variant="body1" sx={{ color: 'text.disabled' }}>{t('situationHidden')}</Typography>
               </Paper>
             ) : (
-              <Paper elevation={3} sx={{ p: 2, backgroundColor: "rgba(255, 255, 255, 0.9)", display: "flex", flexDirection: "column", justifyContent: "center" }}>
+              <Paper elevation={3} sx={{ p: 2, backgroundColor: COLORS.overlayWhite, display: "flex", flexDirection: "column", justifyContent: "center" }}>
                 <Typography variant="body1" sx={{ textAlign: "center", fontWeight: "bold" }}>
                   <>
-                    <span style={{ color: "#1976d2" }}>{t('situation')}:</span> {situationDisplayPart}
+                    <span style={{ color: COLORS.situationText }}>{t('situation')}:</span> {situationDisplayPart}
                     <br />
-                    <span style={{ color: "#d32f2f" }}>{t('villain')}:</span> {villainDisplayPart}
+                    <span style={{ color: COLORS.villainText }}>{t('villain')}:</span> {villainDisplayPart}
                     <br />
-                    <span style={{ color: "#388e3c" }}>{t('hero')}:</span> {heroDisplayPart}
+                    <span style={{ color: COLORS.heroText }}>{t('hero')}:</span> {heroDisplayPart}
                   </>
                 </Typography>
               </Paper>
@@ -135,7 +136,7 @@ const PokerGameTab = ({
               mt: 1,
               pt: 2,
               display: "flex",
-              borderTop: "1px solid rgba(0, 0, 0, 0.12)",
+              borderTop: `1px solid ${COLORS.borderOverlay}`,
               flexDirection: 'row',
               justifyContent: 'space-between',
               alignItems: 'center',
@@ -229,14 +230,14 @@ const PokerGameTab = ({
                     py: 1.5,
                     px: 3,
                     color: 'white',
-                    background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
-                    boxShadow: '0 3px 5px 2px rgba(255, 105, 135, .3)',
+                    background: `linear-gradient(45deg, ${COLORS.gradientPinkStart} 30%, ${COLORS.gradientPinkEnd} 90%)`,
+                    boxShadow: `0 3px 5px 2px ${COLORS.pinkShadowLight}`,
                     borderRadius: '16px',
                     transition: 'transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
                     '&:hover': {
                       transform: 'scale(1.03)',
-                      boxShadow: '0 5px 7px 2px rgba(255, 105, 135, .4)',
-                      background: 'linear-gradient(45deg, #FE6B8B 20%, #FF8E53 80%)',
+                      boxShadow: `0 5px 7px 2px ${COLORS.pinkShadowDark}`,
+                      background: `linear-gradient(45deg, ${COLORS.gradientPinkStart} 20%, ${COLORS.gradientPinkEnd} 80%)`,
                     },
                   }}
                 >

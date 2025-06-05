@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, Box, Typography, Button, Fade, useTheme } from "@mui/material";
+import { COLORS } from '../Constants/Colors';
 import { useTranslation } from 'react-i18next';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
@@ -100,9 +101,9 @@ const GameDisplay = (props) => {
             transform: 'translate(-50%, -50%)',
             padding: theme.spacing(3),
             backgroundColor: feedbackTrigger === 'CORRECT'
-                              ? 'rgba(46, 125, 50, 0.8)'
+                              ? COLORS.feedbackCorrectBg
                               : (feedbackTrigger === 'INCORRECT'
-                                ? 'rgba(211, 47, 47, 0.8)'
+                                ? COLORS.feedbackIncorrectBg
                                 : 'transparent'),
             borderRadius: theme.shape.borderRadius * 2,
             textAlign: 'center',

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Modal, Box, Typography, Button, Chip, Paper, ButtonBase, useTheme, IconButton } from '@mui/material'; // Added IconButton
+import { COLORS } from '../Constants/Colors';
 import { useTranslation } from 'react-i18next';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
@@ -22,7 +23,7 @@ const style = {
   maxWidth: 1000, // Max width
   maxHeight: '90vh',
   bgcolor: 'background.paper',
-  border: '2px solid #000',
+  border: `2px solid ${COLORS.chartModalBorder}`,
   boxShadow: 24,
   p: 1, // Adjusted overall padding
 };
@@ -158,7 +159,7 @@ function SamplePrevArrow(props) {
                             cursor: 'pointer',
                             borderRadius: '8px',
                             border: '2px solid',
-                            borderColor: isSelectedHand(choice) ? '#FFD700' : 'grey.300',
+                            borderColor: isSelectedHand(choice) ? COLORS.highlightGold : 'grey.300',
                             backgroundColor: isSelectedHand(choice) ? theme.palette.action.selected : theme.palette.background.paper,
                             minWidth: '45px', // Adjusted minWidth
                             minHeight: '60px', // Ensure items are taller
@@ -168,7 +169,7 @@ function SamplePrevArrow(props) {
                             transition: 'transform 0.2s ease-in-out, border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out',
                             '&:hover': {
                               transform: 'scale(1.03)',
-                              borderColor: isSelectedHand(choice) ? '#FFD700' : theme.palette.primary.light,
+                              borderColor: isSelectedHand(choice) ? COLORS.highlightGold : theme.palette.primary.light,
                               boxShadow: theme.shadows[4],
                             },
                           }}
@@ -258,19 +259,19 @@ function SamplePrevArrow(props) {
                 <Typography variant="subtitle1" gutterBottom sx={{fontWeight:'bold', color: theme.palette.text.primary}}>{t('understandingChart')}</Typography>
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 0.75 }}>
                   <Chip
-                    icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'lightblue', border: '1px solid grey' }} />} // Adjusted size
+                    icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: COLORS.correctRangeBg, border: '1px solid grey' }} />} // Adjusted size
                     label={t('optimalPlay')}
                     size="small"
                     sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }, backgroundColor: 'white'}}
                   />
                   <Chip
-                    icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: 'rgba(255, 0, 0, 0.3)', border: '1px solid grey' }} />} // Adjusted size
+                    icon={<Box sx={{ width: 12, height: 12, borderRadius: '50%', backgroundColor: COLORS.incorrectRangeBg, border: '1px solid grey' }} />} // Adjusted size
                     label={t('incorrectRange')}
                     size="small"
                     sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }, backgroundColor: 'white'}}
                   />
                   <Chip
-                    icon={<Box sx={{ width: 12, height: 12, borderRadius: '2px', border: '2px solid #FFD700', backgroundColor: 'transparent' }} />} // Adjusted size
+                    icon={<Box sx={{ width: 12, height: 12, borderRadius: '2px', border: `2px solid ${COLORS.highlightGold}`, backgroundColor: 'transparent' }} />} // Adjusted size
                     label={t('specificHand')}
                     size="small"
                     sx={{height: 'auto', '& .MuiChip-label': { whiteSpace: 'normal' }, backgroundColor: 'white'}}

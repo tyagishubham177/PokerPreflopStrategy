@@ -87,6 +87,18 @@ const SettingsTab = ({
     }
     return "'Roboto', sans-serif";
   });
+  const [themeName, setThemeName] = useState(() => {
+    try {
+      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+      if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        return settings.theme || 'light';
+      }
+    } catch (error) {
+      console.error('Failed to load theme from localStorage:', error);
+    }
+    return 'light';
+  });
   const [showStrategyModal, setShowStrategyModal] = useState(false);
   const [showShortcutModal, setShowShortcutModal] = useState(false); // State for the new modal
 
@@ -181,6 +193,21 @@ const SettingsTab = ({
     }
   };
 
+  const handleThemeChange = (theme) => {
+    setThemeName(theme);
+    try {
+      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+      let settings = {};
+      if (savedSettings) {
+        settings = JSON.parse(savedSettings);
+      }
+      settings.theme = theme;
+      localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settings));
+    } catch (error) {
+      console.error('Failed to save theme to localStorage:', error);
+    }
+  };
+
   const handleSaveSettings = () => {
     const settingsToSave = {
       soundEnabled,
@@ -189,6 +216,7 @@ const SettingsTab = ({
       difficulty,
       language,
       fontFamily,
+      theme: themeName,
     };
     try {
       localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settingsToSave));
@@ -249,6 +277,8 @@ const SettingsTab = ({
         handleLanguageChange={handleLanguageChange}
         fontFamily={fontFamily}
         handleFontChange={handleFontChange}
+        themeName={themeName}
+        handleThemeChange={handleThemeChange}
         setIsInputFocused={setIsInputFocused}
       />
 

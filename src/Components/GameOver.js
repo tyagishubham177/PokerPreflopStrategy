@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { Typography, Button, Card, CardContent, Box, Chip, useTheme } from '@mui/material';
+import { COLORS } from '../Constants/Colors';
 import { useTranslation } from 'react-i18next';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
 import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
@@ -51,7 +52,7 @@ const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
           p: 2,
           borderRadius: theme.shape.borderRadius,
           background: isSpecialSuccess
-            ? 'linear-gradient(45deg, #66bb6a, #43a047)' // Greenish gradient for success
+            ? `linear-gradient(45deg, ${COLORS.successGradientStart}, ${COLORS.successGradientEnd})` // Greenish gradient for success
             : theme.palette.grey[200],
           color: isSpecialSuccess ? 'white' : theme.palette.text.primary,
         }}>

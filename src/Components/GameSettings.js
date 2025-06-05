@@ -23,6 +23,8 @@ const GameSettings = ({
   handleLanguageChange,
   fontFamily,
   handleFontChange,
+  themeName,
+  handleThemeChange,
   setIsInputFocused,
 }) => {
   const { t } = useTranslation();
@@ -93,6 +95,19 @@ const GameSettings = ({
                 {option.label}
               </MenuItem>
             ))}
+          </Select>
+          <FormLabel sx={{ mb: 0.5, display: 'block', color: 'text.secondary', fontWeight: 'normal', mt: 2 }}>
+            {t('colorTheme')}
+          </FormLabel>
+          <Select
+            fullWidth
+            value={themeName}
+            onChange={(event) => handleThemeChange(event.target.value)}
+            sx={{ mt: 0.5 }}
+          >
+            <MenuItem value="light">{t('lightTheme')}</MenuItem>
+            <MenuItem value="dark">{t('darkTheme')}</MenuItem>
+            <MenuItem value="forest">{t('forestTheme')}</MenuItem>
           </Select>
         </AccordionDetails>
       </Accordion>

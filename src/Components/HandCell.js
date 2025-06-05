@@ -1,11 +1,12 @@
 import React from 'react';
+import { COLORS } from '../Constants/Colors';
 
 const HandCell = ({ hand, isSelected, onClick, isHighlighted = false, isCorrectActionRange, isIncorrectActionRange }) => {
   const cellStyle = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    border: '1px solid #eee',
+    border: `1px solid ${COLORS.handBorder}`,
     cursor: 'pointer',
     fontSize: '0.8rem',
     padding: '2px',
@@ -19,16 +20,16 @@ const HandCell = ({ hand, isSelected, onClick, isHighlighted = false, isCorrectA
 
   // Determine background color based on props
   if (isCorrectActionRange) {
-    cellStyle.backgroundColor = 'lightblue';
+    cellStyle.backgroundColor = COLORS.correctRangeBg;
   } else if (isIncorrectActionRange) {
-    cellStyle.backgroundColor = 'rgba(255, 0, 0, 0.3)';
+    cellStyle.backgroundColor = COLORS.incorrectRangeBg;
   } else if (isSelected) {
-    cellStyle.backgroundColor = '#90EE90'; // Light green for selected cells
+    cellStyle.backgroundColor = COLORS.handSelectedBg; // Light green for selected cells
   }
 
   // Apply highlight style if needed, without overriding background
   if (isHighlighted) {
-    cellStyle.outline = '2px solid #FFD700';
+    cellStyle.outline = `2px solid ${COLORS.highlightGold}`;
     cellStyle.outlineOffset = '-1px';
   }
 

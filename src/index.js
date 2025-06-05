@@ -6,8 +6,10 @@ import reportWebVitals from "./reportWebVitals";
 import "./Styles/styles.css";
 import "./i18n";
 import { SOUND_SETTINGS_LS_KEY } from './Constants/StorageKeys';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProvider } from '@mui/material/styles';
+import { THEMES } from './Constants/Themes';
 
+let themeName = 'light';
 try {
   const saved = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
   if (saved) {
@@ -15,16 +17,15 @@ try {
     if (parsed.fontFamily) {
       document.documentElement.style.setProperty('--app-font-family', parsed.fontFamily);
     }
+    if (parsed.theme) {
+      themeName = parsed.theme;
+    }
   }
 } catch (e) {
-  console.error('Failed to load font from localStorage', e);
+  console.error('Failed to load settings from localStorage', e);
 }
 
-const theme = createTheme({
-  typography: {
-    fontFamily: 'var(--app-font-family)',
-  },
-});
+const theme = THEMES[themeName] || THEMES.light;
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
