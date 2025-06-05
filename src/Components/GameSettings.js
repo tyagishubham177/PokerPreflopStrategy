@@ -4,12 +4,10 @@ import {
   Paper,
   Typography,
   TextField,
-  Select,
   MenuItem,
   Accordion,
   AccordionSummary,
   AccordionDetails,
-  FormLabel, // Added FormLabel
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { FONT_OPTIONS } from "../Constants/FontOptions";
@@ -67,95 +65,61 @@ const GameSettings = ({
             margin="normal"
             variant="outlined"
           />
-          <FormLabel
-            sx={{
-              mb: 0.5,
-              display: "block",
-              color: "text.secondary",
-              fontWeight: "normal",
-              mt: 2,
-            }}
-          >
-            {t("gameDifficulty")}
-          </FormLabel>
-          <Select
+          <TextField
+            select
             fullWidth
-            // label="Difficulty" // Removed label as FormLabel is used
+            label={t("gameDifficulty")}
             value={difficulty}
             onChange={(event) => handleDifficultyChange(event.target.value)}
-            // margin="normal" // Removed margin
-            sx={{ mt: 0.5 }} // Adjusted to mt: 0.5 as per refined thought, mb from FormLabel is 0.5
+            margin="normal"
+            variant="outlined"
           >
             <MenuItem value="Easy">{t("easy")}</MenuItem>
             <MenuItem value="Medium">{t("medium")}</MenuItem>
             <MenuItem value="Hard">{t("hard")}</MenuItem>
-          </Select>
-          <FormLabel
-            sx={{
-              mb: 0.5,
-              display: "block",
-              color: "text.secondary",
-              fontWeight: "normal",
-              mt: 2,
-            }}
-          >
-            {t("language")}
-          </FormLabel>
-          <Select
+          </TextField>
+          <TextField
+            select
             fullWidth
+            label={t("language")}
             value={language}
             onChange={(event) => handleLanguageChange(event.target.value)}
-            sx={{ mt: 0.5 }}
+            margin="normal"
+            variant="outlined"
           >
             <MenuItem value="en">{t("english")}</MenuItem>
             <MenuItem value="hi">{t("hindi")}</MenuItem>
-          </Select>
-          <FormLabel
-            sx={{
-              mb: 0.5,
-              display: "block",
-              color: "text.secondary",
-              fontWeight: "normal",
-              mt: 2,
-            }}
-          >
-            {t("fontStyle")}
-          </FormLabel>
-          <Select
+          </TextField>
+          <TextField
+            select
             fullWidth
+            label={t("fontStyle")}
             value={fontFamily}
             onChange={(event) => handleFontChange(event.target.value)}
-            sx={{ mt: 0.5 }}
+            margin="normal"
+            variant="outlined"
           >
             {FONT_OPTIONS.map((option) => (
               <MenuItem key={option.label} value={option.value}>
                 {option.label}
               </MenuItem>
             ))}
-          </Select>
-          <FormLabel
-            sx={{
-              mb: 0.5,
-              display: "block",
-              color: "text.secondary",
-              fontWeight: "normal",
-              mt: 2,
-            }}
-          >
-            {t("colorTheme")}
-          </FormLabel>
-          <Select
+          </TextField>
+          <TextField
+            select
             fullWidth
+            label={t("colorTheme")}
             value={themeName}
             onChange={(event) => handleThemeChange(event.target.value)}
-            sx={{ mt: 0.5 }}
+            margin="normal"
+            variant="outlined"
           >
             <MenuItem value="forest">{t("forestTheme")}</MenuItem>
             <MenuItem value="ocean">{t("oceanTheme")}</MenuItem>
             <MenuItem value="sunset">{t("sunsetTheme")}</MenuItem>
             <MenuItem value="grape">{t("grapeTheme")}</MenuItem>
             <MenuItem value="blackWhite">{t("blackWhiteTheme")}</MenuItem>
-          </Select>
+          </TextField>
         </AccordionDetails>
       </Accordion>
     </Paper>
