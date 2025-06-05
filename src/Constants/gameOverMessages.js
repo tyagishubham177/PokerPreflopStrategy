@@ -51,14 +51,3 @@ export const getGameOverMessage = (score, highScore, isNewHighScoreFlag) => {
   return defaultMessages[Math.floor(Math.random() * defaultMessages.length)];
 };
 
-// Example usage (for testing in a Node environment or browser console):
-// console.log("New High Score:", getGameOverMessage(1200, 1000, true));
-// console.log("Matched High Score (score > 0):", getGameOverMessage(1000, 1000, false));
-// console.log("Matched High Score (score = 0, hs = 0):", getGameOverMessage(0, 0, false)); // Should be low/default
-// console.log("Close to High Score:", getGameOverMessage(850, 1000, false));
-// console.log("Decent Score:", getGameOverMessage(600, 1000, false));
-// console.log("Low Score (percentage):", getGameOverMessage(150, 1000, false));
-// console.log("Low Score (absolute < 500):", getGameOverMessage(400, 0, false));
-// console.log("Low Score (absolute < 500, hs > 0):", getGameOverMessage(400, 8000, false));
-// console.log("Default (e.g. score=550, hs=0):", getGameOverMessage(550, 0, false));
-// console.log("Default (e.g. score=550, hs=600, but doesn't meet other conditions):", getGameOverMessage(550, 600, false));

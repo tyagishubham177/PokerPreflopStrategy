@@ -46,7 +46,6 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
   useEffect(() => {
     if (open && wrongChoices && wrongChoices.length > 0) {
       setCurrentDetailedHand(wrongChoices[0]);
-      console.log("currentDetailedHand initialized:", wrongChoices[0]);
     } else if (!open) {
       // Reset when modal closes
       setCurrentDetailedHand(null);
@@ -55,7 +54,6 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
 
   const handleHandSelect = (handData) => {
     setCurrentDetailedHand(handData);
-    console.log("currentDetailedHand selected:", handData);
   };
 
   const carouselSettings = {
@@ -127,22 +125,9 @@ const ChartDisplayModal = ({ open, onClose, title, wrongChoices }) => {
     );
   };
 
-  // Log props and conditions for ReadOnlyStrategyChartViewer
+  // Logic to check if chart should render when modal is open
   if (open) {
-    // Only log when modal is open to avoid excessive logging
-    console.log("Chart Display Check:");
-    console.log("  currentDetailedHand:", currentDetailedHand);
-    console.log("  situationKey:", situationKey);
-    console.log("  positionKey:", positionKey);
-    console.log("  decisionKey (for condition and prop):", decisionKey);
-    console.log("  handNotation (for handToHighlight):", handNotation);
-    console.log("  yourChoice (for incorrectActionName):", yourChoice);
-    console.log(
-      "  Condition for chart render (currentDetailedHand && situationKey && positionKey && decisionKey):",
-      Boolean(
-        currentDetailedHand && situationKey && positionKey && decisionKey,
-      ),
-    );
+    Boolean(currentDetailedHand && situationKey && positionKey && decisionKey);
   }
 
   function SampleNextArrow(props) {

@@ -40,7 +40,7 @@ export const playSound = (soundName, volume = 1) => {
       return;
     }
     
-    console.log('Attempting to play sound:', soundName, 'at path:', actualSoundPath);
+
 
     const audio = new Audio(actualSoundPath);
     // The 'volume' parameter now acts as a relative modifier to the masterVolume
@@ -52,7 +52,7 @@ export const playSound = (soundName, volume = 1) => {
 
     audio.play()
       .then(() => {
-        console.log('Sound', soundName, 'played successfully.');
+        // Sound played successfully
       })
       .catch(playError => {
         console.error(`Error playing sound ${soundName} at path ${actualSoundPath}:`, playError);
