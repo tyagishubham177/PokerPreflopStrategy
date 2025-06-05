@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -15,6 +15,7 @@ import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
 import { POSITION_LABELS } from '../Constants/GameLabels.js';
 import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
 import { CUSTOM_STRATEGY_LS_KEY, SOUND_SETTINGS_LS_KEY } from '../Constants/StorageKeys';
+import { ThemeContext } from '../Context/ThemeContext';
 import i18n from '../i18n';
 
 const SettingsTab = ({
@@ -87,6 +88,7 @@ const SettingsTab = ({
     }
     return "'Roboto', sans-serif";
   });
+  const { themeName, setThemeName } = useContext(ThemeContext);
   const [showStrategyModal, setShowStrategyModal] = useState(false);
   const [showShortcutModal, setShowShortcutModal] = useState(false); // State for the new modal
 
@@ -181,6 +183,10 @@ const SettingsTab = ({
     }
   };
 
+  const handleThemeChange = (theme) => {
+    setThemeName(theme);
+  };
+
   const handleSaveSettings = () => {
     const settingsToSave = {
       soundEnabled,
@@ -249,6 +255,8 @@ const SettingsTab = ({
         handleLanguageChange={handleLanguageChange}
         fontFamily={fontFamily}
         handleFontChange={handleFontChange}
+        themeName={themeName}
+        handleThemeChange={handleThemeChange}
         setIsInputFocused={setIsInputFocused}
       />
 

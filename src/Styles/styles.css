@@ -1,4 +1,4 @@
 .selected-tab {
-    color: #32CD32 !important;
-    background-color: #2d3e95 !important;
-  }
+  color: var(--selected-tab-color) !important;
+  background-color: var(--selected-tab-background) !important;
+}

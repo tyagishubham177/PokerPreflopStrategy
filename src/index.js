@@ -6,7 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import "./Styles/styles.css";
 import "./i18n";
 import { SOUND_SETTINGS_LS_KEY } from './Constants/StorageKeys';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { ThemeProviderWrapper } from './Context/ThemeContext';
 
 try {
   const saved = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
@@ -20,18 +20,12 @@ try {
   console.error('Failed to load font from localStorage', e);
 }
 
-const theme = createTheme({
-  typography: {
-    fontFamily: 'var(--app-font-family)',
-  },
-});
-
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
+    <ThemeProviderWrapper>
       <App />
-    </ThemeProvider>
+    </ThemeProviderWrapper>
   </React.StrictMode>
 );
 
