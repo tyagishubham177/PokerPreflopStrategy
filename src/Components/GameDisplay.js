@@ -52,10 +52,8 @@ const GameDisplay = (props) => {
     if (lastAnswerCorrectness) {
       setFeedbackTrigger(lastAnswerCorrectness);
       if (lastAnswerCorrectness === 'CORRECT') {
-        console.log('GameDisplay: Playing correct_decision sound.');
         playSound('correct_decision');
       } else if (lastAnswerCorrectness === 'INCORRECT') {
-        console.log('GameDisplay: Playing wrong_decision sound.');
         playSound('wrong_decision');
       }
     }

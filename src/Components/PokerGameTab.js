@@ -52,20 +52,10 @@ const PokerGameTab = ({
   const [selectedHandData, setSelectedHandData] = useState(null);
 
   useEffect(() => {
-    console.log(
-      "[PokerGameTab] props changed: gameOver:",
-      gameOver,
-      "readyToShowGameOver:",
-      readyToShowGameOver,
-    );
     if (gameOver && readyToShowGameOver) {
-      console.log(
-        "[PokerGameTab] Condition met: Rendering GameOver component.",
-      );
+      // Condition met: Rendering GameOver component
     } else if (gameOver && !readyToShowGameOver) {
-      console.log(
-        "[PokerGameTab] Condition met: Rendering Placeholder for GameOver.",
-      );
+      // Condition met: Rendering Placeholder for GameOver
     }
   }, [gameOver, readyToShowGameOver]);
 

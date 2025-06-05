@@ -37,7 +37,6 @@ const usePokerGame = () => {
     decrementHints,
     isPaused,
     setIsPaused,
-    logGameState: baseLogGameState, // Renaming to avoid conflict if we want specific logs here
   } = useGameState();
 
   const {
@@ -65,9 +64,12 @@ const usePokerGame = () => {
   }, [gameOver]);
 
   const logGameState = useCallback((action, details = {}) => {
-    // Prefer using the one from useGameState if it's already passed down and includes global context
-    // For now, assuming this local one is fine or baseLogGameState can be used if needed.
-    console.log(`[PokerGame Hook - ${action}]`, { ...details, dealCount: dealCount.current });
+    // Local logging helper; could be enhanced or moved to useGameState later
+    return {
+      action,
+      ...details,
+      dealCount: dealCount.current,
+    };
   }, []);
 
   const togglePausePlay = useCallback(() => {
@@ -164,7 +166,16 @@ const usePokerGame = () => {
     decrementLives();
     setWrongChoices((prevWrongChoices) => [
       ...prevWrongChoices,
-      { handNotation, position: positionDisplay, situation: situationDisplay, correctDecision, yourChoice, situationKey: situationKey, positionKey: positionKey },
+      {
+        handNotation,
+        position: positionDisplay,
+        situation: situationDisplay,
+        correctDecision,
+        decisionKey: correctDecision,
+        yourChoice,
+        situationKey: situationKey,
+        positionKey: positionKey,
+      },
     ]);
 
     setTimeout(() => {

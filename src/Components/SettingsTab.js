@@ -195,10 +195,10 @@ const SettingsTab = ({
       difficulty,
       language,
       fontFamily,
+      theme: themeName,
     };
     try {
       localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settingsToSave));
-      console.log("Settings saved:", settingsToSave);
     } catch (error) {
       console.error("Failed to save settings to localStorage:", error);
     }
@@ -219,7 +219,6 @@ const SettingsTab = ({
     try {
       localStorage.setItem(CUSTOM_STRATEGY_LS_KEY, JSON.stringify(modifiedStrategies));
       setCurrentStrategy(modifiedStrategies);
-      console.log("Custom strategy saved to localStorage and state updated.");
     } catch (error) {
       console.error("Failed to save custom strategy to localStorage:", error);
     }
@@ -230,7 +229,6 @@ const SettingsTab = ({
     try {
       localStorage.removeItem(CUSTOM_STRATEGY_LS_KEY);
       setCurrentStrategy(initialPokerStrategy);
-      console.log("Custom strategy reset to default.");
     } catch (error) {
       console.error("Failed to reset custom strategy:", error);
     }
