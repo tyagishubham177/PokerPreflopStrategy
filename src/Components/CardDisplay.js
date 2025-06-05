@@ -8,6 +8,9 @@ const CustomCard = ({ card }) => {
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
   const [rank, suit] = card.split("");
   const isRed = ["♥", "♦"].includes(suit);
+  const displayRank = rank === "T" ? "10" : rank;
+  const numericRank = parseInt(displayRank, 10);
+  const isNumeric = !isNaN(numericRank);
 
   return (
     <Box
@@ -30,19 +33,41 @@ const CustomCard = ({ card }) => {
         variant={isMobile ? "body2" : "body1"}
         sx={{ position: "absolute", top: 2, left: 2 }}
       >
-        {rank}
+        {displayRank}
       </Typography>
-      <Typography
-        variant={isMobile ? "h5" : "h4"}
+      <Box
         sx={{
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
+          display: "flex",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          alignItems: "center",
+          gap: "2px",
+          width: "80%",
+          height: "70%",
         }}
       >
-        {suit}
-      </Typography>
+        {isNumeric
+          ? Array.from({ length: numericRank }).map((_, i) => (
+              <Typography
+                key={i}
+                sx={{
+                  fontSize: isMobile
+                    ? `${Math.max(8, 14 - numericRank)}px`
+                    : `${Math.max(12, 22 - numericRank)}px`,
+                  lineHeight: 1,
+                }}
+              >
+                {suit}
+              </Typography>
+            ))
+          : (
+              <Typography variant={isMobile ? "h5" : "h4"}>{suit}</Typography>
+            )}
+      </Box>
       <Typography
         variant={isMobile ? "body2" : "body1"}
         sx={{
@@ -52,7 +77,7 @@ const CustomCard = ({ card }) => {
           transform: "rotate(180deg)",
         }}
       >
-        {rank}
+        {displayRank}
       </Typography>
     </Box>
   );
