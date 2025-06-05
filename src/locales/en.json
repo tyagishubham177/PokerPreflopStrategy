@@ -58,6 +58,7 @@
   "changesSavedAutomatically": "Changes are saved automatically. Press Esc or click away to close.",
   "done": "Done",
   "welcomeBackTitle": "Welcome Back, Poker Ace!",
+  "welcomeBackTitleWithName": "Welcome Back, {{username}}!",
   "welcomeBackBody": "Ready to hit the tables? You can tweak the challenge or jump right in with your saved settings.",
   "adjustChallenge": "Adjust Challenge",
   "dealMeIn": "Deal Me In!",
