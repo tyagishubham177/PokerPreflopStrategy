@@ -125,13 +125,15 @@ const CustomCard = ({ card }) => {
           transform: "translate(-50%, -50%)",
           display: "grid",
           gridTemplateRows:
-            (GRID_LAYOUTS[numericRank] || { template: "repeat(5, 1fr)" }).template,
+            !isMobile && GRID_LAYOUTS[numericRank]
+              ? GRID_LAYOUTS[numericRank].template
+              : "repeat(5, 1fr)",
           gridTemplateColumns: "repeat(3, 1fr)",
           width: "80%",
           height: "70%",
         }}
       >
-        {isNumeric
+        {isNumeric && !isMobile
           ? (PIP_LAYOUTS[numericRank] || []).map(({ row, col, rotate }, i) => (
               <Typography
                 key={i}
