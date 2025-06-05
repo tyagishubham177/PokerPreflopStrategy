@@ -151,6 +151,9 @@ const GameSettings = ({
             sx={{ mt: 0.5 }}
           >
             <MenuItem value="forest">{t("forestTheme")}</MenuItem>
+            <MenuItem value="ocean">{t("oceanTheme")}</MenuItem>
+            <MenuItem value="sunset">{t("sunsetTheme")}</MenuItem>
+            <MenuItem value="grape">{t("grapeTheme")}</MenuItem>
             <MenuItem value="blackWhite">{t("blackWhiteTheme")}</MenuItem>
           </Select>
         </AccordionDetails>

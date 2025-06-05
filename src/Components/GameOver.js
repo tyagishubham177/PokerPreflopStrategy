@@ -115,8 +115,10 @@ const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
                   fontSize: "1rem",
                   padding: "8px 12px",
                   fontWeight: "medium",
-                  backgroundColor: "info.main",
-                  color: COLORS.white,
+                  backgroundColor: theme.palette.info.main,
+                  color: theme.palette.getContrastText(
+                    theme.palette.info.main,
+                  ),
                   boxShadow: theme.shadows[1],
                 }}
               />
@@ -127,8 +129,8 @@ const GameOver = ({ score, highScore, restartGame, isNewHighScore }) => {
                   fontSize: "1rem",
                   padding: "8px 12px",
                   fontWeight: "medium",
-                  borderColor: "info.dark",
-                  color: "info.dark",
+                  borderColor: theme.palette.info.dark,
+                  color: theme.palette.info.dark,
                   borderWidth: 1, // Standard outline
                 }}
               />
