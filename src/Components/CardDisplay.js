@@ -3,6 +3,75 @@ import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import { COLORS } from "../Constants/Colors";
 import { motion } from "framer-motion";
 
+const PIP_LAYOUTS = {
+  1: [[3, 2]],
+  2: [[1, 2], [5, 2]],
+  3: [[1, 2], [3, 2], [5, 2]],
+  4: [
+    [1, 1],
+    [1, 3],
+    [5, 1],
+    [5, 3],
+  ],
+  5: [
+    [1, 1],
+    [1, 3],
+    [3, 2],
+    [5, 1],
+    [5, 3],
+  ],
+  6: [
+    [1, 1],
+    [1, 3],
+    [3, 1],
+    [3, 3],
+    [5, 1],
+    [5, 3],
+  ],
+  7: [
+    [1, 1],
+    [1, 3],
+    [3, 1],
+    [3, 3],
+    [5, 1],
+    [5, 3],
+    [3, 2],
+  ],
+  8: [
+    [1, 1],
+    [1, 2],
+    [1, 3],
+    [3, 1],
+    [3, 3],
+    [5, 1],
+    [5, 2],
+    [5, 3],
+  ],
+  9: [
+    [1, 1],
+    [1, 2],
+    [1, 3],
+    [3, 1],
+    [3, 2],
+    [3, 3],
+    [5, 1],
+    [5, 2],
+    [5, 3],
+  ],
+  10: [
+    [1, 1],
+    [1, 2],
+    [1, 3],
+    [2, 1],
+    [2, 3],
+    [4, 1],
+    [4, 3],
+    [5, 1],
+    [5, 2],
+    [5, 3],
+  ],
+};
+
 const CustomCard = ({ card }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
@@ -41,31 +110,38 @@ const CustomCard = ({ card }) => {
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          display: "flex",
-          flexWrap: "wrap",
-          justifyContent: "center",
-          alignItems: "center",
-          gap: "2px",
+          display: "grid",
+          gridTemplateRows: "repeat(5, 1fr)",
+          gridTemplateColumns: "repeat(3, 1fr)",
           width: "80%",
           height: "70%",
         }}
       >
         {isNumeric
-          ? Array.from({ length: numericRank }).map((_, i) => (
+          ? (PIP_LAYOUTS[numericRank] || []).map(([r, c], i) => (
               <Typography
                 key={i}
                 sx={{
+                  gridRow: r,
+                  gridColumn: c,
                   fontSize: isMobile
                     ? `${Math.max(8, 14 - numericRank)}px`
                     : `${Math.max(12, 22 - numericRank)}px`,
                   lineHeight: 1,
+                  textAlign: "center",
+                  transform: r > 3 ? "rotate(180deg)" : "none",
                 }}
               >
                 {suit}
               </Typography>
             ))
           : (
-              <Typography variant={isMobile ? "h5" : "h4"}>{suit}</Typography>
+              <Typography
+                variant={isMobile ? "h5" : "h4"}
+                sx={{ gridRow: 3, gridColumn: 2 }}
+              >
+                {suit}
+              </Typography>
             )}
       </Box>
       <Typography
