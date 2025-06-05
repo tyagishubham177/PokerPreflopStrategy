@@ -12,6 +12,7 @@ import {
   FormLabel, // Added FormLabel
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import { FONT_OPTIONS } from '../Constants/FontOptions';
 
 const GameSettings = ({
   username,
@@ -20,6 +21,8 @@ const GameSettings = ({
   handleDifficultyChange,
   language,
   handleLanguageChange,
+  fontFamily,
+  handleFontChange,
   setIsInputFocused,
 }) => {
   const { t } = useTranslation();
@@ -75,6 +78,21 @@ const GameSettings = ({
           >
             <MenuItem value="en">{t('english')}</MenuItem>
             <MenuItem value="hi">{t('hindi')}</MenuItem>
+          </Select>
+          <FormLabel sx={{ mb: 0.5, display: 'block', color: 'text.secondary', fontWeight: 'normal', mt: 2 }}>
+            {t('fontStyle')}
+          </FormLabel>
+          <Select
+            fullWidth
+            value={fontFamily}
+            onChange={(event) => handleFontChange(event.target.value)}
+            sx={{ mt: 0.5 }}
+          >
+            {FONT_OPTIONS.map((option) => (
+              <MenuItem key={option.label} value={option.value}>
+                {option.label}
+              </MenuItem>
+            ))}
           </Select>
         </AccordionDetails>
       </Accordion>
