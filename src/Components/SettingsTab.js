@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useTranslation } from 'react-i18next';
 import {
   Box,
@@ -15,6 +15,7 @@ import { initialPokerStrategy } from '../Constants/InitialStrategy.js';
 import { POSITION_LABELS } from '../Constants/GameLabels.js';
 import { DIFFICULTY_LEVELS } from '../Constants/GameConstants';
 import { CUSTOM_STRATEGY_LS_KEY, SOUND_SETTINGS_LS_KEY } from '../Constants/StorageKeys';
+import { ThemeContext } from '../Context/ThemeContext';
 import i18n from '../i18n';
 
 const SettingsTab = ({
@@ -87,18 +88,7 @@ const SettingsTab = ({
     }
     return "'Roboto', sans-serif";
   });
-  const [themeName, setThemeName] = useState(() => {
-    try {
-      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
-      if (savedSettings) {
-        const settings = JSON.parse(savedSettings);
-        return settings.theme || 'light';
-      }
-    } catch (error) {
-      console.error('Failed to load theme from localStorage:', error);
-    }
-    return 'light';
-  });
+  const { themeName, setThemeName } = useContext(ThemeContext);
   const [showStrategyModal, setShowStrategyModal] = useState(false);
   const [showShortcutModal, setShowShortcutModal] = useState(false); // State for the new modal
 
@@ -195,17 +185,6 @@ const SettingsTab = ({
 
   const handleThemeChange = (theme) => {
     setThemeName(theme);
-    try {
-      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
-      let settings = {};
-      if (savedSettings) {
-        settings = JSON.parse(savedSettings);
-      }
-      settings.theme = theme;
-      localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settings));
-    } catch (error) {
-      console.error('Failed to save theme to localStorage:', error);
-    }
   };
 
   const handleSaveSettings = () => {
@@ -216,7 +195,6 @@ const SettingsTab = ({
       difficulty,
       language,
       fontFamily,
-      theme: themeName,
     };
     try {
       localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settingsToSave));
