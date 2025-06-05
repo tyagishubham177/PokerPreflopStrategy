@@ -38,9 +38,9 @@ const PIP_LAYOUTS = {
   7: [
     { row: 1, col: 1 },
     { row: 1, col: 3 },
-    { row: 3, col: 1 },
-    { row: 3, col: 3 },
-    { row: 3, col: 2, rotate: true },
+    { row: 2, col: 2 },
+    { row: 3, col: 2, rotate: false },
+    { row: 4, col: 2 },
     { row: 5, col: 1 },
     { row: 5, col: 3 },
   ],
@@ -49,17 +49,17 @@ const PIP_LAYOUTS = {
     { row: 1, col: 3 },
     { row: 2, col: 1 },
     { row: 2, col: 3 },
+    { row: 3, col: 1 },
+    { row: 3, col: 3 },
     { row: 4, col: 1 },
     { row: 4, col: 3 },
-    { row: 5, col: 1 },
-    { row: 5, col: 3 },
   ],
   9: [
     { row: 1, col: 1 },
     { row: 1, col: 3 },
     { row: 2, col: 1 },
     { row: 2, col: 3 },
-    { row: 3, col: 2 },
+    { row: 3, col: 2, rotate: false },
     { row: 4, col: 1 },
     { row: 4, col: 3 },
     { row: 5, col: 1 },
@@ -68,15 +68,21 @@ const PIP_LAYOUTS = {
   10: [
     { row: 1, col: 1 },
     { row: 1, col: 3 },
-    { row: 2, col: 1 },
-    { row: 2, col: 3 },
     { row: 2, col: 2 },
-    { row: 4, col: 1 },
-    { row: 4, col: 3 },
-    { row: 4, col: 2, rotate: true },
+    { row: 3, col: 1 },
+    { row: 3, col: 3 },
+    { row: 4, col: 2 },
     { row: 5, col: 1 },
     { row: 5, col: 3 },
+    { row: 6, col: 1 },
+    { row: 6, col: 3 },
   ],
+};
+
+const GRID_LAYOUTS = {
+  8: { template: "repeat(4, 1fr)", rows: 4 },
+  9: { template: "2fr 2fr 1fr 2fr 2fr", rows: 5 },
+  10: { template: "2fr 1fr 2fr 1fr 2fr 2fr", rows: 6 },
 };
 
 const CustomCard = ({ card }) => {
@@ -118,7 +124,8 @@ const CustomCard = ({ card }) => {
           left: "50%",
           transform: "translate(-50%, -50%)",
           display: "grid",
-          gridTemplateRows: "repeat(5, 1fr)",
+          gridTemplateRows:
+            (GRID_LAYOUTS[numericRank] || { template: "repeat(5, 1fr)" }).template,
           gridTemplateColumns: "repeat(3, 1fr)",
           width: "80%",
           height: "70%",
@@ -137,7 +144,14 @@ const CustomCard = ({ card }) => {
                   lineHeight: 1,
                   textAlign: "center",
                   transform:
-                    rotate || row > 3 ? "rotate(180deg)" : "none",
+                    rotate === true
+                      ? "rotate(180deg)"
+                      : rotate === false
+                      ? "none"
+                      : row >
+                        ((GRID_LAYOUTS[numericRank]?.rows || 5) / 2)
+                      ? "rotate(180deg)"
+                      : "none",
                 }}
               >
                 {suit}
