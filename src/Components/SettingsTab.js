@@ -75,6 +75,18 @@ const SettingsTab = ({
     }
     return 'en';
   });
+  const [fontFamily, setFontFamily] = useState(() => {
+    try {
+      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+      if (savedSettings) {
+        const settings = JSON.parse(savedSettings);
+        return settings.fontFamily || "'Roboto', sans-serif";
+      }
+    } catch (error) {
+      console.error('Failed to load font from localStorage:', error);
+    }
+    return "'Roboto', sans-serif";
+  });
   const [showStrategyModal, setShowStrategyModal] = useState(false);
   const [showShortcutModal, setShowShortcutModal] = useState(false); // State for the new modal
 
@@ -93,6 +105,10 @@ const SettingsTab = ({
   useEffect(() => {
     i18n.changeLanguage(language);
   }, [language]);
+
+  useEffect(() => {
+    document.documentElement.style.setProperty('--app-font-family', fontFamily);
+  }, [fontFamily]);
 
   // handleShortcutKeyChange is removed from here, as it's in ShortcutConfigModal
 
@@ -150,6 +166,21 @@ const SettingsTab = ({
     }
   };
 
+  const handleFontChange = (font) => {
+    setFontFamily(font);
+    try {
+      const savedSettings = localStorage.getItem(SOUND_SETTINGS_LS_KEY);
+      let settings = {};
+      if (savedSettings) {
+        settings = JSON.parse(savedSettings);
+      }
+      settings.fontFamily = font;
+      localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settings));
+    } catch (error) {
+      console.error('Failed to save font to localStorage:', error);
+    }
+  };
+
   const handleSaveSettings = () => {
     const settingsToSave = {
       soundEnabled,
@@ -157,6 +188,7 @@ const SettingsTab = ({
       username,
       difficulty,
       language,
+      fontFamily,
     };
     try {
       localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settingsToSave));
@@ -215,6 +247,8 @@ const SettingsTab = ({
         handleDifficultyChange={handleDifficultyChange}
         language={language}
         handleLanguageChange={handleLanguageChange}
+        fontFamily={fontFamily}
+        handleFontChange={handleFontChange}
         setIsInputFocused={setIsInputFocused}
       />
 
