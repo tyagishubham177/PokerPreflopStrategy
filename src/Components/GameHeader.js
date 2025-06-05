@@ -1,8 +1,9 @@
-import React from 'react';
+import React from "react";
 import { Avatar, Box, IconButton, Typography } from "@mui/material";
+import { COLORS } from "../Constants/Colors";
 import InfoIcon from "@mui/icons-material/Info";
 import pokerImage from "../Assets/pokerlogo512.png";
-import { useTranslation } from 'react-i18next';
+import { useTranslation } from "react-i18next";
 
 const GameHeader = ({ onInfoClick, onLongPressStart, onLongPressEnd }) => {
   const { t } = useTranslation();
@@ -17,8 +18,8 @@ const GameHeader = ({ onInfoClick, onLongPressStart, onLongPressEnd }) => {
       }}
     >
       <Avatar src={pokerImage} sx={{ width: 40, height: 40 }} />
-      <Typography variant="h6" sx={{ fontWeight: "bold", color: "white" }}>
-        {t('learnPreflopStrategy')}
+      <Typography variant="h6" sx={{ fontWeight: "bold", color: COLORS.white }}>
+        {t("learnPreflopStrategy")}
       </Typography>
       <IconButton
         aria-label="info"
@@ -27,7 +28,7 @@ const GameHeader = ({ onInfoClick, onLongPressStart, onLongPressEnd }) => {
         onMouseUp={onLongPressEnd}
         onTouchStart={onLongPressStart}
         onTouchEnd={onLongPressEnd}
-        sx={{ color: "white" }}
+        sx={{ color: COLORS.white }}
       >
         <InfoIcon />
       </IconButton>

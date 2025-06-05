@@ -1,5 +1,6 @@
 import React from "react";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
+import { COLORS } from "../Constants/Colors";
 import { motion } from "framer-motion";
 
 const CustomCard = ({ card }) => {
@@ -13,7 +14,7 @@ const CustomCard = ({ card }) => {
       sx={{
         width: isMobile ? "60px" : "90px",
         height: isMobile ? "84px" : "126px",
-        backgroundColor: "white",
+        backgroundColor: COLORS.white,
         borderRadius: "8px",
         border: `2px solid ${theme.palette.grey[300]}`,
         display: "flex",
@@ -25,18 +26,31 @@ const CustomCard = ({ card }) => {
         position: "relative",
       }}
     >
-      <Typography variant={isMobile ? "body2" : "body1"} sx={{ position: "absolute", top: 2, left: 2 }}>
+      <Typography
+        variant={isMobile ? "body2" : "body1"}
+        sx={{ position: "absolute", top: 2, left: 2 }}
+      >
         {rank}
       </Typography>
       <Typography
         variant={isMobile ? "h5" : "h4"}
-        sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}
+        sx={{
+          position: "absolute",
+          top: "50%",
+          left: "50%",
+          transform: "translate(-50%, -50%)",
+        }}
       >
         {suit}
       </Typography>
       <Typography
         variant={isMobile ? "body2" : "body1"}
-        sx={{ position: "absolute", bottom: 2, right: 2, transform: "rotate(180deg)" }}
+        sx={{
+          position: "absolute",
+          bottom: 2,
+          right: 2,
+          transform: "rotate(180deg)",
+        }}
       >
         {rank}
       </Typography>

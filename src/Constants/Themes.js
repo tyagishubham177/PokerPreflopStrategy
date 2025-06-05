@@ -1,20 +1,22 @@
-import { createTheme } from '@mui/material/styles';
+import { createTheme } from "@mui/material/styles";
 
 export const THEMES = {
-  light: createTheme({
-    palette: { mode: 'light' },
-    typography: { fontFamily: 'var(--app-font-family)' },
-  }),
-  dark: createTheme({
-    palette: { mode: 'dark' },
-    typography: { fontFamily: 'var(--app-font-family)' },
-  }),
   forest: createTheme({
     palette: {
-      mode: 'light',
-      primary: { main: '#2e7d32' },
-      secondary: { main: '#81c784' },
+      mode: "light",
+      primary: { main: "#2e7d32" },
+      secondary: { main: "#81c784" },
     },
-    typography: { fontFamily: 'var(--app-font-family)' },
+    typography: { fontFamily: "var(--app-font-family)" },
+  }),
+  blackWhite: createTheme({
+    palette: {
+      mode: "light",
+      primary: { main: "#000000" },
+      secondary: { main: "#ffffff" },
+      background: { default: "#ffffff", paper: "#ffffff" },
+      text: { primary: "#000000", secondary: "#000000" },
+    },
+    typography: { fontFamily: "var(--app-font-family)" },
   }),
 };

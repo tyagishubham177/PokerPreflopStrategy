@@ -1,15 +1,16 @@
-import React, { createContext, useState, useEffect } from 'react';
-import { ThemeProvider } from '@mui/material/styles';
-import { THEMES } from '../Constants/Themes';
-import { SOUND_SETTINGS_LS_KEY } from '../Constants/StorageKeys';
+import React, { createContext, useState, useEffect } from "react";
+import { ThemeProvider } from "@mui/material/styles";
+import { THEMES } from "../Constants/Themes";
+import { SOUND_SETTINGS_LS_KEY } from "../Constants/StorageKeys";
+import { COLORS } from "../Constants/Colors";
 
 export const ThemeContext = createContext({
-  themeName: 'light',
+  themeName: "forest",
   setThemeName: () => {},
 });
 
 export const ThemeProviderWrapper = ({ children }) => {
-  const [themeName, setThemeName] = useState('light');
+  const [themeName, setThemeName] = useState("forest");
 
   // Load saved theme on mount
   useEffect(() => {
@@ -22,7 +23,7 @@ export const ThemeProviderWrapper = ({ children }) => {
         }
       }
     } catch (e) {
-      console.error('Failed to load theme from localStorage', e);
+      console.error("Failed to load theme from localStorage", e);
     }
   }, []);
 
@@ -37,11 +38,27 @@ export const ThemeProviderWrapper = ({ children }) => {
       settings.theme = themeName;
       localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settings));
     } catch (e) {
-      console.error('Failed to save theme to localStorage', e);
+      console.error("Failed to save theme to localStorage", e);
     }
+    document.documentElement.style.setProperty(
+      "--selected-tab-color",
+      COLORS.selectedTabText,
+    );
+    document.documentElement.style.setProperty(
+      "--selected-tab-background",
+      COLORS.selectedTabBackground,
+    );
+    document.documentElement.style.setProperty(
+      "--app-header-bg",
+      COLORS.appHeaderBg,
+    );
+    document.documentElement.style.setProperty(
+      "--app-link-color",
+      COLORS.appLink,
+    );
   }, [themeName]);
 
-  const theme = THEMES[themeName] || THEMES.light;
+  const theme = THEMES[themeName] || THEMES.forest;
 
   return (
     <ThemeContext.Provider value={{ themeName, setThemeName }}>

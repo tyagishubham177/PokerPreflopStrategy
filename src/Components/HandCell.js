@@ -1,21 +1,28 @@
-import React from 'react';
-import { COLORS } from '../Constants/Colors';
+import React from "react";
+import { COLORS } from "../Constants/Colors";
 
-const HandCell = ({ hand, isSelected, onClick, isHighlighted = false, isCorrectActionRange, isIncorrectActionRange }) => {
+const HandCell = ({
+  hand,
+  isSelected,
+  onClick,
+  isHighlighted = false,
+  isCorrectActionRange,
+  isIncorrectActionRange,
+}) => {
   const cellStyle = {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
     border: `1px solid ${COLORS.handBorder}`,
-    cursor: 'pointer',
-    fontSize: '0.8rem',
-    padding: '2px',
-    textAlign: 'center',
-    userSelect: 'none',
-    MozUserSelect: 'none',
-    WebkitUserSelect: 'none',
-    msUserSelect: 'none',
-    backgroundColor: 'white', // Default background color
+    cursor: "pointer",
+    fontSize: "0.8rem",
+    padding: "2px",
+    textAlign: "center",
+    userSelect: "none",
+    MozUserSelect: "none",
+    WebkitUserSelect: "none",
+    msUserSelect: "none",
+    backgroundColor: COLORS.white, // Default background color
   };
 
   // Determine background color based on props
@@ -30,7 +37,7 @@ const HandCell = ({ hand, isSelected, onClick, isHighlighted = false, isCorrectA
   // Apply highlight style if needed, without overriding background
   if (isHighlighted) {
     cellStyle.outline = `2px solid ${COLORS.highlightGold}`;
-    cellStyle.outlineOffset = '-1px';
+    cellStyle.outlineOffset = "-1px";
   }
 
   return (
