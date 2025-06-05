@@ -23,7 +23,7 @@ const PIP_LAYOUTS = {
   5: [
     { row: 1, col: 1 },
     { row: 1, col: 3 },
-    { row: 3, col: 2 },
+    { row: 3, col: 2, rotate: false },
     { row: 5, col: 1 },
     { row: 5, col: 3 },
   ],

@@ -15,9 +15,9 @@ export const getHandRepresentation = (rank1, rank2) => {
   if (index1 === index2) {
     return highRank + highRank;
   } else if (index1 > index2) {
-    return highRank + lowRank + 'o';
-  } else {
     return highRank + lowRank + 's';
+  } else {
+    return highRank + lowRank + 'o';
   }
 };
 
