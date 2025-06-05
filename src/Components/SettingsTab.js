@@ -195,6 +195,7 @@ const SettingsTab = ({
       difficulty,
       language,
       fontFamily,
+      theme: themeName,
     };
     try {
       localStorage.setItem(SOUND_SETTINGS_LS_KEY, JSON.stringify(settingsToSave));
